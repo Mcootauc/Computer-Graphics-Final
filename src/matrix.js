@@ -106,3 +106,22 @@ const rotationMatrix = (angle, x, y, z) => {
       1.0
     ]
   }
+
+  function orthoProjection(left, right, bottom, top, near, far)
+  {
+    const width = right - left;
+    const height = top  - bottom;
+    const depth = far - near;
+    const x3 = -(right + left) / width
+    const y3 = -(top + bottom) / height
+    const z3 = -(far + near) / depth
+
+    const matrix = new Float32Array([
+        2 / width, 0, 0, x3,
+        0, 2 / height, 0, y3, 
+        0, 0, -2 / depth, z3,
+        0, 0, 0, 1
+    ])
+
+    return matrix;
+  }
