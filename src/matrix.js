@@ -32,14 +32,14 @@ function multiply4x4Matrices(m1, m2){
 /* Individual Matrix Implementations
 * Gage Messner: Matrix Translations
 * Kevin: 
-* Mitch: 
+* Mitchell Cootauco: Matrix Scale 
 * David: 
 * 
 * Group: 
 */
 
 // Translates a given matrix by whatever numbers you want. 'a' translates the x-coord, 
-// 'b' translates the y-coord, 'c' translates the z-coord
+// 'b' translates the y-coord, 'c' translates the z-coord.
 function translateMatrix(matrix4, a, b, c){
     matrix4[3] += a // last entry in col. 1
     matrix4[7] += b // last entry in col. 2
@@ -47,10 +47,17 @@ function translateMatrix(matrix4, a, b, c){
     return matrix4
 }
 
+// Scales a given matrix by whatever numbers you want. 'a' scales the x-coord, 
+// 'b' scales the y-coord, 'c' scales the z-coord.
+function scaleMatrix(matrix4, a, b, c){
+    matrix4[3] *= a // last entry in col. 1
+    matrix4[7] *= b // last entry in col. 2
+    matrix4[11] *= c // last entry in col. 3
+    return matrix4
+}
 
 // Rotation Matrix from class
 // CAN be refactored for our use
-
 const rotationMatrix = (angle, x, y, z) => {
     // In production code, this function should be associated
     // with a matrix object with associated functions.
