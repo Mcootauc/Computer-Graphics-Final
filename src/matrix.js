@@ -28,16 +28,6 @@ function multiply4x4Matrices(m1, m2){
     return result
 }
 
-
-/* Individual Matrix Implementations
-* Gage Messner: Matrix Translations
-* Kevin: 
-* Mitchell Cootauco: Matrix Scale 
-* David: 
-* 
-* Group: 
-*/
-
 // Translates a given matrix by whatever numbers you want. 'a' translates the x-coord, 
 // 'b' translates the y-coord, 'c' translates the z-coord.
 function translateMatrix(matrix4, a, b, c){
