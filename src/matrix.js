@@ -10,7 +10,7 @@ function new4x4Matrix(){
 // 4x4 Matrix multiplier
 // need help on how to access the individual rows, cols
 function multiply4x4Matrices(m1, m2){
-    var result = []
+    let result = []
     if(m1.size() != m2.size()){
         console.error();
         return
@@ -40,9 +40,9 @@ function translateMatrix(matrix4, a, b, c){
 // Scales a given matrix by whatever numbers you want. 'a' scales the x-coord, 
 // 'b' scales the y-coord, 'c' scales the z-coord.
 function scaleMatrix(matrix4, a, b, c){
-    matrix4[3] *= a // last entry in col. 1
-    matrix4[7] *= b // last entry in col. 2
-    matrix4[11] *= c // last entry in col. 3
+    matrix4[0] *= a // row[1]col[1]
+    matrix4[5] *= b // row[2]col[2]
+    matrix4[10] *= c // row[3]col[3]
     return matrix4
 }
 

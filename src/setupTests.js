@@ -5,7 +5,6 @@
 import '@testing-library/jest-dom'
 import {scaleMatrix, new4x4Matrix} from "./matrix";
 
-
 describe('Scale Matrix implementation', () => {
   describe('Scale the given matrix by a given number', () => {
     it('should scale the x y and z by 3', () => {
