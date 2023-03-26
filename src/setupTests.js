@@ -20,3 +20,31 @@ describe('Scale Matrix implementation', () => {
     })
   })
 })
+
+
+describe('orthoProjection', () => {
+  test('should return a 4x4 matrix', () => {
+    const matrix = orthoProjection(-1, 1, -1, 1, -1, 1);
+    expect(matrix.length).toBe(16);
+  });
+
+  test('should project the given coordinates to the normalized device coordinates', () => {
+    const matrix = orthoProjection(-1, 1, -1, 1, -1, 1);
+    const input = [0.5, 0.5, 0.5, 1];
+    const expectedOutput = [0.75, 0.75, -0.5, 1];
+    const output = new Float32Array(4);
+    mat4.multiply(output, input, matrix);
+    expect(output).toEqual(expectedOutput);
+  });
+
+  test('should be the identity matrix when left = -right, bottom = -top and near = -far', () => {
+    const matrix = orthoProjection(-1, 1, -1, 1, -1, 1);
+    const identityMatrix = new Float32Array([
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1,
+    ]);
+    expect(matrix).toEqual(identityMatrix);
+  });
+});
