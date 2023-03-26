@@ -2,9 +2,8 @@
 
 //Matrix Generator that automatically outputs an identity matrix
 function new4x4Matrix(){
-    const m = mat4.create()
-    mat4.identity(m)
-    return m
+    const mat4 = glMatrix.mat4;
+    return mat4.create();
 }
 
 // 4x4 Matrix multiplier
@@ -40,6 +39,9 @@ function translateMatrix(matrix4, a, b, c){
 // Scales a given matrix by whatever numbers you want. 'a' scales the x-coord, 
 // 'b' scales the y-coord, 'c' scales the z-coord.
 function scaleMatrix(matrix4, a, b, c){
+    if (matrix4.length !== 16) {
+        throw new Error("Input matrix is not a 4x4 matrix");
+    }
     matrix4[0] *= a // row[1]col[1]
     matrix4[5] *= b // row[2]col[2]
     matrix4[10] *= c // row[3]col[3]
