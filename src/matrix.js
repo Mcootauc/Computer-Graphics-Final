@@ -115,3 +115,5 @@ const rotationMatrix = (angle, x, y, z) => {
 
     return matrix;
   }
+
+  export { scaleMatrix, new4x4Matrix }
