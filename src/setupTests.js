@@ -15,8 +15,8 @@ describe('Scale Matrix implementation', () => {
         0.0, 0.0, 3.0, 0.0,
         0.0, 0.0, 0.0, 3.0
       );
-      scaleMatrix(matrixBase, 3, 3, 3);
-      expect(matrixBase).toBe(answerMatrix);
+      const scaledMatrix = scaleMatrix(matrixBase, 3, 3, 3);
+      expect(scaledMatrix).toHaveValue(answerMatrix);
     })
   })
 })
