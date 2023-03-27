@@ -1,4 +1,4 @@
-import { scaleMatrix, orthoProjection, new4x4Matrix, multiply4x4Matrices } from './matrix'
+import { scaleMatrix, orthoProjection, new4x4Matrix } from './matrix'
 
 describe('Matrix Multiplication', () => {
   it('should return a 4x4 matrix using multiplication', () => {
