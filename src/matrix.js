@@ -17,16 +17,16 @@ function new4x4Matrix() {
 
 // 4x4 Matrix multiplier
 // need help on how to access the individual rows, cols
-function multiply4x4Matrices(m1, m2) {
+function multiply4x4Matrices(matrix1, matrix2) {
   let result = []
-  if (m1.length != m2.length) {
+  if (matrix1.length != matrix2.length) {
     console.error('invalid')
     return
   }
 
-  for (let i = 0; i < m1.length; i += 4) {
-    for (let j = 0; j < m1.length; j += 4) {
-      result.push(dotProduct(m1, m2, i, j))
+  for (let i = 0; i < matrix1.length; i += 4) {
+    for (let j = 0; j < matrix1.length; j += 4) {
+      result.push(dotProduct(matrix1, matrix2, i, j))
     }
   }
 
@@ -35,12 +35,12 @@ function multiply4x4Matrices(m1, m2) {
 }
 
 // calculates the dot product of two matrices
-function dotProduct(martix1, matrix2, i, j) {
+function dotProduct(matrix1, matrix2, i, j) {
   return (
-    martix1[i] * matrix2[j] +
-    martix1[i + 1] * matrix2[j + 4] +
-    martix1[i + 2] * matrix2[j + 8] +
-    martix1[i + 3] * matrix2[j + 12]
+    matrix1[i] * matrix2[j] +
+    matrix1[i + 1] * matrix2[j + 4] +
+    matrix1[i + 2] * matrix2[j + 8] +
+    matrix1[i + 3] * matrix2[j + 12]
   )
 }
 
@@ -120,35 +120,42 @@ const rotationMatrix = (angle, x, y, z) => {
 }
 
 function orthoProjection(left, right, bottom, top, near, far) {
-    const result = new Float32Array(16);
-  
-    result[0] = 2 / (right - left);
-    result[5] = 2 / (top - bottom);
-    result[10] = -1 / (far - near);
-    result[12] = (right + left) / (left - right);
-    result[13] = (top + bottom) / (bottom - top);
-    result[14] = -near / (near - far);
-    result[15] = 1;
-  
-    return result;
-  }
-  
+  const result = new Float32Array(16)
+
+  result[0] = 2 / (right - left)
+  result[5] = 2 / (top - bottom)
+  result[10] = -1 / (far - near)
+  result[12] = (right + left) / (left - right)
+  result[13] = (top + bottom) / (bottom - top)
+  result[14] = -near / (near - far)
+  result[15] = 1
+
+  return result
+}
 
 function perspectiveProjection(left, right, bottom, top, near, far) {
-  const width = right - left
-  const height = top - bottom
-  const depth = far - near
-  const x2 = (right + left) / width
-  const y2 = (top + bottom) / height
-  const z2 = -(far + near) / depth
-
   //prettier-ignore
   const matrix = new Float32Array([
-        (2 * near) / width, 0, x2, 0,
-        0, (2 * near) / height, y2, 0,
-        0, 0, z2, (-2 * near * far) / depth,
-        0, 0, -1, 0
-    ])
+    (2 * near) / right - left,
+    0,
+    0,
+    0,
+
+    0,
+    (2 * near) / top - bottom,
+    0,
+    0,
+
+    (right + left) / (right - left),
+    (top + bottom) / (top - bottom),
+    -(far + near) / (far - near),
+    -1,
+
+    0,
+    0,
+    (-2 * near * far) / (far - near),
+    0
+  ])
   return matrix
 }
 
