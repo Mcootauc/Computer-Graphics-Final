@@ -26,22 +26,18 @@ function multiply4x4Matrices(matrix1, matrix2) {
 
   for (let i = 0; i < matrix1.length; i += 4) {
     for (let j = 0; j < matrix1.length; j += 4) {
-      result.push(dotProduct(matrix1, matrix2, i, j))
+      result.push(
+        matrix1[i] * matrix2[j] +
+          matrix1[i + 1] * matrix2[j + 4] +
+          matrix1[i + 2] * matrix2[j + 8] +
+          matrix1[i + 3] * matrix2[j + 12]
+      )
+      console.log(i, j)
     }
   }
 
   console.log('your result is: ', result)
   return result
-}
-
-// calculates the dot product of two matrices
-function dotProduct(matrix1, matrix2, i, j) {
-  return (
-    matrix1[i] * matrix2[j] +
-    matrix1[i + 1] * matrix2[j + 4] +
-    matrix1[i + 2] * matrix2[j + 8] +
-    matrix1[i + 3] * matrix2[j + 12]
-  )
 }
 
 // **************************************************
@@ -134,7 +130,6 @@ function orthoProjection(left, right, bottom, top, near, far) {
 }
 
 function perspectiveProjection(left, right, bottom, top, near, far) {
-  //prettier-ignore
   const matrix = new Float32Array([
     (2 * near) / right - left,
     0,

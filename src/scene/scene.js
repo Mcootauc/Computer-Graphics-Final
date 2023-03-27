@@ -21,6 +21,8 @@ const Scene = props => {
     gl.enable(gl.CULL_FACE)
     gl.clearColor(0.0, 0.0, 0.0, 0.0)
     gl.viewport(0, 0, canvas.width, canvas.height)
+
+    const drawObject = object => {}
   }, [canvasRef])
 
   return (
