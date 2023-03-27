@@ -59,7 +59,7 @@ function translateMatrix(matrix4, a, b, c) {
 // Scales a given matrix by whatever numbers you want. 'a' scales the x-coord,
 // 'b' scales the y-coord, 'c' scales the z-coord.
 function scaleMatrix(matrix4, a, b, c) {
-  if (matrix4.length !== 16) {
+  if (matrix4.length != 16) {
     throw new Error('Input matrix is not a 4x4 matrix')
   }
   matrix4[0] *= a // row[1]col[1]
