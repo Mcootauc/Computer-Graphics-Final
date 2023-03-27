@@ -36,7 +36,7 @@ describe('Scale Matrix implementation', () => {
       matrixBase[8] = 1
 
       
-      expect(scaleMatrix(matrixBase, 1, 1, 1)).toThrow('Input matrix is not a 4x4 matrix')
+      expect(() => scaleMatrix(matrixBase, 1, 1, 1)).toThrowError('Input matrix is not a 4x4 matrix')
     })
   })
 })
