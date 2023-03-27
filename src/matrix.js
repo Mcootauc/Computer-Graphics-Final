@@ -20,22 +20,33 @@ function new4x4Matrix() {
 // need help on how to access the individual rows, cols
 function multiply4x4Matrices(m1, m2) {
   let result = []
-  if (m1.size() != m2.size()) {
-    console.error()
+  if (m1.length != m2.length) {
+    console.error('invalid')
     return
   }
 
-  for (let i = 0; i < m1.size(); i++) {
-    for (let j = 0; j < m1[3][3]; j++) {
-      result[i][j] = 0
-      for (let k = 0; k < m2[3][3]; k++) {
-        result += m1[i][j] * m2[j][k]
-      }
+  for (let i = 0; i < m1.length; i += 4) {
+    for (let j = 0; j < m1.length; j += 4) {
+      result.push(dotProduct(m1, m2, i, j))
     }
   }
+
   console.log('your result is: ', result)
   return result
 }
+
+// calculates the dot product of two matrices
+function dotProduct(martix1, matrix2, i, j) {
+  return (
+    martix1[i] * matrix2[j] +
+    martix1[i + 1] * matrix2[j + 4] +
+    martix1[i + 2] * matrix2[j + 8] +
+    martix1[i + 3] * matrix2[j + 12]
+  )
+}
+
+// **************************************************
+// make function to change matrix to "regular matrix"
 
 // Translates a given matrix by whatever numbers you want. 'a' translates the x-coord,
 // 'b' translates the y-coord, 'c' translates the z-coord.
@@ -146,4 +157,12 @@ function perspectiveProjection(left, right, bottom, top, near, far) {
   return matrix
 }
 
-export { scaleMatrix, new4x4Matrix, translateMatrix, rotationMatrix, orthoProjection, perspectiveProjection }
+export {
+  scaleMatrix,
+  multiply4x4Matrices,
+  new4x4Matrix,
+  translateMatrix,
+  rotationMatrix,
+  orthoProjection,
+  perspectiveProjection
+}
