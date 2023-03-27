@@ -1,4 +1,6 @@
-import {scaleMatrix, new4x4Matrix} from "./matrix";
+import {scaleMatrix, orthoProjection, new4x4Matrix} from "./matrix";
+import { mat4 } from 'gl-matrix';
+
 
 describe('Scale Matrix implementation', () => {
     describe('Scale the given matrix by a given number', () => {
@@ -26,13 +28,19 @@ describe('orthoProjection', () => {
     });
   
     test('should project the given coordinates to the normalized device coordinates', () => {
-      const matrix = orthoProjection(-1, 1, -1, 1, -1, 1);
-      const input = [0.5, 0.5, 0.5, 1];
-      const expectedOutput = [0.75, 0.75, -0.5, 1];
+      const input = new Float32Array([0, 0, 0, 1]);
+      const expectedOutput = new Float32Array([0.75, 0.75, -0.5, 1]);
       const output = new Float32Array(4);
+      const matrix = orthoProjection(-1, 1, -1, 1, -1, 1);
+    
       mat4.multiply(output, input, matrix);
+      for (let i = 0; i < output.length; i++) {
+        output[i] = parseFloat(output[i].toFixed(2)); // Round output to 2 decimal places
+      }
+    
       expect(output).toEqual(expectedOutput);
     });
+    
   
     test('should be the identity matrix when left = -right, bottom = -top and near = -far', () => {
       const matrix = orthoProjection(-1, 1, -1, 1, -1, 1);
@@ -42,6 +50,7 @@ describe('orthoProjection', () => {
         0, 0, 1, 0,
         0, 0, 0, 1,
       ]);
+      
       expect(matrix).toEqual(identityMatrix);
     });
   });

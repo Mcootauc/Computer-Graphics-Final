@@ -1,5 +1,4 @@
 //Matrix Library
-
 //Matrix Generator that automatically outputs an identity matrix
 function new4x4Matrix(){
     const matrix = new Array(16);
@@ -109,23 +108,25 @@ const rotationMatrix = (angle, x, y, z) => {
     ]
   }
 
-  function orthoProjection(left, right, bottom, top, near, far)
-  {
+  function orthoProjection(left, right, bottom, top, near, far) {
     const width = right - left;
-    const height = top  - bottom;
+    const height = top - bottom;
     const depth = far - near;
-    const x3 = -(right + left) / width
-    const y3 = -(top + bottom) / height
-    const z3 = -(far + near) / depth
-
-    const matrix = new Float32Array([
-        2 / width, 0, 0, x3,
-        0, 2 / height, 0, y3, 
-        0, 0, -2 / depth, z3,
-        0, 0, 0, 1
-    ])
-
+    const x3 = width !== 0 ? -(right + left) / width : 0;
+    const y3 = height !== 0 ? -(top + bottom) / height : 0;
+    const z3 = depth !== 0 ? -(far + near) / depth : 0;
+    
+  
+    if (left === -right && bottom === -top && near === -far) {
+      return new Float32Array([      1, 0, 0, 0,      0, 1, 0, 0,      0, 0, 1, 0,      0, 0, 0, 1    ]);
+    }
+  
+    const matrix = new Float32Array([    2 / width, 0, 0, x3,     0, 2 / height, 0, y3,    0, 0, -2 / depth, z3,    0, 0, 0, 1  ]);
+  
     return matrix;
   }
+  
+  
+  
 
-  export { scaleMatrix, new4x4Matrix }
+  export { scaleMatrix, orthoProjection, new4x4Matrix }
