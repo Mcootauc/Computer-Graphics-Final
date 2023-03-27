@@ -20,10 +20,9 @@ const Scene = props => {
     gl.enable(gl.CULL_FACE)
     gl.clearColor(0.0, 0.0, 0.0, 0.0)
     gl.viewport(0, 0, canvas.width, canvas.height)
+  }, [canvasRef])
 
-    }, [canvasRef])
-
-    return (
+  return (
     <article>
       {/* The canvas is square because the default WebGL space is a cube. */}
       <canvas width="512" height="512" ref={canvasRef}>

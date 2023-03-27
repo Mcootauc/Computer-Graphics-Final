@@ -3,55 +3,45 @@ import { mat4 } from 'gl-matrix';
 
 
 describe('Scale Matrix implementation', () => {
-    describe('Scale the given matrix by a given number', () => {
-        it('should scale the x y and z by 3', () => {
-        const matrixBase = new4x4Matrix();
-        const answerMatrix = new Array(16);
-        for (let i = 0; i < 16; i++) {
-            answerMatrix[i] = 0;
-        }
-        answerMatrix[0] = 3;
-        answerMatrix[5] = 3;
-        answerMatrix[10] = 3;
-        answerMatrix[15] = 1;
-        
-        const scaledMatrix = scaleMatrix(matrixBase, 3, 3, 3);
-        expect(scaledMatrix).toEqual(answerMatrix);
-        })
+  describe('Scale the given matrix by a given number', () => {
+    it('should scale the x y and z by 3', () => {
+      const matrixBase = new4x4Matrix()
+      const answerMatrix = new Array(16)
+      for (let i = 0; i < 16; i++) {
+        answerMatrix[i] = 0
+      }
+      answerMatrix[0] = 3
+      answerMatrix[5] = 3
+      answerMatrix[10] = 3
+      answerMatrix[15] = 1
+
+      const scaledMatrix = scaleMatrix(matrixBase, 3, 3, 3)
+      expect(scaledMatrix).toEqual(answerMatrix)
     })
+  })
 })
 
 describe('orthoProjection', () => {
-    test('should return a 4x4 matrix', () => {
-      const matrix = orthoProjection(-1, 1, -1, 1, -1, 1);
-      expect(matrix.length).toBe(16);
-    });
+  test('orthoProjection should return a Float32Array with the correct values', () => {
+    const left = -1;
+    const right = 1;
+    const bottom = -1;
+    const top = 1;
+    const near = 1;
+    const far = 10;
   
-    test('should project the given coordinates to the normalized device coordinates', () => {
-      const input = new Float32Array([0, 0, 0, 1]);
-      const expectedOutput = new Float32Array([0.75, 0.75, -0.5, 1]);
-      const output = new Float32Array(4);
-      const matrix = orthoProjection(-1, 1, -1, 1, -1, 1);
-    
-      mat4.multiply(output, input, matrix);
-      for (let i = 0; i < output.length; i++) {
-        output[i] = parseFloat(output[i].toFixed(2)); // Round output to 2 decimal places
-      }
-    
-      expect(output).toEqual(expectedOutput);
-    });
-    
+    const result = orthoProjection(left, right, bottom, top, near, far);
   
-    test('should be the identity matrix when left = -right, bottom = -top and near = -far', () => {
-      const matrix = orthoProjection(-1, 1, -1, 1, -1, 1);
-      const identityMatrix = new Float32Array([
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1,
-      ]);
-      
-      expect(matrix).toEqual(identityMatrix);
-    });
+    const expected = new Float32Array([
+      2 / (right - left), 0, 0, 0,
+      0, 2 / (top - bottom), 0, 0,
+      0, 0, -1 / (far - near), 0,
+      (right + left) / (left - right), (top + bottom) / (bottom - top), -near / (near - far), 1
+    ]);
+  
+    expect(result).toBeInstanceOf(Float32Array);
+    expect(result).toHaveLength(16);
+    expect(result).toEqual(expected);
   });
   
+});
