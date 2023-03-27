@@ -32,6 +32,7 @@ function multiply4x4Matrices(matrix1, matrix2) {
           matrix1[i + 2] * matrix2[j + 8] +
           matrix1[i + 3] * matrix2[j + 12]
       )
+      console.log(i, j)
     }
   }
 
