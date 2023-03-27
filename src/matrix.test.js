@@ -2,9 +2,9 @@ import { scaleMatrix, orthoProjection, new4x4Matrix, multiply4x4Matrices } from 
 
 describe('Matrix Multiplication', () => {
   it('should return a 4x4 matrix using multiplication', () => {
-    const matrix1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-    const matrix2 = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]
-    const resultMatrix = [180, 404, 628, 852, 200, 456, 712, 968, 220, 508, 796, 1084, 240, 560, 880, 1200]
+    const matrix1 = [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4]
+    const matrix2 = [2, 3, 4, 5, 2, 3, 4, 5, 2, 3, 4, 5, 2, 3, 4, 5]
+    const resultMatrix = [14, 28, 42, 56, 14, 28, 42, 56, 14, 28, 42, 56, 14, 28, 42, 56]
 
     expect(multiply4x4Matrices(matrix1, matrix2)).toEqual(resultMatrix)
   })
