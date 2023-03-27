@@ -2,8 +2,18 @@
 
 //Matrix Generator that automatically outputs an identity matrix
 function new4x4Matrix(){
-    const mat4 = glMatrix.mat4;
-    return mat4.create();
+    const matrix = new Array(16);
+    for (let i = 0; i < 16; i++) {
+        matrix[i] = 0;
+    }
+
+    // Set some values in the matrix
+    matrix[0] = 1;
+    matrix[5] = 1;
+    matrix[10] = 1;
+    matrix[15] = 1;
+    
+    return matrix;
 }
 
 // 4x4 Matrix multiplier
