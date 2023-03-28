@@ -16,7 +16,6 @@ function new4x4Matrix() {
 }
 
 // 4x4 Matrix multiplier
-// need help on how to access the individual rows, cols
 function matrixMultiplier(matrix1, matrix2) {
   let result = []
   if (matrix1.length != matrix2.length) {
@@ -138,8 +137,8 @@ function orthoProjection(left, right, bottom, top, near, far) {
   return result
 }
 
-function perspectiveProjection(left, right, bottom, top, near, far) {
-  const matrix = new Float32Array([
+const perspectiveProjection = (left, right, bottom, top, near, far) => {
+  return [
     (2 * near) / right - left,
     0,
     0,
@@ -159,8 +158,7 @@ function perspectiveProjection(left, right, bottom, top, near, far) {
     0,
     (-2 * near * far) / (far - near),
     0
-  ])
-  return matrix
+  ]
 }
 
 export {
