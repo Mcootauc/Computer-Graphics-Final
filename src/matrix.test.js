@@ -1,4 +1,4 @@
-import { scaleMatrix, orthoProjection, new4x4Matrix } from './matrix'
+import { scaleMatrix, orthoProjection, new4x4Matrix, matrixMultiplier } from './matrix'
 
 describe('Matrix Multiplication', () => {
   it('should return a 4x4 matrix using multiplication', () => {
@@ -6,7 +6,7 @@ describe('Matrix Multiplication', () => {
     const matrix2 = [2, 3, 4, 5, 2, 3, 4, 5, 2, 3, 4, 5, 2, 3, 4, 5]
     const resultMatrix = [14, 28, 42, 56, 14, 28, 42, 56, 14, 28, 42, 56, 14, 28, 42, 56]
 
-    expect(multiply4x4Matrices(matrix1, matrix2)).toEqual(resultMatrix)
+    expect(matrixMultiplier(matrix1, matrix2)).toEqual(resultMatrix)
   })
 })
 
