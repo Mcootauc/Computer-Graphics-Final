@@ -1,4 +1,4 @@
-import { scaleMatrix, orthoProjection, new4x4Matrix, matrixMultiplier } from './matrix'
+import { scaleMatrix, orthoProjection, new4x4Matrix, matrixMultiplier, perspectiveProjection } from './matrix'
 
 describe('Matrix Multiplication', () => {
   it('should return a 4x4 matrix using multiplication', () => {
@@ -35,7 +35,6 @@ describe('Scale Matrix implementation', () => {
       matrixBase[4] = 1
       matrixBase[8] = 1
 
-      
       expect(() => scaleMatrix(matrixBase, 1, 1, 1)).toThrowError('Input matrix is not a 4x4 matrix')
     })
   })
@@ -74,5 +73,21 @@ describe('orthoProjection', () => {
     expect(result).toBeInstanceOf(Float32Array)
     expect(result).toHaveLength(16)
     expect(result).toEqual(expected)
+  })
+})
+
+describe('Perspective Projection', () => {
+  it('should make an accurate perspective projection matrix', () => {
+    const matrix = perspectiveProjection(1, 2, 3, 4, 1, 2)
+    const result = [0, 0, 0, 0, 0, -2.5, 0, 0, 3, 7, -3, -1, 0, 0, -4, 0]
+
+    expect(matrix).toEqual(result)
+  })
+  it('should calculate matrix multiplication', () => {
+    const matrix1 = perspectiveProjection(1, 2, 3, 4, 1, 2)
+    const matrix2 = perspectiveProjection(0.5, -0.5, 3, 5, 2, 1)
+    const result = [0, 0, 0, 0, 0, 5.5, 0, 0, 9, 11, -5, -3, 12, 28, -12, -4]
+
+    expect(matrixMultiplier(matrix1, matrix2)).toEqual(result)
   })
 })
