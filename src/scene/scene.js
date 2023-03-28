@@ -16,6 +16,7 @@ const Scene = props => {
       // No WebGL, no use going on...
       return
     }
+    
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.CULL_FACE)
     gl.clearColor(0.0, 0.0, 0.0, 0.0)

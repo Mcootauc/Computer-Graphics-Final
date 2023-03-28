@@ -26,6 +26,18 @@ describe('Scale Matrix implementation', () => {
       const scaledMatrix = scaleMatrix(matrixBase, 3, 3, 3)
       expect(scaledMatrix).toEqual(answerMatrix)
     })
+    it('should throw an error for not being a 4x4 matrix', () => {
+      const matrixBase = new Array(9)
+      for (let i = 0; i < 9; i++) {
+        matrixBase[i] = 0
+      }
+      matrixBase[0] = 1
+      matrixBase[4] = 1
+      matrixBase[8] = 1
+
+      
+      expect(() => scaleMatrix(matrixBase, 1, 1, 1)).toThrowError('Input matrix is not a 4x4 matrix')
+    })
   })
 })
 
