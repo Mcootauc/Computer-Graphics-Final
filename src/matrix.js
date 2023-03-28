@@ -1,19 +1,19 @@
 //Matrix Library
 
 //Matrix Generator that automatically outputs an identity matrix
-function new4x4Matrix(){
-    const matrix = new Array(16);
-    for (let i = 0; i < 16; i++) {
-        matrix[i] = 0;
-    }
+function new4x4Matrix() {
+  const matrix = new Array(16)
+  for (let i = 0; i < 16; i++) {
+    matrix[i] = 0
+  }
 
-    // defaults to identity matrix
-    matrix[0] = 1;
-    matrix[5] = 1;
-    matrix[10] = 1;
-    matrix[15] = 1;
+  // defaults to identity matrix
+  matrix[0] = 1
+  matrix[5] = 1
+  matrix[10] = 1
+  matrix[15] = 1
 
-    return matrix;
+  return matrix
 }
 
 // 4x4 Matrix multiplier
@@ -48,37 +48,29 @@ function matrixMultiplier(matrix1, matrix2) {
   result[15] =
     matrix1[3] * matrix2[12] + matrix1[7] * matrix2[13] + matrix1[11] * matrix2[14] + matrix1[15] * matrix2[15]
 
-    for(let i = 0; i < m1.size(); i++){
-        for(let j = 0; j < m1[3][3]; j++){
-            result[i][j] = 0
-            for(let k = 0; k < m2[3][3]; k++){
-                result += m1[i][j] * m2[j][k]
-            }
-        }
-    }
-    console.log("your result is: ", result)
-    return result
+  console.log('your result is: ', result)
+  return result
 }
 
 // Translates a given matrix by whatever numbers you want. 'a' translates the x-coord,
 // 'b' translates the y-coord, 'c' translates the z-coord.
-function translateMatrix(matrix4, a, b, c){
-    matrix4[3] += a // last entry in col. 1
-    matrix4[7] += b // last entry in col. 2
-    matrix4[11] += c // last entry in col. 3
-    return matrix4
+function translateMatrix(matrix4, a, b, c) {
+  matrix4[3] += a // last entry in col. 1
+  matrix4[7] += b // last entry in col. 2
+  matrix4[11] += c // last entry in col. 3
+  return matrix4
 }
 
-// Scales a given matrix by whatever numbers you want. 'a' scales the x-coord, 
+// Scales a given matrix by whatever numbers you want. 'a' scales the x-coord,
 // 'b' scales the y-coord, 'c' scales the z-coord.
-function scaleMatrix(matrix4, a, b, c){
-    if (matrix4.length !== 16) {
-        throw new Error("Input matrix is not a 4x4 matrix");
-    }
-    matrix4[0] *= a // row[1]col[1]
-    matrix4[5] *= b // row[2]col[2]
-    matrix4[10] *= c // row[3]col[3]
-    return matrix4
+function scaleMatrix(matrix4, a, b, c) {
+  if (matrix4.length !== 16) {
+    throw new Error('Input matrix is not a 4x4 matrix')
+  }
+  matrix4[0] *= a // row[1]col[1]
+  matrix4[5] *= b // row[2]col[2]
+  matrix4[10] *= c // row[3]col[3]
+  return matrix4
 }
 
 // Rotation Matrix from class
