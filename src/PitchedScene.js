@@ -4,6 +4,8 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef } from 'react'
+import addShapeWithLines from './scene/scene'
+import { icosahedron, toRawLineArray } from './shapes'
 
 const CANVAS_WIDTH = 512
 const CANVAS_HEIGHT = 512
@@ -21,7 +23,10 @@ const PitchedScene = props => {
     }
 
     const renderingContext = canvas.getContext('2d')
-
+    addShapeWithLines(
+      { r: 1, g: 0.5, b: 0 },
+      toRawLineArray(icosahedron())
+    )
     let previousTimestamp
     const nextFrame = timestamp => {
       // Initialize the timestamp.
