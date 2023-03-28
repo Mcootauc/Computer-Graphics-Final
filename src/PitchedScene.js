@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef } from 'react'
-import { cone, cylinder, toRawLineArray } from './shapes'
+import { sphere, cone, cylinder, toRawLineArray } from './shapes'
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utilities'
 
 const VERTEX_SHADER = `
@@ -74,10 +74,14 @@ const PitchedScene = props => {
         vertices: toRawLineArray(cylinder()),
         mode: gl.LINES
       },
-
       {
         color: { r: 0.5, g: 1.0, b: 0 },
         vertices: toRawLineArray(cone()),
+        mode: gl.LINES
+      },
+      {
+        color: { r: 0.0, g: 0.0, b: 0 },
+        vertices: toRawLineArray(sphere()),
         mode: gl.LINES
       }
     ];
