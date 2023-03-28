@@ -5,13 +5,13 @@
  */
 
 /**
- * Returns the vertices and faces for a small icosahedron.
+ * 
  *
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
 const cylinder = () => {
-    // The core icosahedron coordinates.
+    // The core cylinder coordinates.
     const X = 0.9
     const Z = 0.636
   
@@ -35,95 +35,49 @@ const cylinder = () => {
         [0.0, -X,   X], //15
         [Z,   -X,   Z], //16
         [X,   -X, 0.0], //17
-        [Z,   -X,  -Z], //18
+        [Z,   -X,  -Z] //18
       ],
   
       facesByIndex: [
-        [1, 2, 3], //Top
-        [1, 3, 4],
-        [1, 4, 5],
-        [1, 5, 6],
-        [1, 6, 7],
-        [1, 7, 8],
-        [1, 8, 9],
-        [1, 9, 2],
+        [0, 1, 2], //Top
+        [0, 2, 3],
+        [0, 3, 4],
+        [0, 4, 5],
+        [0, 5, 6],
+        [0, 6, 7],
+        [0, 7, 8],
+        [0, 8, 1],
 
-        [10, 11, 12], //Bottom
-        [10, 12, 13],
-        [10, 13, 14],
-        [10, 14, 15],
-        [10, 15, 16],
-        [10, 16, 17],
-        [10, 17, 18],
-        [10, 18, 11],
+        [9, 10, 11], //Bottom
+        [9, 11, 12],
+        [9, 12, 13],
+        [9, 13, 14],
+        [9, 14, 15],
+        [9, 15, 16],
+        [9, 16, 17],
+        [9, 17, 10],
 
-        [15, 6,  7], //Middle
+        [14, 5,  6], //Middle
+        [14, 6, 15],
+        [15, 6,  7],
         [15, 7, 16],
         [16, 7,  8],
         [16, 8, 17],
-        [17, 8,  9],
-        [17, 9, 18],
-        [18, 9,  2],
-        [18, 2, 11],
+        [17, 8,  1],
+        [17, 1, 10],
 
-        [11, 2,  3], 
+        [10, 1,  2], 
+        [10, 2, 11],
+        [11, 2,  3],
         [11, 3, 12],
         [12, 3,  4],
         [12, 4, 13],
         [13, 4,  5],
         [13, 5, 14],
-        [14, 5,  6],
-        [14, 6, 15],
       ]
     }
   }
 
-  const icosahedron = () => {
-    // The core icosahedron coordinates.
-    const X = 0.525731112119133606
-    const Z = 0.850650808352039932
-  
-    return {
-      vertices: [
-        [-X, 0.0, Z],
-        [X, 0.0, Z],
-        [-X, 0.0, -Z],
-        [X, 0.0, -Z],
-        [0.0, Z, X],
-        [0.0, Z, -X],
-        [0.0, -Z, X],
-        [0.0, -Z, -X],
-        [Z, X, 0.0],
-        [-Z, X, 0.0],
-        [Z, -X, 0.0],
-        [-Z, -X, 0.0]
-      ],
-  
-      facesByIndex: [
-        [1, 4, 0],
-        [4, 9, 0],
-        [4, 5, 9],
-        [8, 5, 4],
-        [1, 8, 4],
-        [1, 10, 8],
-        [10, 3, 8],
-        [8, 3, 5],
-        [3, 2, 5],
-        [3, 7, 2],
-        [3, 10, 7],
-        [10, 6, 7],
-        [6, 11, 7],
-        [6, 0, 11],
-        [6, 1, 0],
-        [10, 1, 6],
-        [11, 0, 9],
-        [2, 11, 9],
-        [5, 2, 9],
-        [11, 2, 7]
-      ]
-    }
-  }
-  
   /**
    * Utility function for turning our nascent geometry object into a “raw” coordinate array
    * arranged as triangles.
@@ -163,5 +117,5 @@ const cylinder = () => {
     return result
   }
   
-  export { cylinder, icosahedron, toRawTriangleArray, toRawLineArray }
+  export { cylinder, toRawTriangleArray, toRawLineArray }
   

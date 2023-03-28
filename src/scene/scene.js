@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
+import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utilities'
 
 const VERTEX_SHADER = `
   #ifdef GL_ES
@@ -100,4 +100,4 @@ const Scene = props => {
   )
 }
 
-export default Scene.addShapeWithLines;
+export default Scene;
