@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef } from 'react'
-import { cylinder, toRawLineArray } from './shapes'
+import { cone, cylinder, toRawLineArray } from './shapes'
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from './glsl-utilities'
 
 const VERTEX_SHADER = `
@@ -74,7 +74,13 @@ const PitchedScene = props => {
         vertices: toRawLineArray(cylinder()),
         mode: gl.LINES
       },
-    ]
+
+      {
+        color: { r: 0.5, g: 1.0, b: 0 },
+        vertices: toRawLineArray(cone()),
+        mode: gl.LINES
+      }
+    ];
 
     // Pass the vertices to WebGL.
     objectsToDraw.forEach(objectToDraw => {
@@ -130,14 +136,14 @@ const PitchedScene = props => {
      */
     const drawScene = () => {
       // Clear the display.
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    
       // Display the objects.
-      objectsToDraw.forEach(drawObject)
-
+      objectsToDraw.forEach(drawObject);
+    
       // All done.
-      gl.flush()
-    }
+      gl.flush();
+    };
 
     // ...and finally, do the initial display.
     drawScene()

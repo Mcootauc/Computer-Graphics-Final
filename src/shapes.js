@@ -1,3 +1,4 @@
+import { scaleMatrix } from "./matrix"
 /*
  * This module defines/generates vertex arrays for certain predefined shapes.
  * The "shapes" are returned as indexed vertices, with utility functions for
@@ -116,6 +117,42 @@ const cylinder = () => {
   
     return result
   }
+  const cone = () => {
+    const radius = 0.9 * 0.5;
+    const height = 1.2 * 0.5;
   
-  export { cylinder, toRawTriangleArray, toRawLineArray }
+    const vertices = [
+      [0, height, 0], // top vertex
+    ];
+  
+    // generate base vertices around the circle
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2;
+      const x = Math.sin(angle) * radius;
+      const y = 0;
+      const z = Math.cos(angle) * radius;
+      vertices.push([x, y, z]);
+    }
+  
+    const facesByIndex = [];
+  
+    // generate faces for the base
+    for (let i = 1; i < 8; i++) {
+      facesByIndex.push([0, i, i + 1]);
+    }
+    facesByIndex.push([0, 8, 1]);
+  
+    // generate faces for the sides
+    for (let i = 1; i < 8; i++) {
+      facesByIndex.push([i, i + 1, 0]);
+    }
+    facesByIndex.push([8, 1, 0]);
+  
+    return { vertices, facesByIndex };
+  };
+  
+
+  
+  
+  export { cone, cylinder, toRawTriangleArray, toRawLineArray }
   
