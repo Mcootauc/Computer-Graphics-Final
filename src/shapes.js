@@ -1,4 +1,3 @@
-import { scaleMatrix } from "./matrix"
 /*
  * This module defines/generates vertex arrays for certain predefined shapes.
  * The "shapes" are returned as indexed vertices, with utility functions for
@@ -11,73 +10,154 @@ import { scaleMatrix } from "./matrix"
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
-const cylinder = () => {
-    // The core cylinder coordinates.
-    const X = 0.9
-    const Z = 0.636
-  
-    return {
-      vertices: [
-        [0.0,  X, 0.0], //1
-        [0.0,  X,  -X], //2
-        [-Z,   X,  -Z], //3
-        [-X,   X, 0.0], //4
-        [-Z,   X,   Z], //5
-        [0.0,  X,   X], //6
-        [Z,    X,   Z], //7
-        [X,    X, 0.0], //8
-        [Z,    X,  -Z], //9
+const sphere = () => {
+  // Define the number of subdivisions in the sphere
+  const numSubdivisions = 16;
 
-        [0.0, -X, 0.0], //10
-        [0.0, -X,  -X], //11
-        [-Z,  -X,  -Z], //12
-        [-X,  -X, 0.0], //13
-        [-Z,  -X,   Z], //14
-        [0.0, -X,   X], //15
-        [Z,   -X,   Z], //16
-        [X,   -X, 0.0], //17
-        [Z,   -X,  -Z] //18
-      ],
-  
-      facesByIndex: [
-        [0, 1, 2], //Top
-        [0, 2, 3],
-        [0, 3, 4],
-        [0, 4, 5],
-        [0, 5, 6],
-        [0, 6, 7],
-        [0, 7, 8],
-        [0, 8, 1],
+  // Create an array to hold the vertices
+  const vertices = [];
 
-        [9, 10, 11], //Bottom
-        [9, 11, 12],
-        [9, 12, 13],
-        [9, 13, 14],
-        [9, 14, 15],
-        [9, 15, 16],
-        [9, 16, 17],
-        [9, 17, 10],
+  // Create the vertices for the top half of the sphere
+  for (let i = 0; i <= numSubdivisions; i++) {
+    const theta = i * Math.PI / numSubdivisions;
+    const sinTheta = Math.sin(theta);
+    const cosTheta = Math.cos(theta);
 
-        [14, 5,  6], //Middle
-        [14, 6, 15],
-        [15, 6,  7],
-        [15, 7, 16],
-        [16, 7,  8],
-        [16, 8, 17],
-        [17, 8,  1],
-        [17, 1, 10],
+    for (let j = 0; j <= numSubdivisions; j++) {
+      const phi = j * 2 * Math.PI / numSubdivisions;
+      const sinPhi = Math.sin(phi);
+      const cosPhi = Math.cos(phi);
 
-        [10, 1,  2], 
-        [10, 2, 11],
-        [11, 2,  3],
-        [11, 3, 12],
-        [12, 3,  4],
-        [12, 4, 13],
-        [13, 4,  5],
-        [13, 5, 14],
-      ]
+      const x = cosPhi * sinTheta;
+      const y = cosTheta;
+      const z = sinPhi * sinTheta;
+
+      vertices.push(x, y + 0.3, z);
     }
   }
+
+  // Create the vertices for the bottom half of the sphere
+  for (let i = 0; i <= numSubdivisions; i++) {
+    const theta = i * Math.PI / numSubdivisions;
+    const sinTheta = Math.sin(theta);
+    const cosTheta = Math.cos(theta);
+
+    for (let j = 0; j <= numSubdivisions; j++) {
+      const phi = j * 2 * Math.PI / numSubdivisions;
+      const sinPhi = Math.sin(phi);
+      const cosPhi = Math.cos(phi);
+
+      const x = cosPhi * sinTheta;
+      const y = cosTheta;
+      const z = sinPhi * sinTheta;
+
+      vertices.push(x, y - 0.3, z);
+    }
+  }
+
+  // Create an array to hold the faces
+  const faces = [];
+
+  // Create the faces for the top half of the sphere
+  for (let i = 0; i < numSubdivisions; i++) {
+    for (let j = 0; j < numSubdivisions; j++) {
+      const a = (i * (numSubdivisions + 1)) + j;
+      const b = a + numSubdivisions + 1;
+      const c = a + 1;
+      faces.push(a, b, c);
+
+      const d = b + 1;
+      faces.push(c, b, d);
+    }
+  }
+
+  // Create the faces for the bottom half of the sphere
+  const offset = (numSubdivisions + 1) * (numSubdivisions + 1);
+  for (let i = 0; i < numSubdivisions; i++) {
+    for (let j = 0; j < numSubdivisions; j++) {
+      const a = offset + (i * (numSubdivisions + 1)) + j;
+      const b = a + numSubdivisions + 1;
+      const c = a + 1;
+      faces.push(a, c, b);
+
+      const d = b + 1;
+      faces.push(c, d, b);
+    }
+  }
+  return {vertices, faces}
+}
+const cylinder = () => {
+  // The core cylinder coordinates.
+  const X = 0.9
+  const Z = 0.636
+
+  return {
+    vertices: [
+      [0.0,  X, 0.0], //1
+      [0.0,  X,  -X], //2
+      [-Z,   X,  -Z], //3
+      [-X,   X, 0.0], //4
+      [-Z,   X,   Z], //5
+      [0.0,  X,   X], //6
+      [Z,    X,   Z], //7
+      [X,    X, 0.0], //8
+      [Z,    X,  -Z], //9
+
+
+      [0.0, -X, 0.0], //10
+      [0.0, -X,  -X], //11
+      [-Z,  -X,  -Z], //12
+      [-X,  -X, 0.0], //13
+      [-Z,  -X,   Z], //14
+      [0.0, -X,   X], //15
+      [Z,   -X,   Z], //16
+      [X,   -X, 0.0], //17
+      [Z,   -X,  -Z] //18
+    ],
+
+    facesByIndex: [
+      [0, 1, 2], //Top
+      [0, 2, 3],
+      [0, 3, 4],
+      [0, 4, 5],
+      [0, 5, 6],
+      [0, 6, 7],
+      [0, 7, 8],
+      [0, 8, 1],
+
+
+      [9, 10, 11], //Bottom
+      [9, 11, 12],
+      [9, 12, 13],
+      [9, 13, 14],
+      [9, 14, 15],
+      [9, 15, 16],
+      [9, 16, 17],
+      [9, 17, 10],
+
+
+      [14, 5,  6], //Middle
+      [14, 6, 15],
+      [15, 6,  7],
+      [15, 7, 16],
+      [16, 7,  8],
+      [16, 8, 17],
+      [17, 8,  1],
+      [17, 1, 10],
+
+
+      [10, 1,  2],
+      [10, 2, 11],
+      [11, 2,  3],
+      [11, 3, 12],
+      [12, 3,  4],
+      [12, 4, 13],
+      [13, 4,  5],
+      [13, 5, 14],
+    ]
+  }
+}
+
 
   /**
    * Utility function for turning our nascent geometry object into a “raw” coordinate array
@@ -154,5 +234,5 @@ const cylinder = () => {
 
   
   
-  export { cone, cylinder, toRawTriangleArray, toRawLineArray }
+  export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray }
   
