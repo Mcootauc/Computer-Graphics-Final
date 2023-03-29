@@ -3,8 +3,8 @@
  * but now done using your own 3D library. It doesn’t have to be the same scene of course—that was done with
  * a different group, many many weeks ago!
  */
-import { useEffect, useRef } from 'react'
-import { cone, cylinder, toRawLineArray, pentagonalPyramid, hexagonalPrism } from './shapes'
+import { useEffect, useRef, useState } from 'react'
+import { cone, cylinder, toRawLineArray, hexagonalPrism, pentagonalPyramid } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -16,6 +16,8 @@ const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
 
 const PitchedScene = props => {
   const canvasRef = useRef()
+  const [objectsToDraw, setObjectsToDraw] = useState([])
+  let gl // Declare gl as a global variable
 
   useEffect(() => {
     const pitchedCanvas = canvasRef.current
@@ -93,17 +95,68 @@ const PitchedScene = props => {
     }
 
     window.requestAnimationFrame(nextFrame)
-  }, [canvasRef])
+  }, [canvasRef, objectsToDraw])
 
-  return (
-    <article>
-      <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
+  const addHexagonalPrism = () => {
+    const hexagonalObject = {
+      color: { r: 0, g: 1.0, b: 0.5},
+      vertices: toRawLineArray(hexagonalPrism()),
+      mode: gl.LINES
+    }
+    setObjectsToDraw(prevObjects => [...prevObjects, hexagonalObject])
+  }
 
-      <canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasRef}>
-        Your favorite update-your-browser message here.
-      </canvas>
-    </article>
-  )
+  const addPentagonalPyramid = () => {
+    const pentagonalObject = {
+      color: { r: 0.5, g: 0, b: 0.5},
+      vertices: toRawLineArray(pentagonalPyramid()),
+      mode: gl.LINES
+    }
+    setObjectsToDraw(prevObjects => [...prevObjects, pentagonalObject])
+  }
+
+const addCylinder = () => {
+  const cylinderObject = {
+    color: { r: 1, g: 0.5, b: 0 },
+    //takes in a parameter of radius, height, and radial segments
+    vertices: toRawLineArray(cylinder(1.2 * 0.5, 1.5 * 0.5, 4)),
+    mode: gl.LINES
+  }
+  setObjectsToDraw(prevObjects => [...prevObjects, cylinderObject])
 }
 
+const addCone = () => {
+  const coneObject = {
+    color: { r: 0.5, g: 1.0, b: 0 },
+    vertices: toRawLineArray(cone(1.8 * 0.5, 1.2 * 0.5)),
+    mode: gl.LINES
+  }
+  setObjectsToDraw(prevObjects => [...prevObjects, coneObject])
+}
+
+const removePrevious = () => {
+  setObjectsToDraw(prevObjects => {
+    const newObjects = [...prevObjects]
+    newObjects.pop()
+    return newObjects
+  })
+}
+
+return (
+  <article>
+    <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
+
+    <canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasRef}>
+      Your favorite update-your-browser message here.
+    </canvas>
+    <div>
+    <button onClick={addCylinder}>Add Cylinder</button>
+    <button onClick={addCone}>Add Cone</button>
+    <button onClick={addHexagonalPrism}>Add Hexagonal Prism</button>
+    <button onClick={addPentagonalPyramid}>Add Pentagonal Pyramid</button>
+    <button onClick={removePrevious}>Remove the previous shape</button>
+    </div>
+  </article>
+)
+}
 export default PitchedScene
