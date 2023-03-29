@@ -122,10 +122,8 @@ const cylinder = () => {
   
     return result
   }
-  const cone = () => {
-    const radius = 0.9 * 0.5;
-    const height = 1.2 * 0.5;
-  
+  const cone = (radius , height ) => {
+
     const vertices = [
       [0, height, 0], // top vertex
     ];

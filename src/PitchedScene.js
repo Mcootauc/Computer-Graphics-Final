@@ -42,7 +42,7 @@ const PitchedScene = props => {
       },
       {
         color: { r: 0.5, g: 1.0, b: 0 },
-        vertices: toRawLineArray(cone()),
+        vertices: toRawLineArray(cone(1.8 * 0.5, 1.2 * 0.5)),
         mode: gl.LINES
       }
     ];
