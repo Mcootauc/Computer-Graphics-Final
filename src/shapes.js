@@ -153,4 +153,42 @@ const pentagonalPyramid = () => {
   }
 }
 
-export { cone, cylinder, toRawTriangleArray, toRawLineArray, pentagonalPyramid }
+const hexagonalPrism = () => {
+  return {
+    vertices: [
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5],
+      [0.5, 0.5, 0.5]
+    ],
+    facesByIndex: [
+      [0, 1, 2], // Top Hexagon
+      [1, 2, 3],
+      [2, 3, 4],
+      [3, 4, 5],
+      [0, 4, 5],
+
+      [6, 7, 8], // Bottom Hexagon
+      [7, 8, 9],
+      [8, 9, 10],
+      [9, 10, 11],
+
+      [0, 6, 7], // edges to connect top & bottom heaxagon
+      [1, 7, 8],
+      [2, 8, 9],
+      [3, 9, 10],
+      [4, 10, 11],
+      [5, 11, 6]
+    ]
+  }
+}
+
+export { cone, cylinder, toRawTriangleArray, toRawLineArray, pentagonalPyramid, hexagonalPrism }
