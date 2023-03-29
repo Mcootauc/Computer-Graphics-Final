@@ -39,7 +39,7 @@ const PitchedScene = props => {
       {
         color: { r: 1, g: 0.5, b: 0 },
         //takes in a parameter of radius, height, and radial segments
-        vertices: toRawLineArray(sphere(0.7, 4, 4)),
+        vertices: toRawLineArray(sphere()),
         mode: gl.LINES
       },
       //{
@@ -48,11 +48,11 @@ const PitchedScene = props => {
       //  vertices: toRawLineArray(cylinder(0.6, 0.75, 4)),
       //  mode: gl.LINES
       //},
-      {
-        color: { r: 0.5, g: 1.0, b: 0 },
-        vertices: toRawLineArray(cone()),
-        mode: gl.LINES
-      },
+      //{
+      //  color: { r: 0.5, g: 1.0, b: 0 },
+      //  vertices: toRawLineArray(cone()),
+      //  mode: gl.LINES
+      //},
       // {
       //   color: { r: 0.5, g: 0, b: 1 },
       //   vertices: toRawLineArray(pentagonalPyramid()),
@@ -68,7 +68,7 @@ const PitchedScene = props => {
     let currentRotation = 0.0
     const DEGREES_PER_MILLISECOND = 0.033
     const FULL_CIRCLE = 360.0
-
+    
     let previousTimestamp
     const nextFrame = timestamp => {
       // Initialize the timestamp.
