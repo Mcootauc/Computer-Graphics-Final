@@ -19,7 +19,7 @@ function new4x4Matrix() {
 // 4x4 Matrix multiplier
 function matrixMultiplier(matrix1, matrix2) {
   let result = []
-  if (matrix1.length != matrix2.length) {
+  if (matrix1.length !== matrix2.length) {
     console.error('invalid')
     return
   }

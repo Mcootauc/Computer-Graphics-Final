@@ -10,6 +10,40 @@
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
+function sphere(radius, latitudeSegments, longitudeSegments) {
+  let vertices = []
+  let facesByIndex = []
+
+  for (let i = 0; i <= latitudeSegments; i++) {
+    let theta = (i * Math.PI) / latitudeSegments
+    let sinTheta = Math.sin(theta)
+    let cosTheta = Math.cos(theta)
+
+    for (let j = 0; j <= longitudeSegments; j++) {
+      let phi = (j * 2 * Math.PI) / longitudeSegments
+      let sinPhi = Math.sin(phi)
+      let cosPhi = Math.cos(phi)
+
+      let x = radius * sinTheta * cosPhi
+      let y = radius * sinTheta * sinPhi
+      let z = radius * cosTheta
+
+      vertices.push(x, y, z)
+
+      if (i < latitudeSegments && j < longitudeSegments) {
+        let first = i * (longitudeSegments + 1) + j
+        let second = first + longitudeSegments + 1
+
+        facesByIndex.push(first, second, first + 1)
+        facesByIndex.push(second, second + 1, first + 1)
+      }
+    }
+  }
+  console.log('radius: ' + radius + 'latitudeSegments: ' + latitudeSegments + 'longitudeSegments: ' + longitudeSegments)
+  console.log('vertices: ' + vertices)
+  console.log('facesByIndex: ' + facesByIndex)
+  return { vertices, facesByIndex }
+}
 
 const cylinder = (radius, height, radialSegments) => {
   const vertices = [
@@ -191,4 +225,4 @@ const hexagonalPrism = () => {
   }
 }
 
-export { cone, cylinder, toRawTriangleArray, toRawLineArray, pentagonalPyramid, hexagonalPrism }
+export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, pentagonalPyramid, hexagonalPrism }
