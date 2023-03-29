@@ -33,18 +33,18 @@ const PitchedScene = props => {
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
     const objectsToDraw = [
-
-      // Shape library demonstration.
+      //Shape library demonstration.
       {
         color: { r: 1, g: 0.5, b: 0 },
-        vertices: toRawLineArray(cylinder()),
+        //takes in a parameter of radius, height, and radial segments
+        vertices: toRawLineArray(cylinder( 1.2 * 0.5, 1.5 * 0.5, 4)),
         mode: gl.LINES
       },
-      {
-        color: { r: 0.5, g: 1.0, b: 0 },
-        vertices: toRawLineArray(cone()),
-        mode: gl.LINES
-      }
+      //{
+      //  color: { r: 0.5, g: 1.0, b: 0 },
+      //  vertices: toRawLineArray(cone()),
+      //  mode: gl.LINES
+      //}
     ];
     
     let currentRotation = 0.0
