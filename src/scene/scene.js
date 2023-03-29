@@ -23,7 +23,7 @@ const FRAGMENT_SHADER = `
     gl_FragColor = vec4(color, 1.0);
   }
 `
-const Scene = (canvas, objectsToDraw) => {
+const Scene = (canvas, objectsToDraw, CANVAS_WIDTH, CANVAS_HEIGHT, MILLISECONDS_PER_FRAME) => {
   const gl = getGL(canvas)
   if (!gl) {
     alert('No WebGL context found...sorry.')
@@ -98,6 +98,35 @@ const Scene = (canvas, objectsToDraw) => {
 
   // ...and finally, do the initial display.
   drawScene()
+
+  const renderingContext = canvas.getContext('2d')
+    let previousTimestamp
+    const nextFrame = timestamp => {
+      // Initialize the timestamp.
+      if (!previousTimestamp) {
+        previousTimestamp = timestamp
+        window.requestAnimationFrame(nextFrame)
+        return
+      }
+
+      // Check if it’s time to advance.
+      const progress = timestamp - previousTimestamp
+      if (progress < MILLISECONDS_PER_FRAME) {
+        // Do nothing if it’s too soon.
+        window.requestAnimationFrame(nextFrame)
+        return
+      }
+
+      // This is not the code you’re looking for.
+      renderingContext.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+      renderingContext.fillText(`timestamp: ${timestamp}`, 10, 20)
+
+      // Request the next frame.
+      previousTimestamp = timestamp
+      window.requestAnimationFrame(nextFrame)
+    }
+
+    window.requestAnimationFrame(nextFrame)
 
   return (
     <article>

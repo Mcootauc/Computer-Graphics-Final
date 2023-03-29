@@ -48,36 +48,8 @@ const PitchedScene = props => {
     ];
 
     //Sends canvas and objects to draw to the scene
-    Scene(pitchCanvas, objectsToDraw)
+    Scene(pitchCanvas, objectsToDraw, CANVAS_WIDTH, CANVAS_HEIGHT, MILLISECONDS_PER_FRAME)
 
-    const renderingContext = pitchCanvas.getContext('2d')
-    let previousTimestamp
-    const nextFrame = timestamp => {
-      // Initialize the timestamp.
-      if (!previousTimestamp) {
-        previousTimestamp = timestamp
-        window.requestAnimationFrame(nextFrame)
-        return
-      }
-
-      // Check if it’s time to advance.
-      const progress = timestamp - previousTimestamp
-      if (progress < MILLISECONDS_PER_FRAME) {
-        // Do nothing if it’s too soon.
-        window.requestAnimationFrame(nextFrame)
-        return
-      }
-
-      // This is not the code you’re looking for.
-      renderingContext.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-      renderingContext.fillText(`timestamp: ${timestamp}`, 10, 20)
-
-      // Request the next frame.
-      previousTimestamp = timestamp
-      window.requestAnimationFrame(nextFrame)
-    }
-
-    window.requestAnimationFrame(nextFrame)
   }, [canvasRef])
 
   return (
