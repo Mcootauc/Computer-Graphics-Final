@@ -13,8 +13,8 @@
 
 const cylinder = () => {
   // The core cylinder coordinates.
-  const X = 0.5
-  const Z = 0.33
+  const X = 0.9
+  const Z = 0.63
 
   return {
     vertices: [

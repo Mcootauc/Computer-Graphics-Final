@@ -1,5 +1,5 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
-
+import { rotationMatrix } from '../matrix'
 const VERTEX_SHADER = `
   #ifdef GL_ES
   precision highp float;
@@ -7,8 +7,10 @@ const VERTEX_SHADER = `
 
   attribute vec3 vertexPosition;
 
+  uniform mat4 theRotationMatrix;
+
   void main(void) {
-    gl_Position = vec4(vertexPosition, 1.0);
+    gl_Position = theRotationMatrix * vec4(vertexPosition, 1.0);
   }
 `
 
@@ -23,7 +25,7 @@ const FRAGMENT_SHADER = `
     gl_FragColor = vec4(color, 1.0);
   }
 `
-const Scene = (canvas, objectsToDraw, CANVAS_WIDTH, CANVAS_HEIGHT, MILLISECONDS_PER_FRAME) => {
+const Scene = (canvas, objectsToDraw, currentRotation) => {
   const gl = getGL(canvas)
   if (!gl) {
     alert('No WebGL context found...sorry.')
@@ -74,6 +76,7 @@ const Scene = (canvas, objectsToDraw, CANVAS_WIDTH, CANVAS_HEIGHT, MILLISECONDS_
   // Hold on to the important variables within the shaders.
   const vertexPosition = gl.getAttribLocation(shaderProgram, 'vertexPosition')
   gl.enableVertexAttribArray(vertexPosition)
+  const theRotationMatrix = gl.getUniformLocation(shaderProgram, 'theRotationMatrix')
 
   const drawObject = object => {
     gl.uniform3f(gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b)
@@ -89,6 +92,9 @@ const Scene = (canvas, objectsToDraw, CANVAS_WIDTH, CANVAS_HEIGHT, MILLISECONDS_
     // Clear the display.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    // Set up the rotation matrix.
+    gl.uniformMatrix4fv(theRotationMatrix, gl.FALSE, new Float32Array(rotationMatrix(currentRotation, 1, 1, 1)))
+
     // Display the objects.
     objectsToDraw.forEach(drawObject);
   
@@ -98,35 +104,6 @@ const Scene = (canvas, objectsToDraw, CANVAS_WIDTH, CANVAS_HEIGHT, MILLISECONDS_
 
   // ...and finally, do the initial display.
   drawScene()
-
-  const renderingContext = canvas.getContext('2d')
-    let previousTimestamp
-    const nextFrame = timestamp => {
-      // Initialize the timestamp.
-      if (!previousTimestamp) {
-        previousTimestamp = timestamp
-        window.requestAnimationFrame(nextFrame)
-        return
-      }
-
-      // Check if it’s time to advance.
-      const progress = timestamp - previousTimestamp
-      if (progress < MILLISECONDS_PER_FRAME) {
-        // Do nothing if it’s too soon.
-        window.requestAnimationFrame(nextFrame)
-        return
-      }
-
-      // This is not the code you’re looking for.
-      renderingContext.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-      renderingContext.fillText(`timestamp: ${timestamp}`, 10, 20)
-
-      // Request the next frame.
-      previousTimestamp = timestamp
-      window.requestAnimationFrame(nextFrame)
-    }
-
-    window.requestAnimationFrame(nextFrame)
 
   return (
     <article>
