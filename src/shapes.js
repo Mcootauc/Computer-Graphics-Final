@@ -58,10 +58,10 @@ const sphere = (wireframe) => {
   //new vertices at the midpoint of each edge 
   for (let i = 0; i < 1; i++) {
     const initVertLength = vertices.length
-    for (let i = 0; i < facesByIndex.length; i++) {
-      const v1 = midpoint(vertices[facesByIndex[i][0]], vertices[facesByIndex[i][1]])
-      const v2 = midpoint(vertices[facesByIndex[i][1]], vertices[facesByIndex[i][2]])
-      const v3 = midpoint(vertices[facesByIndex[i][2]], vertices[facesByIndex[i][0]])
+    for (const element of facesByIndex) {
+      const v1 = midpoint(vertices[element[0]], vertices[element[1]])
+      const v2 = midpoint(vertices[element[1]], vertices[element[2]])
+      const v3 = midpoint(vertices[element[2]], vertices[element[0]])
       vertices.push(v1, v2, v3)
     }
     for (let i = initVertLength - 1; i < vertices.length - 3; i = i + 3) {
