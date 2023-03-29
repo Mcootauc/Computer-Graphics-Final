@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef } from 'react'
-import { cone, cylinder, toRawLineArray } from './shapes'
+import { cone, cylinder, toRawLineArray, pentagonalPyramid } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -33,7 +33,6 @@ const PitchedScene = props => {
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
     const objectsToDraw = [
-
       // Shape library demonstration.
       {
         color: { r: 1, g: 0.5, b: 0 },
@@ -44,9 +43,14 @@ const PitchedScene = props => {
         color: { r: 0.5, g: 1.0, b: 0 },
         vertices: toRawLineArray(cone()),
         mode: gl.LINES
+      },
+      {
+        color: { r: 0.5, g: 0, b: 1 },
+        vertices: toRawLineArray(pentagonalPyramid()),
+        mode: gl.LINES
       }
-    ];
-    
+    ]
+
     let currentRotation = 0.0
     const DEGREES_PER_MILLISECOND = 0.033
     const FULL_CIRCLE = 360.0
