@@ -18,11 +18,12 @@ const PitchedScene = props => {
   const canvasRef = useRef()
 
   useEffect(() => {
-    const pitchCanvas = canvasRef.current
-    if (!pitchCanvas) {
+    const pitchedCanvas = canvasRef.current
+    if (!pitchedCanvas) {
       return
     }
-    const gl = getGL(pitchCanvas)
+    
+    const gl = getGL(pitchedCanvas)
     if (!gl) {
       alert('No WebGL context found...sorry.')
 
@@ -33,12 +34,12 @@ const PitchedScene = props => {
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
     const objectsToDraw = [
-      {
-        color: { r: 1, g: 0.5, b: 0 },
-        //takes in a parameter of radius, height, and radial segments
-        vertices: toRawLineArray(cylinder(1.2 * 0.5, 1.5 * 0.5, 4)),
-        mode: gl.LINES
-      },
+      //{
+      //  color: { r: 1, g: 0.5, b: 0 },
+      //  //takes in a parameter of radius, height, and radial segments
+      //  vertices: toRawLineArray(cylinder(1.2 * 0.5, 1.5 * 0.5, 4)),
+      //  mode: gl.LINES
+      //},
       {
         color: { r: 0.5, g: 1.0, b: 0 },
         vertices: toRawLineArray(cone()),
@@ -59,9 +60,9 @@ const PitchedScene = props => {
     let currentRotation = 0.0
     const DEGREES_PER_MILLISECOND = 0.033
     const FULL_CIRCLE = 360.0
-
-    const renderingContext = pitchCanvas.getContext('2d')
+    
     let previousTimestamp
+    let i = 0;
     const nextFrame = timestamp => {
       // Initialize the timestamp.
       if (!previousTimestamp) {
@@ -77,16 +78,14 @@ const PitchedScene = props => {
         window.requestAnimationFrame(nextFrame)
         return
       }
-
+      // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
-      //Sends canvas and objects to draw to the scene
-      Scene(pitchCanvas, objectsToDraw, currentRotation)
+      Scene(pitchedCanvas, objectsToDraw, currentRotation)
+      
       if (currentRotation >= FULL_CIRCLE) {
         currentRotation -= FULL_CIRCLE
       }
       // This is not the code you’re looking for.
-      renderingContext.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-      renderingContext.fillText(`timestamp: ${timestamp}`, 10, 20)
 
       // Request the next frame.
       previousTimestamp = timestamp
