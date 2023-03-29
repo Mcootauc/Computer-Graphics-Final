@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, pentagonalPyramid } from './shapes'
+import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -42,22 +42,17 @@ const PitchedScene = props => {
         vertices: toRawLineArray(sphere(0.7, 4, 4)),
         mode: gl.LINES
       },
-      //{
-      //  color: { r: 1, g: 0.5, b: 0 },
-      //  //takes in a parameter of radius, height, and radial segments
-      //  vertices: toRawLineArray(cylinder(0.6, 0.75, 4)),
-      //  mode: gl.LINES
-      //},
+      {
+        color: { r: 1, g: 0.5, b: 0 },
+        //takes in a parameter of radius, height, and radial segments
+        vertices: toRawLineArray(cylinder(0.6, 0.75, 4)),
+        mode: gl.LINES
+      },
       {
         color: { r: 0.5, g: 1.0, b: 0 },
         vertices: toRawLineArray(cone()),
         mode: gl.LINES
       },
-      // {
-      //   color: { r: 0.5, g: 0, b: 1 },
-      //   vertices: toRawLineArray(pentagonalPyramid()),
-      //   mode: gl.LINES
-      // },
       {
         color: { r: 0.5, g: 0, b: 1 },
         vertices: toRawLineArray(hexagonalPrism()),
@@ -111,15 +106,6 @@ const PitchedScene = props => {
     setObjectsToDraw(prevObjects => [...prevObjects, hexagonalObject])
   }
 
-  const addPentagonalPyramid = () => {
-    const pentagonalObject = {
-      color: { r: 0.5, g: 0, b: 0.5 },
-      vertices: toRawLineArray(pentagonalPyramid()),
-      mode: gl.LINES
-    }
-    setObjectsToDraw(prevObjects => [...prevObjects, pentagonalObject])
-  }
-
   const addCylinder = () => {
     const cylinderObject = {
       color: { r: 1, g: 0.5, b: 0 },
@@ -158,7 +144,6 @@ const PitchedScene = props => {
         <button onClick={addCylinder}>Add Cylinder</button>
         <button onClick={addCone}>Add Cone</button>
         <button onClick={addHexagonalPrism}>Add Hexagonal Prism</button>
-        <button onClick={addPentagonalPyramid}>Add Pentagonal Pyramid</button>
         <button onClick={removePrevious}>Remove the previous shape</button>
       </div>
     </article>

@@ -163,30 +163,6 @@ const cone = () => {
   return { vertices, facesByIndex }
 }
 
-const pentagonalPyramid = () => {
-  return {
-    vertices: [
-      [0.5, 0.5, 0.5],
-      [-0.5, 0.5, -0.5],
-      [-0.5, -0.5, -0.5],
-      [0.5, -0.5, -0.5],
-      [0.5, 0.5, -0.5],
-      [0.5, 0.5, -0.5]
-    ],
-    facesByIndex: [
-      [0, 1, 2], // Around
-      [0, 2, 3],
-      [0, 3, 4],
-      [0, 4, 5],
-      [0, 1, 5],
-
-      [1, 2, 3], // Base
-      [1, 3, 4],
-      [1, 4, 5]
-    ]
-  }
-}
-
 const hexagonalPrism = () => {
   return {
     vertices: [
@@ -204,25 +180,26 @@ const hexagonalPrism = () => {
       [0.5, 0.5, 0.5]
     ],
     facesByIndex: [
-      [0, 1, 2], // Top Hexagon
-      [1, 2, 3],
-      [2, 3, 4],
-      [3, 4, 5],
-      [0, 4, 5],
+      [0, 1, 2],
+      [0, 2, 3]
 
-      [6, 7, 8], // Bottom Hexagon
-      [7, 8, 9],
-      [8, 9, 10],
-      [9, 10, 11],
-
-      [0, 6, 7], // edges to connect top & bottom heaxagon
-      [1, 7, 8],
-      [2, 8, 9],
-      [3, 9, 10],
-      [4, 10, 11],
-      [5, 11, 6]
+      // [0, 1, 2], // Top Hexagon
+      // [1, 2, 3],
+      // [2, 3, 4],
+      // [3, 4, 5],
+      // [0, 4, 5],
+      // [6, 7, 8], // Bottom Hexagon
+      // [7, 8, 9],
+      // [8, 9, 10],
+      // [9, 10, 11],
+      // [0, 6, 7], // edges to connect top & bottom heaxagon
+      // [1, 7, 8],
+      // [2, 8, 9],
+      // [3, 9, 10],
+      // [4, 10, 11],
+      // [5, 11, 6]
     ]
   }
 }
 
-export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, pentagonalPyramid, hexagonalPrism }
+export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, hexagonalPrism }
