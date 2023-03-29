@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism } from './shapes'
+import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, toRawTriangleArray } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -39,20 +39,25 @@ const PitchedScene = props => {
       {
         color: { r: 1, g: 0.5, b: 0 },
         //takes in a parameter of radius, height, and radial segments
-        vertices: toRawLineArray(sphere(0.7, 4, 4)),
+        vertices: sphere(true),
         mode: gl.LINES
       },
-      {
-        color: { r: 1, g: 0.5, b: 0 },
-        //takes in a parameter of radius, height, and radial segments
-        vertices: toRawLineArray(cylinder(0.6, 0.75, 4)),
-        mode: gl.LINES
-      },
-      {
-        color: { r: 0.5, g: 1.0, b: 0 },
-        vertices: toRawLineArray(cone()),
-        mode: gl.LINES
-      },
+      //{
+      //  color: { r: 1, g: 0.5, b: 0 },
+      //  //takes in a parameter of radius, height, and radial segments
+      //  vertices: toRawLineArray(cylinder(0.6, 0.75, 4)),
+      //  mode: gl.LINES
+      //},
+      //{
+      //  color: { r: 0.5, g: 1.0, b: 0 },
+      //  vertices: toRawLineArray(cone()),
+      //  mode: gl.LINES
+      //},
+      // {
+      //   color: { r: 0.5, g: 0, b: 1 },
+      //   vertices: toRawLineArray(pentagonalPyramid()),
+      //   mode: gl.LINES
+      // },
       {
         color: { r: 0.5, g: 0, b: 1 },
         vertices: toRawLineArray(hexagonalPrism()),
