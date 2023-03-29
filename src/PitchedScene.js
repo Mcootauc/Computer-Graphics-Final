@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { cone, cylinder, toRawLineArray } from './shapes'
+import { cone, cylinder, toRawLineArray, hexagonalPrism, pentagonalPyramid } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -72,6 +72,24 @@ const PitchedScene = props => {
     window.requestAnimationFrame(nextFrame)
   }, [canvasRef, objectsToDraw])
 
+  const addHexagonalPrism = () => {
+    const hexagonalObject = {
+      color: { r: 0, g: 1.0, b: 0.5},
+      vertices: toRawLineArray(hexagonalPrism()),
+      mode: gl.LINES
+    }
+    setObjectsToDraw(prevObjects => [...prevObjects, hexagonalObject])
+  }
+
+  const addPentagonalPyramid = () => {
+    const pentagonalObject = {
+      color: { r: 0.5, g: 0, b: 0.5},
+      vertices: toRawLineArray(pentagonalPyramid()),
+      mode: gl.LINES
+    }
+    setObjectsToDraw(prevObjects => [...prevObjects, pentagonalObject])
+  }
+
 const addCylinder = () => {
   const cylinderObject = {
     color: { r: 1, g: 0.5, b: 0 },
@@ -91,14 +109,13 @@ const addCone = () => {
   setObjectsToDraw(prevObjects => [...prevObjects, coneObject])
 }
 
-const removeCylinder = () => {
-  setObjectsToDraw(prevObjects => prevObjects.slice(0, -1))
+const removePrevious = () => {
+  setObjectsToDraw(prevObjects => {
+    const newObjects = [...prevObjects]
+    newObjects.pop()
+    return newObjects
+  })
 }
-
-const removeCone = () => {
-  setObjectsToDraw(prevObjects => prevObjects.slice(0, -1))
-}
-
 
 return (
   <article>
@@ -110,8 +127,9 @@ return (
     <div>
     <button onClick={addCylinder}>Add Cylinder</button>
     <button onClick={addCone}>Add Cone</button>
-    <button onClick={removeCylinder}>Remove Cylinder</button>
-    <button onClick={removeCone}>Remove Cone</button>
+    <button onClick={addHexagonalPrism}>Add Hexagonal Prism</button>
+    <button onClick={addPentagonalPyramid}>Add Pentagonal Pyramid</button>
+    <button onClick={removePrevious}>Remove the previous shape</button>
     </div>
   </article>
 )
