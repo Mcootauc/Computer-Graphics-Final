@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { cone, cylinder, toRawLineArray, hexagonalPrism, pentagonalPyramid } from './shapes'
+import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, pentagonalPyramid } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -36,10 +36,16 @@ const PitchedScene = props => {
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
     const objectsToDraw = [
+      {
+        color: { r: 1, g: 0.5, b: 0 },
+        //takes in a parameter of radius, height, and radial segments
+        vertices: toRawLineArray(sphere(0.7, 4, 4)),
+        mode: gl.LINES
+      },
       //{
       //  color: { r: 1, g: 0.5, b: 0 },
       //  //takes in a parameter of radius, height, and radial segments
-      //  vertices: toRawLineArray(cylinder(1.2 * 0.5, 1.5 * 0.5, 4)),
+      //  vertices: toRawLineArray(cylinder(0.6, 0.75, 4)),
       //  mode: gl.LINES
       //},
       {
@@ -64,7 +70,6 @@ const PitchedScene = props => {
     const FULL_CIRCLE = 360.0
     
     let previousTimestamp
-    let i = 0;
     const nextFrame = timestamp => {
       // Initialize the timestamp.
       if (!previousTimestamp) {
