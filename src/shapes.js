@@ -10,7 +10,7 @@
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
-const sphere = () => {
+const sphere = (wireframe) => {
   // The core icosahedron coordinates.
   const X = 0.525731112119133606
   const Z = 0.850650808352039932
@@ -68,7 +68,12 @@ const sphere = () => {
       facesByIndex.push([i + 1, i + 2, i + 3])
     }
   }
-  return { vertices, facesByIndex }
+
+  if (wireframe === true) {
+    return toRawLineArray({vertices, facesByIndex})
+  } else {
+    return toRawTriangleArray({vertices, facesByIndex})
+  }
 }
 
 
