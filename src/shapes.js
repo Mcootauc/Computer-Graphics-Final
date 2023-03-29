@@ -10,40 +10,67 @@
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
-function sphere(radius, latitudeSegments, longitudeSegments) {
-  let vertices = []
-  let facesByIndex = []
-
-  for (let i = 0; i <= latitudeSegments; i++) {
-    let theta = (i * Math.PI) / latitudeSegments
-    let sinTheta = Math.sin(theta)
-    let cosTheta = Math.cos(theta)
-
-    for (let j = 0; j <= longitudeSegments; j++) {
-      let phi = (j * 2 * Math.PI) / longitudeSegments
-      let sinPhi = Math.sin(phi)
-      let cosPhi = Math.cos(phi)
-
-      let x = radius * sinTheta * cosPhi
-      let y = radius * sinTheta * sinPhi
-      let z = radius * cosTheta
-
-      vertices.push(x, y, z)
-
-      if (i < latitudeSegments && j < longitudeSegments) {
-        let first = i * (longitudeSegments + 1) + j
-        let second = first + longitudeSegments + 1
-
-        facesByIndex.push(first, second, first + 1)
-        facesByIndex.push(second, second + 1, first + 1)
-      }
+const sphere = () => {
+  // The core icosahedron coordinates.
+  const X = 0.525731112119133606
+  const Z = 0.850650808352039932
+  function midpoint (v1, v2) {
+    //((x1 + x2)/2, (y1 + y2)/2, (z1 + z2)/2)
+    return [((v1[0] + v2[0])/2), ((v1[1] + v2[1])/2), ((v1[2] + v2[2])/2)]
+  }
+  const vertices = [
+    [-X, 0.0, Z],
+    [X, 0.0, Z],
+    [-X, 0.0, -Z],
+    [X, 0.0, -Z],
+    [0.0, Z, X],
+    [0.0, Z, -X],
+    [0.0, -Z, X],
+    [0.0, -Z, -X],
+    [Z, X, 0.0],
+    [-Z, X, 0.0],
+    [Z, -X, 0.0],
+    [-Z, -X, 0.0]
+  ]
+  const facesByIndex = [
+    [1, 4, 0],
+    [4, 9, 0],
+    [4, 5, 9],
+    [8, 5, 4],
+    [1, 8, 4],
+    [1, 10, 8],
+    [10, 3, 8],
+    [8, 3, 5],
+    [3, 2, 5],
+    [3, 7, 2],
+    [3, 10, 7],
+    [10, 6, 7],
+    [6, 11, 7],
+    [6, 0, 11],
+    [6, 1, 0],
+    [10, 1, 6],
+    [11, 0, 9],
+    [2, 11, 9],
+    [5, 2, 9],
+    [11, 2, 7],
+  ]
+  //Subdivide each face into four smaller triangles by adding 
+  //new vertices at the midpoint of each edge 
+  for (let i = 0; i < 1; i++) {
+    const initVertLength = vertices.length
+    for (let i = 0; i < facesByIndex.length; i++) {
+      const v1 = midpoint(vertices[facesByIndex[i][0]], vertices[facesByIndex[i][1]])
+      const v2 = midpoint(vertices[facesByIndex[i][1]], vertices[facesByIndex[i][2]])
+      const v3 = midpoint(vertices[facesByIndex[i][2]], vertices[facesByIndex[i][0]])
+      vertices.push(v1, v2, v3)
+    }
+    for (let i = initVertLength - 1; i < vertices.length - 3; i = i + 3) {
+      facesByIndex.push([i + 1, i + 2, i + 3])
     }
   }
-  console.log('radius: ' + radius + 'latitudeSegments: ' + latitudeSegments + 'longitudeSegments: ' + longitudeSegments)
-  console.log('vertices: ' + vertices)
-  console.log('facesByIndex: ' + facesByIndex)
   return { vertices, facesByIndex }
 }
+
 
 const cylinder = (radius, height, radialSegments) => {
   const vertices = [
