@@ -54,23 +54,14 @@ function matrixMultiplier(matrix1, matrix2) {
 
 // Translates a given matrix by whatever numbers you want. 'a' translates the x-coord,
 // 'b' translates the y-coord, 'c' translates the z-coord.
-function translateMatrix(matrix4, a, b, c) {
-  matrix4[3] += a // last entry in col. 1
-  matrix4[7] += b // last entry in col. 2
-  matrix4[11] += c // last entry in col. 3
-  return matrix4
+const translateMatrix = (x, y, z) => {
+  return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]
 }
 
 // Scales a given matrix by whatever numbers you want. 'a' scales the x-coord,
 // 'b' scales the y-coord, 'c' scales the z-coord.
-function scaleMatrix(matrix4, a, b, c) {
-  if (matrix4.length !== 16) {
-    throw new Error('Input matrix is not a 4x4 matrix')
-  }
-  matrix4[0] *= a // row[1]col[1]
-  matrix4[5] *= b // row[2]col[2]
-  matrix4[10] *= c // row[3]col[3]
-  return matrix4
+const scaleMatrix = (x, y, z) => {
+  return [x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1]
 }
 
 // Rotation Matrix from class
