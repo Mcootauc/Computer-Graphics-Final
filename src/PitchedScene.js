@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism } from './shapes'
+import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, toRawTriangleArray } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -39,8 +39,8 @@ const PitchedScene = props => {
       {
         color: { r: 1, g: 0.5, b: 0 },
         //takes in a parameter of radius, height, and radial segments
-        vertices: toRawLineArray(sphere()),
-        mode: gl.LINES
+        vertices: sphere(true),
+        mode: gl.LINES 
       },
       //{
       //  color: { r: 1, g: 0.5, b: 0 },
