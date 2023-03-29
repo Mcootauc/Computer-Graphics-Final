@@ -10,86 +10,11 @@
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
-const sphere = () => {
-  // Define the number of subdivisions in the sphere
-  const numSubdivisions = 16;
 
-  // Create an array to hold the vertices
-  const vertices = [];
-
-  // Create the vertices for the top half of the sphere
-  for (let i = 0; i <= numSubdivisions; i++) {
-    const theta = i * Math.PI / numSubdivisions;
-    const sinTheta = Math.sin(theta);
-    const cosTheta = Math.cos(theta);
-
-    for (let j = 0; j <= numSubdivisions; j++) {
-      const phi = j * 2 * Math.PI / numSubdivisions;
-      const sinPhi = Math.sin(phi);
-      const cosPhi = Math.cos(phi);
-
-      const x = cosPhi * sinTheta;
-      const y = cosTheta;
-      const z = sinPhi * sinTheta;
-
-      vertices.push(x, y + 0.3, z);
-    }
-  }
-
-  // Create the vertices for the bottom half of the sphere
-  for (let i = 0; i <= numSubdivisions; i++) {
-    const theta = i * Math.PI / numSubdivisions;
-    const sinTheta = Math.sin(theta);
-    const cosTheta = Math.cos(theta);
-
-    for (let j = 0; j <= numSubdivisions; j++) {
-      const phi = j * 2 * Math.PI / numSubdivisions;
-      const sinPhi = Math.sin(phi);
-      const cosPhi = Math.cos(phi);
-
-      const x = cosPhi * sinTheta;
-      const y = cosTheta;
-      const z = sinPhi * sinTheta;
-
-      vertices.push(x, y - 0.3, z);
-    }
-  }
-
-  // Create an array to hold the faces
-  const faces = [];
-
-  // Create the faces for the top half of the sphere
-  for (let i = 0; i < numSubdivisions; i++) {
-    for (let j = 0; j < numSubdivisions; j++) {
-      const a = (i * (numSubdivisions + 1)) + j;
-      const b = a + numSubdivisions + 1;
-      const c = a + 1;
-      faces.push(a, b, c);
-
-      const d = b + 1;
-      faces.push(c, b, d);
-    }
-  }
-
-  // Create the faces for the bottom half of the sphere
-  const offset = (numSubdivisions + 1) * (numSubdivisions + 1);
-  for (let i = 0; i < numSubdivisions; i++) {
-    for (let j = 0; j < numSubdivisions; j++) {
-      const a = offset + (i * (numSubdivisions + 1)) + j;
-      const b = a + numSubdivisions + 1;
-      const c = a + 1;
-      faces.push(a, c, b);
-
-      const d = b + 1;
-      faces.push(c, d, b);
-    }
-  }
-  return {vertices, faces}
-}
 const cylinder = () => {
   // The core cylinder coordinates.
-  const X = 0.9
-  const Z = 0.636
+  const X = 0.5
+  const Z = 0.33
 
   return {
     vertices: [
@@ -135,7 +60,7 @@ const cylinder = () => {
       [9, 16, 17],
       [9, 17, 10],
 
-
+      
       [14, 5,  6], //Middle
       [14, 6, 15],
       [15, 6,  7],
@@ -234,5 +159,5 @@ const cylinder = () => {
 
   
   
-  export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray }
+  export { cone, cylinder, toRawTriangleArray, toRawLineArray }
   
