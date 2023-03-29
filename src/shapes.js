@@ -11,72 +11,49 @@
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
 
-const cylinder = () => {
-  // The core cylinder coordinates.
-  const X = 0.9
-  const Z = 0.63
-
-  return {
-    vertices: [
-      [0.0, X, 0.0], //1
-      [0.0, X, -X], //2
-      [-Z, X, -Z], //3
-      [-X, X, 0.0], //4
-      [-Z, X, Z], //5
-      [0.0, X, X], //6
-      [Z, X, Z], //7
-      [X, X, 0.0], //8
-      [Z, X, -Z], //9
-
-      [0.0, -X, 0.0], //10
-      [0.0, -X, -X], //11
-      [-Z, -X, -Z], //12
-      [-X, -X, 0.0], //13
-      [-Z, -X, Z], //14
-      [0.0, -X, X], //15
-      [Z, -X, Z], //16
-      [X, -X, 0.0], //17
-      [Z, -X, -Z] //18
-    ],
-
-    facesByIndex: [
-      [0, 1, 2], //Top
-      [0, 2, 3],
-      [0, 3, 4],
-      [0, 4, 5],
-      [0, 5, 6],
-      [0, 6, 7],
-      [0, 7, 8],
-      [0, 8, 1],
-
-      [9, 10, 11], //Bottom
-      [9, 11, 12],
-      [9, 12, 13],
-      [9, 13, 14],
-      [9, 14, 15],
-      [9, 15, 16],
-      [9, 16, 17],
-      [9, 17, 10],
-
-      [14, 5, 6], //Middle
-      [14, 6, 15],
-      [15, 6, 7],
-      [15, 7, 16],
-      [16, 7, 8],
-      [16, 8, 17],
-      [17, 8, 1],
-      [17, 1, 10],
-
-      [10, 1, 2],
-      [10, 2, 11],
-      [11, 2, 3],
-      [11, 3, 12],
-      [12, 3, 4],
-      [12, 4, 13],
-      [13, 4, 5],
-      [13, 5, 14]
-    ]
+const cylinder = (radius, height, radialSegments) => {
+  const vertices = [
+    [0, height, 0] // top vertex
+  ]
+  // generate base vertices around the top vertex
+  for (let i = 0; i < radialSegments; i++) {
+    const angle = (i / radialSegments) * Math.PI * 2
+    const x = Math.sin(angle) * radius
+    const y = height
+    const z = Math.cos(angle) * radius
+    vertices.push([x, y, z])
   }
+
+  vertices.push([0, -height, 0]) // bottom vertex
+  // generate base vertices around the bottom vertex
+  for (let i = 0; i < radialSegments; i++) {
+    const angle = (i / radialSegments) * Math.PI * 2
+    const x = Math.sin(angle) * radius
+    const y = -height
+    const z = Math.cos(angle) * radius
+    vertices.push([x, y, z])
+  }
+
+  const facesByIndex = []
+  // generate faces for the top
+  for (let i = 1; i < radialSegments; i++) {
+    facesByIndex.push([0, i, i + 1])
+  }
+  facesByIndex.push([0, radialSegments, 1])
+  // generate faces for the base
+  for (let i = 1; i < radialSegments; i++) {
+    facesByIndex.push([1 + radialSegments, i + 1 + radialSegments, i + 2 + radialSegments])
+  }
+  facesByIndex.push([1 + radialSegments, 1 + radialSegments + radialSegments, 2 + radialSegments])
+  // generate faces for the sides
+  facesByIndex.push([radialSegments + 2, 1, radialSegments])
+  facesByIndex.push([radialSegments + 2, 1 + radialSegments + radialSegments, radialSegments])
+  for (let i = 2; i < radialSegments + 1; i++) {
+    facesByIndex.push([i + 1 + radialSegments, i, i - 1])
+    facesByIndex.push([i + 1 + radialSegments, i + radialSegments, i - 1])
+  }
+
+  return { vertices, facesByIndex }
 }
 
 /**
