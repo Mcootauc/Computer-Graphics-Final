@@ -13,8 +13,7 @@ const CANVAS_HEIGHT = 512
 
 const PitchedScene = props => {
   const canvasRef = useRef()
-  const [objectsToDraw, setObjectsToDraw] = useState([])
-  let gl // Declare gl as a global variable
+  const [objectsToDraw] = useState([])
 
   useEffect(() => {
     const pitchedCanvas = canvasRef.current
@@ -29,7 +28,7 @@ const PitchedScene = props => {
       // No WebGL, no use going on...
       return
     }
-    var visible = false;
+
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
     const objectsToDraw = [
@@ -55,7 +54,8 @@ const PitchedScene = props => {
         //also takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: cylinder(0.3, 0.3, 4, false),
         mode: gl.TRIANGLES,
-        translation: {x: 1.0, y: 1.2, z: 0}
+        translation: {x: 1.0, y: 1.2, z: 0},
+        visible: false
       },
       {
         color: { r: 0, g: 0, b: 0 },
@@ -63,7 +63,8 @@ const PitchedScene = props => {
         //also takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: cylinder(0.3, 0.3, 4, false),
         mode: gl.LINE_LOOP,
-        translation: {x: 1.4, y: 0.3, z: 0}
+        translation: {x: 1.4, y: 0.3, z: 0},
+        visible: false
       },
       {
         color: { r: 0.5, g: 0, b: 0 },
@@ -82,10 +83,11 @@ const PitchedScene = props => {
     ]
 
     Scene(pitchedCanvas, objectsToDraw)
+
     const toggle = document.querySelector('#toggle');
     toggle.addEventListener('click', function() {
-      for (let i = 0; i < objectsToDraw.length; i++) {
-        objectsToDraw[i].visible = !objectsToDraw[i].visible;
+      for (const element of objectsToDraw) {
+        element.visible = !element.visible;
       }
     })
     
