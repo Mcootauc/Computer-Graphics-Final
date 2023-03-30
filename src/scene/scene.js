@@ -1,9 +1,6 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
 import { translateMatrix, rotationMatrix } from '../matrix'
 
-const FRAMES_PER_SECOND = 30
-const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
-
 const VERTEX_SHADER = `
   #ifdef GL_ES
   precision highp float;
@@ -86,6 +83,8 @@ const Scene = (canvas, objectsToDraw) => {
 
   const drawObject = object => {
     gl.uniform3f(gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b)
+    // Set up the translation matrix.
+    gl.uniformMatrix4fv(theTranslationMatrix, gl.FALSE, new Float32Array(translateMatrix(-0.5, 0.5, 0)))
     gl.bindBuffer(gl.ARRAY_BUFFER, object.verticesBuffer)
     gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0)
     gl.drawArrays(object.mode, 0, object.vertices.length / 3)
@@ -103,9 +102,6 @@ const Scene = (canvas, objectsToDraw) => {
     // Set up the rotation matrix.
     gl.uniformMatrix4fv(theRotationMatrix, gl.FALSE, new Float32Array(rotationMatrix(currentRotation, 1, 1, 1)))
 
-    // Set up the translation matrix.
-    gl.uniformMatrix4fv(theTranslationMatrix, gl.FALSE, new Float32Array(translateMatrix(-0.5, 0.5, 0)))
-
     // Display the objects.
     objectsToDraw.forEach(drawObject);
   
@@ -113,6 +109,8 @@ const Scene = (canvas, objectsToDraw) => {
     gl.flush();
   };
 
+  const FRAMES_PER_SECOND = 30
+  const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
   // ...and finally, do the initial display.
   const DEGREES_PER_MILLISECOND = 0.033
   const FULL_CIRCLE = 360.0
