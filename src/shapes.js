@@ -118,6 +118,7 @@ const cylinder = (radius, height, radialSegments, wireframe) => {
   }
   facesByIndex.push([1 + radialSegments, 2 + radialSegments, 1 + radialSegments + radialSegments])
   console.log('faces: ' + facesByIndex)
+
   // generate faces for the sides
   facesByIndex.push([radialSegments + 2, 1, radialSegments])
   facesByIndex.push([radialSegments + 2, radialSegments, 1 + radialSegments + radialSegments])

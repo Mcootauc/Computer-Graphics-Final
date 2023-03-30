@@ -1,5 +1,7 @@
 //Matrix Library
 
+import { render } from '@testing-library/react'
+
 //Matrix Generator that automatically outputs an identity matrix
 function new4x4Matrix() {
   const matrix = new Array(16)
@@ -67,6 +69,18 @@ const matrixConversion = matrix => {
 // 'b' translates the y-coord, 'c' translates the z-coord.
 const translateMatrix = (x, y, z) => {
   return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]
+}
+// Translates a given matrix by whatever numbers you want. 'x' translates the x-coord,
+// 'y' translates the y-coord, 'z' translates the z-coord.
+const translateMatrix = (matrix, x, y, z) => {
+  // if(matrix.length != Array(16)){
+  //   throw new Error('Matrix is the wrong size')
+  // }
+  matrix[3] += x
+  matrix[7] += y
+  matrix[11] += z
+
+  return [matrix]
 }
 
 // Scales a given matrix by whatever numbers you want. 'a' scales the x-coord,
@@ -170,6 +184,20 @@ const perspectiveProjection = (left, right, bottom, top, near, far) => {
   ]
 }
 
+//for groups
+function recursiveDraw(parent, node) {
+  var matrixTree = new TreeWalker()
+  matrixTree.append(parent)
+  instanceMatrix = matrixMultiplier(parent, node)
+  finalMatrix = matrixMultiplier(parent, instanceMatrix)
+  render(node, finalMatrix)
+  var child = matrixTree.firstChild
+  if (child)
+    matrixTree.forEach(Node => {
+      recursiveDraw(finalMatrix, child)
+    })
+}
+
 export {
   scaleMatrix,
   matrixMultiplier,
@@ -178,5 +206,6 @@ export {
   translateMatrix,
   rotationMatrix,
   orthoProjection,
+  recursiveDraw,
   perspectiveProjection
 }
