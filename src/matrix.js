@@ -57,9 +57,9 @@ function matrixMultiplier(matrix1, matrix2) {
 // Translates a given matrix by whatever numbers you want. 'x' translates the x-coord,
 // 'y' translates the y-coord, 'z' translates the z-coord.
 const translateMatrix = (matrix, x, y, z) => {
-  // if(matrix.length != Array(16)){
-  //   throw new Error('Matrix is the wrong size') 
-  // }
+  if(matrix.length !== Array(16)){
+    throw new Error('Matrix is the wrong size') 
+  }
   matrix[3] += x
   matrix[7] += y
   matrix[11] += z
@@ -76,7 +76,7 @@ const scaleMatrix = (m1, x, y, z) => {
   m1[0] *= x
   m1[5] *= y
   m1[10] *= z
-  return [m1]
+  return m1
 }
 
 // Rotation Matrix from class
@@ -170,16 +170,16 @@ const perspectiveProjection = (left, right, bottom, top, near, far) => {
 
 //for groups
 function recursiveDraw(parent, node){
-  var matrixTree = new TreeWalker
-  matrixTree.append(parent)
-  instanceMatrix = matrixMultiplier(parent, node)
-  finalMatrix = matrixMultiplier(parent, instanceMatrix)
+  let matrixTree = new TreeWalker()
+   matrixTree.append(parent)
+  let instanceMatrix = matrixMultiplier(parent, node)
+  let finalMatrix = matrixMultiplier(parent, instanceMatrix)
   render(node, finalMatrix)
-  var child = matrixTree.firstChild
+  let child = matrixTree.firstChild
   if(child)
-    matrixTree.forEach(Node => {
-      recursiveDraw(finalMatrix, child)
-    }); 
+  matrixTree.forEach(Node => {
+    recursiveDraw(finalMatrix, child)
+  }); 
 }
 
 export {
