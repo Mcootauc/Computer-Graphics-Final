@@ -84,8 +84,8 @@ const PitchedScene = props => {
     Scene(pitchedCanvas, objectsToDraw)
     const toggle = document.querySelector('#toggle');
     toggle.addEventListener('click', function() {
-      for (let i = 0; i < objectsToDraw.length; i++) {
-        objectsToDraw[i].visible = !objectsToDraw[i].visible;
+      for (const element of objectsToDraw) {
+        element.visible = !element.visible;
       }
     })
     
