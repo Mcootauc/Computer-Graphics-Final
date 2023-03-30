@@ -12,8 +12,8 @@
  */
 const sphere = (wireframe) => {
   // The core icosahedron coordinates.
-  const X = 0.525731112119133606
-  const Z = 0.850650808352039932
+  const X = 0.26
+  const Z = 0.425
   function midpoint (v1, v2) {
     //((x1 + x2)/2, (y1 + y2)/2, (z1 + z2)/2)
     return [((v1[0] + v2[0])/2), ((v1[1] + v2[1])/2), ((v1[2] + v2[2])/2)]
