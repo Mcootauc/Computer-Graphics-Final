@@ -10,13 +10,13 @@
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
-const sphere = (wireframe) => {
+const sphere = wireframe => {
   // The core icosahedron coordinates.
   const X = 0.26
   const Z = 0.425
-  function midpoint (v1, v2) {
+  function midpoint(v1, v2) {
     //((x1 + x2)/2, (y1 + y2)/2, (z1 + z2)/2)
-    return [((v1[0] + v2[0])/2), ((v1[1] + v2[1])/2), ((v1[2] + v2[2])/2)]
+    return [(v1[0] + v2[0]) / 2, (v1[1] + v2[1]) / 2, (v1[2] + v2[2]) / 2]
   }
   const vertices = [
     [-X, 0.0, Z],
@@ -52,10 +52,10 @@ const sphere = (wireframe) => {
     [11, 0, 9],
     [2, 11, 9],
     [5, 2, 9],
-    [11, 2, 7],
+    [11, 2, 7]
   ]
-  //Subdivide each face into four smaller triangles by adding 
-  //new vertices at the midpoint of each edge 
+  //Subdivide each face into four smaller triangles by adding
+  //new vertices at the midpoint of each edge
   for (let i = 0; i < 1; i++) {
     const initVertLength = vertices.length
     for (const element of facesByIndex) {
@@ -70,12 +70,11 @@ const sphere = (wireframe) => {
   }
 
   if (wireframe === true) {
-    return toRawLineArray({vertices, facesByIndex})
+    return toRawLineArray({ vertices, facesByIndex })
   } else {
-    return toRawTriangleArray({vertices, facesByIndex})
+    return toRawTriangleArray({ vertices, facesByIndex })
   }
 }
-
 
 const cylinder = (radius, height, radialSegments, wireframe) => {
   const vertices = [
@@ -120,9 +119,9 @@ const cylinder = (radius, height, radialSegments, wireframe) => {
   }
 
   if (wireframe === true) {
-    return toRawLineArray({vertices, facesByIndex})
+    return toRawLineArray({ vertices, facesByIndex })
   } else {
-    return toRawTriangleArray({vertices, facesByIndex})
+    return toRawTriangleArray({ vertices, facesByIndex })
   }
 }
 
@@ -202,38 +201,33 @@ const cone = () => {
 const hexagonalPrism = () => {
   return {
     vertices: [
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5],
-      [0.5, 0.5, 0.5]
+      // FACE
+      [0.35, 0, 0.15],
+      [0.15, 0.35, 0.15],
+      [-0.15, 0.35, 0.15],
+      [-0.35, 0, 0.15],
+      [-0.15, -0.35, 0.15],
+      [0.15, -0.35, 0.15],
+
+      // BASE
+      [0.35, 0, -0.15],
+      [0.15, 0.35, -0.15],
+      [-0.15, 0.35, -0.15],
+      [-0.35, 0, -0.15],
+      [-0.15, -0.35, -0.15],
+      [0.15, -0.35, -0.15]
     ],
     facesByIndex: [
-      [0, 1, 2],
-      [0, 2, 3]
-
-      // [0, 1, 2], // Top Hexagon
-      // [1, 2, 3],
-      // [2, 3, 4],
-      // [3, 4, 5],
-      // [0, 4, 5],
-      // [6, 7, 8], // Bottom Hexagon
-      // [7, 8, 9],
-      // [8, 9, 10],
-      // [9, 10, 11],
-      // [0, 6, 7], // edges to connect top & bottom heaxagon
-      // [1, 7, 8],
-      // [2, 8, 9],
-      // [3, 9, 10],
-      // [4, 10, 11],
-      // [5, 11, 6]
+      [0, 1, 7],
+      [0, 5, 6],
+      [1, 2, 8],
+      [2, 8, 9],
+      [2, 3, 9],
+      [3, 4, 10],
+      [3, 9, 10],
+      [4, 5, 11],
+      [6, 7, 8],
+      [6, 10, 11]
     ]
   }
 }
