@@ -45,7 +45,7 @@ const PitchedScene = props => {
       //{
       //  color: { r: 1, g: 0.5, b: 0 },
       //  //takes in a parameter of radius, height, and radial segments
-      //  vertices: toRawLineArray(cylinder(0.6, 0.75, 4)),
+      //  vertices: toRawLineArray(cylinder(0.6, 0.75, 4, true)),
       //  mode: gl.LINES
       //},
       //{
