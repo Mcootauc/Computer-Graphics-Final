@@ -73,8 +73,8 @@ const matrixConversion = matrix => {
 // Translates a given matrix by whatever numbers you want. 'x' translates the x-coord,
 // 'y' translates the y-coord, 'z' translates the z-coord.
 const translateMatrix = (matrix, x, y, z) => {
-  if(matrix.length !== Array(16)){
-    throw new Error('Matrix is the wrong size') 
+  if (matrix.length !== Array(16)) {
+    throw new Error('Matrix is the wrong size')
   }
   matrix[3] += x
   matrix[7] += y
@@ -185,17 +185,17 @@ const perspectiveProjection = (left, right, bottom, top, near, far) => {
 }
 
 //for groups
-function recursiveDraw(parent, node){
+function recursiveDraw(parent, node) {
   let matrixTree = new TreeWalker()
-   matrixTree.append(parent)
+  matrixTree.append(parent)
   let instanceMatrix = matrixMultiplier(parent, node)
   let finalMatrix = matrixMultiplier(parent, instanceMatrix)
   render(node, finalMatrix)
   let child = matrixTree.firstChild
-  if(child)
-  matrixTree.forEach(Node => {
-    recursiveDraw(finalMatrix, child)
-  }); 
+  if (child)
+    matrixTree.forEach(Node => {
+      recursiveDraw(finalMatrix, child)
+    })
 }
 
 export {
