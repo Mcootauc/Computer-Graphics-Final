@@ -32,7 +32,7 @@ const PitchedScene = props => {
       // No WebGL, no use going on...
       return
     }
-    
+
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
     const objectsToDraw = [
@@ -54,10 +54,6 @@ const PitchedScene = props => {
       //  mode: gl.LINES
       //},
       // {
-      //   color: { r: 0.5, g: 0, b: 1 },
-      //   vertices: toRawLineArray(pentagonalPyramid()),
-      //   mode: gl.LINES
-      // },
       {
         color: { r: 0.5, g: 0, b: 1 },
         vertices: toRawLineArray(hexagonalPrism()),
