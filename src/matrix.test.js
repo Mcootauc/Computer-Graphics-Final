@@ -12,18 +12,32 @@ describe('Matrix Multiplication', () => {
 
 describe('Scale Matrix implementation', () => {
   describe('Scale the given matrix by a given number', () => {
-    it('should scale the x y and z by 3', () => {
+    it('should scale the x y and z by a positive number', () => {
       const matrixBase = new4x4Matrix()
       const answerMatrix = new Array(16)
       for (let i = 0; i < 16; i++) {
         answerMatrix[i] = 0
       }
-      answerMatrix[0] = 3
-      answerMatrix[5] = 3
-      answerMatrix[10] = 3
+      answerMatrix[0] = 7
+      answerMatrix[5] = 7
+      answerMatrix[10] = 7
       answerMatrix[15] = 1
 
-      const scaledMatrix = scaleMatrix(matrixBase, 3, 3, 3)
+      const scaledMatrix = scaleMatrix(matrixBase, 7, 7, 7)
+      expect(scaledMatrix).toEqual(answerMatrix)
+    })
+    it('should scale the x y and z by a negative number', () => {
+      const matrixBase = new4x4Matrix()
+      const answerMatrix = new Array(16)
+      for (let i = 0; i < 16; i++) {
+        answerMatrix[i] = 0
+      }
+      answerMatrix[0] = -7
+      answerMatrix[5] = -7
+      answerMatrix[10] = -7
+      answerMatrix[15] = 1
+
+      const scaledMatrix = scaleMatrix(matrixBase, -7, -7, -7)
       expect(scaledMatrix).toEqual(answerMatrix)
     })
     it('should throw an error for not being a 4x4 matrix', () => {
