@@ -113,15 +113,17 @@ const cylinder = (radius, height, radialSegments, wireframe) => {
   facesByIndex.push([0, radialSegments, 1])
   // generate faces for the base
   for (let i = 1; i < radialSegments; i++) {
-    facesByIndex.push([1 + radialSegments, i + 1 + radialSegments, i + 2 + radialSegments])
+    console.log("bottom: " + (1 + radialSegments) + (i + 2 + radialSegments) + (i + 1 + radialSegments))
+    facesByIndex.push([1 + radialSegments, i + 2 + radialSegments, i + 1 + radialSegments])
   }
-  facesByIndex.push([1 + radialSegments, 1 + radialSegments + radialSegments, 2 + radialSegments])
+  facesByIndex.push([1 + radialSegments, 2 + radialSegments, 1 + radialSegments + radialSegments])
+  console.log("faces: " + facesByIndex)
   // generate faces for the sides
   facesByIndex.push([radialSegments + 2, 1, radialSegments])
-  facesByIndex.push([radialSegments + 2, 1 + radialSegments + radialSegments, radialSegments])
+  facesByIndex.push([radialSegments + 2, radialSegments, 1 + radialSegments + radialSegments])
   for (let i = 2; i < radialSegments + 1; i++) {
     facesByIndex.push([i + 1 + radialSegments, i, i - 1])
-    facesByIndex.push([i + 1 + radialSegments, i + radialSegments, i - 1])
+    facesByIndex.push([i + 1 + radialSegments, i - 1, i + radialSegments])
   }
 
   if (wireframe === true) {

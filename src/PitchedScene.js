@@ -51,9 +51,17 @@ const PitchedScene = props => {
         color: { r: 0, g: 0, b: 0 },
         //takes in a parameter of radius, height, and radial segments
         //also takes in a parameter true or false to choose whether you want a wireframe or not
-        vertices: cylinder(0.3, 0.3, 8, true),
-        mode: gl.LINES,
-        translation: {x: 1.0, y: 0.5, z: 0}
+        vertices: cylinder(0.3, 0.3, 4, false),
+        mode: gl.TRIANGLES,
+        translation: {x: 1.0, y: 1.2, z: 0}
+      },
+      {
+        color: { r: 0, g: 0, b: 0 },
+        //takes in a parameter of radius, height, and radial segments
+        //also takes in a parameter true or false to choose whether you want a wireframe or not
+        vertices: cylinder(0.3, 0.3, 4, false),
+        mode: gl.LINE_LOOP,
+        translation: {x: 1.4, y: 0.3, z: 0}
       },
       {
         color: { r: 0.5, g: 0, b: 0 },
