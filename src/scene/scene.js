@@ -84,7 +84,7 @@ const Scene = (canvas, objectsToDraw) => {
   const drawObject = object => {
     gl.uniform3f(gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b)
     // Set up the translation matrix.
-    gl.uniformMatrix4fv(theTranslationMatrix, gl.FALSE, new Float32Array(translateMatrix(-0.5, 0.5, 0)))
+    gl.uniformMatrix4fv(theTranslationMatrix, gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)))
     gl.bindBuffer(gl.ARRAY_BUFFER, object.verticesBuffer)
     gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0)
     gl.drawArrays(object.mode, 0, object.vertices.length / 3)

@@ -40,13 +40,15 @@ const PitchedScene = props => {
         color: { r: 1, g: 0.5, b: 0 },
         //takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: sphere(true),
-        mode: gl.LINES
+        mode: gl.LINES,
+        translation: {x: -0.5, y: 0.5, z: 0}
       },
       {
         color: { r: 0, g: 0, b: 0 },
         //takes in a parameter of radius, height, and radial segments
-        vertices: cylinder(0.6, 0.75, 4, true),
-        mode: gl.LINES
+        vertices: cylinder(0.3, 0.3, 8, true),
+        mode: gl.LINES,
+        translation: {x: 0.5, y: 0.5, z: 0}
       },
       //{
       //  color: { r: 0.5, g: 1.0, b: 0 },
@@ -54,11 +56,11 @@ const PitchedScene = props => {
       //  mode: gl.LINES
       //},
       // {
-      {
-        color: { r: 0.5, g: 0, b: 1 },
-        vertices: toRawLineArray(hexagonalPrism()),
-        mode: gl.LINES
-      }
+      //{
+      //  color: { r: 0.5, g: 0, b: 1 },
+      //  vertices: toRawLineArray(hexagonalPrism()),
+      //  mode: gl.LINES
+      //}
     ]
 
     Scene(pitchedCanvas, objectsToDraw)
