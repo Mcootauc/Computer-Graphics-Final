@@ -52,7 +52,6 @@ function matrixMultiplier(matrix1, matrix2) {
   return result
 }
 
-<<<<<<< HEAD
 // Translates a given matrix by whatever numbers you want. 'x' translates the x-coord,
 // 'y' translates the y-coord, 'z' translates the z-coord.
 const translateMatrix = (matrix, x, y, z) => {
@@ -64,12 +63,6 @@ const translateMatrix = (matrix, x, y, z) => {
   matrix[11] += z
 
   return [matrix]
-=======
-// Translates a given matrix by whatever numbers you want. 'a' translates the x-coord,
-// 'b' translates the y-coord, 'c' translates the z-coord.
-const translateMatrix = (x, y, z) => {
-  return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]
->>>>>>> e56b95a37392fdb5de43034e2126ff1c20b67c24
 }
 
 // Scales a given matrix by whatever numbers you want. 'a' scales the x-coord,
@@ -173,7 +166,6 @@ const perspectiveProjection = (left, right, bottom, top, near, far) => {
   ]
 }
 
-<<<<<<< HEAD
 //for groups
 function recursiveDraw(parent, node) {
   let matrixTree = new TreeWalker()
@@ -188,8 +180,6 @@ function recursiveDraw(parent, node) {
     })
 }
 
-=======
->>>>>>> e56b95a37392fdb5de43034e2126ff1c20b67c24
 export {
   scaleMatrix,
   matrixMultiplier,
