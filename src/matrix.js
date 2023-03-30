@@ -61,7 +61,7 @@ const translateMatrix = (x, y, z) => {
 // Scales a given matrix by whatever numbers you want. 'a' scales the x-coord,
 // 'b' scales the y-coord, 'c' scales the z-coord.
 const scaleMatrix = (m1, x, y, z) => {
-  if (m1.length != 16) {
+  if (m1.length !== 16) {
     throw new Error('Input matrix is not a 4x4 matrix')
   }
   m1[0] *= x

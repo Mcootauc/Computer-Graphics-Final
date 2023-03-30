@@ -66,7 +66,8 @@ const Scene = (canvas, objectsToDraw) => {
       alert('Could not link shaders...sorry.')
     }
   )
-    // If the abort variable is true here, we can't continue.
+
+  // If the abort variable is true here, we can't continue.
   if (abort) {
     alert('Fatal errors encountered; we cannot continue.')
     return
@@ -83,18 +84,16 @@ const Scene = (canvas, objectsToDraw) => {
 
   const drawObject = object => {
     gl.uniform3f(gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b)
-    // Set up the translation matrix.
+    // Set up the translation matrix with each object's unique translation on scene
     gl.uniformMatrix4fv(theTranslationMatrix, gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)))
     gl.bindBuffer(gl.ARRAY_BUFFER, object.verticesBuffer)
     gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0)
     gl.drawArrays(object.mode, 0, object.vertices.length / 3)
   }
-  
-  let currentRotation = 0.0
 
   /*
-    * Displays the scene.
-    */
+  * Displays the scene.
+  */
   const drawScene = () => {
     // Clear the display.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -109,9 +108,9 @@ const Scene = (canvas, objectsToDraw) => {
     gl.flush();
   };
 
+  let currentRotation = 0.0
   const FRAMES_PER_SECOND = 30
   const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
-  // ...and finally, do the initial display.
   const DEGREES_PER_MILLISECOND = 0.033
   const FULL_CIRCLE = 360.0
 

@@ -11,9 +11,6 @@ import Scene from './scene/scene'
 const CANVAS_WIDTH = 512
 const CANVAS_HEIGHT = 512
 
-const FRAMES_PER_SECOND = 30
-const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
-
 const PitchedScene = props => {
   const canvasRef = useRef()
   const [objectsToDraw, setObjectsToDraw] = useState([])
@@ -46,6 +43,7 @@ const PitchedScene = props => {
       {
         color: { r: 0, g: 0, b: 0 },
         //takes in a parameter of radius, height, and radial segments
+        //also takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: cylinder(0.3, 0.3, 8, true),
         mode: gl.LINES,
         translation: {x: 0.5, y: 0.5, z: 0}
