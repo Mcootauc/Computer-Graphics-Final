@@ -1,4 +1,11 @@
-import { scaleMatrix, orthoProjection, new4x4Matrix, matrixMultiplier, perspectiveProjection } from './matrix'
+import {
+  scaleMatrix,
+  orthoProjection,
+  new4x4Matrix,
+  matrixMultiplier,
+  perspectiveProjection,
+  matrixConversion
+} from './matrix'
 
 describe('Matrix Multiplication', () => {
   it('should return a 4x4 matrix using multiplication', () => {
@@ -10,20 +17,44 @@ describe('Matrix Multiplication', () => {
   })
 })
 
+describe('Matrix Conversion', () => {
+  it('should return a column-major matrix', () => {
+    const matrix = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    const resultMatrix = [1, 4, 7, 10, 13, 16, 2, 5, 8, 11, 14, 3, 6, 9, 12, 15]
+
+    console.log('conversion', matrixConversion(matrix))
+    expect(matrixConversion(matrix)).toEqual(resultMatrix)
+  })
+})
+
 describe('Scale Matrix implementation', () => {
   describe('Scale the given matrix by a given number', () => {
-    it('should scale the x y and z by 3', () => {
+    it('should scale the x y and z by a positive number', () => {
       const matrixBase = new4x4Matrix()
       const answerMatrix = new Array(16)
       for (let i = 0; i < 16; i++) {
         answerMatrix[i] = 0
       }
-      answerMatrix[0] = 3
-      answerMatrix[5] = 3
-      answerMatrix[10] = 3
+      answerMatrix[0] = 7
+      answerMatrix[5] = 7
+      answerMatrix[10] = 7
       answerMatrix[15] = 1
 
-      const scaledMatrix = scaleMatrix(matrixBase, 3, 3, 3)
+      const scaledMatrix = scaleMatrix(matrixBase, 7, 7, 7)
+      expect(scaledMatrix).toEqual(answerMatrix)
+    })
+    it('should scale the x y and z by a negative number', () => {
+      const matrixBase = new4x4Matrix()
+      const answerMatrix = new Array(16)
+      for (let i = 0; i < 16; i++) {
+        answerMatrix[i] = 0
+      }
+      answerMatrix[0] = -7
+      answerMatrix[5] = -7
+      answerMatrix[10] = -7
+      answerMatrix[15] = 1
+
+      const scaledMatrix = scaleMatrix(matrixBase, -7, -7, -7)
       expect(scaledMatrix).toEqual(answerMatrix)
     })
     it('should throw an error for not being a 4x4 matrix', () => {
