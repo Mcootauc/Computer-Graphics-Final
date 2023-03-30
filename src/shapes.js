@@ -207,6 +207,37 @@ const cone = () => {
   return { vertices, facesByIndex }
 }
 
+const box = () => {
+return {
+
+  vertices: [
+    [0, 0, 0], //0
+    [3, 0, 0], //1
+    [3, 3, 0], //2
+    [0, 3, 0], //3
+    [0, 3, -3], // 4
+    [0, 0, -3], // 5
+    [3, 0, -3], // 6
+    [3, 3, -3] // 7
+  ],
+
+  index: [
+    [2, 0, 1], //far face
+    [2, 0, 3],
+    [2, 4, 7], //top face
+    [2, 3, 4],
+    [4, 3, 0], //left face
+    [4, 0, 5],
+    [7, 4, 5], //front face
+    [7, 5, 6],
+    [2, 7, 6], //right face
+    [2, 6, 1],
+    [6, 5, 1], //bottom face
+    [0, 1, 5]
+  ]
+  }
+}
+
 const hexagonalPrism = () => {
   return {
     vertices: [
@@ -241,4 +272,4 @@ const hexagonalPrism = () => {
   }
 }
 
-export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, hexagonalPrism }
+export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, hexagonalPrism, box }
