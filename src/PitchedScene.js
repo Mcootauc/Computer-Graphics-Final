@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, toRawTriangleArray } from './shapes'
+import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -32,22 +32,22 @@ const PitchedScene = props => {
       // No WebGL, no use going on...
       return
     }
-
+    
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
     const objectsToDraw = [
       {
         color: { r: 1, g: 0.5, b: 0 },
-        //takes in a parameter of radius, height, and radial segments
+        //takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: sphere(true),
         mode: gl.LINES
       },
-      //{
-      //  color: { r: 1, g: 0.5, b: 0 },
-      //  //takes in a parameter of radius, height, and radial segments
-      //  vertices: toRawLineArray(cylinder(0.6, 0.75, 4)),
-      //  mode: gl.LINES
-      //},
+      {
+        color: { r: 0, g: 0, b: 0 },
+        //takes in a parameter of radius, height, and radial segments
+        vertices: cylinder(0.6, 0.75, 4, true),
+        mode: gl.LINES
+      },
       //{
       //  color: { r: 0.5, g: 1.0, b: 0 },
       //  vertices: toRawLineArray(cone()),
@@ -65,41 +65,7 @@ const PitchedScene = props => {
       }
     ]
 
-    let currentRotation = 0.0
-    const DEGREES_PER_MILLISECOND = 0.033
-    const FULL_CIRCLE = 360.0
-
-    let previousTimestamp
-    const nextFrame = timestamp => {
-      // Initialize the timestamp.
-      if (!previousTimestamp) {
-        previousTimestamp = timestamp
-        window.requestAnimationFrame(nextFrame)
-        return
-      }
-
-      // Check if it’s time to advance.
-      const progress = timestamp - previousTimestamp
-      if (progress < MILLISECONDS_PER_FRAME) {
-        // Do nothing if it’s too soon.
-        window.requestAnimationFrame(nextFrame)
-        return
-      }
-      // All clear.
-      currentRotation += DEGREES_PER_MILLISECOND * progress
-      Scene(pitchedCanvas, objectsToDraw, currentRotation)
-
-      if (currentRotation >= FULL_CIRCLE) {
-        currentRotation -= FULL_CIRCLE
-      }
-      // This is not the code you’re looking for.
-
-      // Request the next frame.
-      previousTimestamp = timestamp
-      window.requestAnimationFrame(nextFrame)
-    }
-
-    window.requestAnimationFrame(nextFrame)
+    Scene(pitchedCanvas, objectsToDraw)
   }, [canvasRef, objectsToDraw])
 
   const addHexagonalPrism = () => {
@@ -154,4 +120,5 @@ const PitchedScene = props => {
     </article>
   )
 }
+
 export default PitchedScene
