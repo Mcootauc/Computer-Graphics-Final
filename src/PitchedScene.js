@@ -38,7 +38,14 @@ const PitchedScene = props => {
         //takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: sphere(true),
         mode: gl.LINES,
-        translation: {x: -0.5, y: 0.5, z: 0}
+        translation: {x: -1.0, y: 0.5, z: 0}
+      },
+      {
+        color: { r: 1, g: 0.5, b: 0 },
+        //takes in a parameter true or false to choose whether you want a wireframe or not
+        vertices: sphere(false),
+        mode: gl.TRIANGLES,
+        translation: {x: -0.2, y: 1, z: 0}
       },
       {
         color: { r: 0, g: 0, b: 0 },
@@ -46,19 +53,19 @@ const PitchedScene = props => {
         //also takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: cylinder(0.3, 0.3, 8, true),
         mode: gl.LINES,
-        translation: {x: 0.5, y: 0.5, z: 0}
+        translation: {x: 1.0, y: 0.5, z: 0}
       },
       {
         color: { r: 0.5, g: 0, b: 0 },
         vertices: toRawLineArray(cone()),
         mode: gl.LINES,
-        translation: {x: -0.5, y: -0.6, z: 0}
+        translation: {x: -0.5, y: -1.0, z: 0}
       },
       {
         color: { r: 0.5, g: 0, b: 1 },
         vertices: toRawLineArray(hexagonalPrism()),
         mode: gl.LINES,
-        translation: {x: 0.5, y: -0.5, z: 0}
+        translation: {x: 0.8, y: -0.8, z: 0}
       }
     ]
 

@@ -1,5 +1,5 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
-import { translateMatrix, rotationMatrix } from '../matrix'
+import { translateMatrix, rotationMatrix, orthoProjection} from '../matrix'
 
 const VERTEX_SHADER = `
   #ifdef GL_ES
@@ -7,12 +7,12 @@ const VERTEX_SHADER = `
   #endif
 
   attribute vec3 vertexPosition;
-
   uniform mat4 theTranslationMatrix;
   uniform mat4 theRotationMatrix;
+  uniform mat4 theOrthoProjection;
 
   void main(void) {
-    gl_Position = theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
+    gl_Position = theOrthoProjection * theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
   }
 `
 
@@ -79,13 +79,14 @@ const Scene = (canvas, objectsToDraw) => {
   // Hold on to the important variables within the shaders.
   const vertexPosition = gl.getUniformLocation(shaderProgram, 'vertexPosition')
   gl.enableVertexAttribArray(vertexPosition)
-  const theRotationMatrix = gl.getUniformLocation(shaderProgram, 'theRotationMatrix')
-  const theTranslationMatrix = gl.getUniformLocation(shaderProgram, 'theTranslationMatrix')
+  const rotatingMatrix = gl.getUniformLocation(shaderProgram, 'theRotationMatrix')
+  const translationMatrix = gl.getUniformLocation(shaderProgram, 'theTranslationMatrix')
+  const orthographicProjection = gl.getUniformLocation(shaderProgram, 'theOrthoProjection')
 
   const drawObject = object => {
-    gl.uniform3f(gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b)
     // Set up the translation matrix with each object's unique translation on scene
-    gl.uniformMatrix4fv(theTranslationMatrix, gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)))
+    gl.uniformMatrix4fv(translationMatrix, gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)))
+    gl.uniform3f(gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b)
     gl.bindBuffer(gl.ARRAY_BUFFER, object.verticesBuffer)
     gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0)
     gl.drawArrays(object.mode, 0, object.vertices.length / 3)
@@ -99,7 +100,10 @@ const Scene = (canvas, objectsToDraw) => {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Set up the rotation matrix.
-    gl.uniformMatrix4fv(theRotationMatrix, gl.FALSE, new Float32Array(rotationMatrix(currentRotation, 1, 1, 1)))
+    gl.uniformMatrix4fv(rotatingMatrix, gl.FALSE, new Float32Array(rotationMatrix(currentRotation, 1, 1, 1)))
+
+    // Set up the rotation matrix.
+    gl.uniformMatrix4fv(orthographicProjection, gl.FALSE, new Float32Array(orthoProjection(-5/2, 5/2, -5/2, 5/2, -1, 1)))
 
     // Display the objects.
     objectsToDraw.forEach(drawObject);

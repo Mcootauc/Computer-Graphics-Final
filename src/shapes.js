@@ -12,8 +12,8 @@
  */
 const sphere = wireframe => {
   // The core icosahedron coordinates.
-  const X = 0.26
-  const Z = 0.425
+  const X = 0.13
+  const Z = 0.21
 
   const vertices = [
     [-X, 0.0, Z],
@@ -61,8 +61,9 @@ const sphere = wireframe => {
   //Takes the core icosahedron coordinate and
   //subdivides each face into four smaller triangles by adding
   //new vertices at the midpoint of each edge to make a sphere.
+
+  const initVertLength = vertices.length
   for (let i = 0; i < 1; i++) {
-    const initVertLength = vertices.length
     for (const element of facesByIndex) {
       const v1 = midpoint(vertices[element[0]], vertices[element[1]])
       const v2 = midpoint(vertices[element[1]], vertices[element[2]])
