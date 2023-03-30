@@ -50,17 +50,18 @@ const PitchedScene = props => {
         mode: gl.LINES,
         translation: {x: 0.5, y: 0.5, z: 0}
       },
-      //{
-      //  color: { r: 0.5, g: 1.0, b: 0 },
-      //  vertices: toRawLineArray(cone()),
-      //  mode: gl.LINES
-      //},
-      // {
-      //{
-      //  color: { r: 0.5, g: 0, b: 1 },
-      //  vertices: toRawLineArray(hexagonalPrism()),
-      //  mode: gl.LINES
-      //}
+      {
+        color: { r: 0.5, g: 0, b: 0 },
+        vertices: toRawLineArray(cone()),
+        mode: gl.LINES,
+        translation: {x: -0.5, y: -0.6, z: 0}
+      },
+      {
+        color: { r: 0.5, g: 0, b: 1 },
+        vertices: toRawLineArray(hexagonalPrism()),
+        mode: gl.LINES,
+        translation: {x: 0.5, y: -0.5, z: 0}
+      }
     ]
 
     Scene(pitchedCanvas, objectsToDraw)
