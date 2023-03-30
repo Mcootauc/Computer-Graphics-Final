@@ -10,13 +10,13 @@
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
-const sphere = (wireframe) => {
+const sphere = wireframe => {
   // The core icosahedron coordinates.
-  const X = 0.525731112119133606
-  const Z = 0.850650808352039932
-  function midpoint (v1, v2) {
+  const X = 0.26
+  const Z = 0.425
+  function midpoint(v1, v2) {
     //((x1 + x2)/2, (y1 + y2)/2, (z1 + z2)/2)
-    return [((v1[0] + v2[0])/2), ((v1[1] + v2[1])/2), ((v1[2] + v2[2])/2)]
+    return [(v1[0] + v2[0]) / 2, (v1[1] + v2[1]) / 2, (v1[2] + v2[2]) / 2]
   }
   const vertices = [
     [-X, 0.0, Z],
@@ -52,16 +52,16 @@ const sphere = (wireframe) => {
     [11, 0, 9],
     [2, 11, 9],
     [5, 2, 9],
-    [11, 2, 7],
+    [11, 2, 7]
   ]
-  //Subdivide each face into four smaller triangles by adding 
-  //new vertices at the midpoint of each edge 
+  //Subdivide each face into four smaller triangles by adding
+  //new vertices at the midpoint of each edge
   for (let i = 0; i < 1; i++) {
     const initVertLength = vertices.length
-    for (let i = 0; i < facesByIndex.length; i++) {
-      const v1 = midpoint(vertices[facesByIndex[i][0]], vertices[facesByIndex[i][1]])
-      const v2 = midpoint(vertices[facesByIndex[i][1]], vertices[facesByIndex[i][2]])
-      const v3 = midpoint(vertices[facesByIndex[i][2]], vertices[facesByIndex[i][0]])
+    for (const element of facesByIndex) {
+      const v1 = midpoint(vertices[element[0]], vertices[element[1]])
+      const v2 = midpoint(vertices[element[1]], vertices[element[2]])
+      const v3 = midpoint(vertices[element[2]], vertices[element[0]])
       vertices.push(v1, v2, v3)
     }
     for (let i = initVertLength - 1; i < vertices.length - 3; i = i + 3) {
@@ -70,14 +70,13 @@ const sphere = (wireframe) => {
   }
 
   if (wireframe === true) {
-    return toRawLineArray({vertices, facesByIndex})
+    return toRawLineArray({ vertices, facesByIndex })
   } else {
-    return toRawTriangleArray({vertices, facesByIndex})
+    return toRawTriangleArray({ vertices, facesByIndex })
   }
 }
 
-
-const cylinder = (radius, height, radialSegments) => {
+const cylinder = (radius, height, radialSegments, wireframe) => {
   const vertices = [
     [0, height, 0] // top vertex
   ]
@@ -119,7 +118,11 @@ const cylinder = (radius, height, radialSegments) => {
     facesByIndex.push([i + 1 + radialSegments, i + radialSegments, i - 1])
   }
 
-  return { vertices, facesByIndex }
+  if (wireframe === true) {
+    return toRawLineArray({ vertices, facesByIndex })
+  } else {
+    return toRawTriangleArray({ vertices, facesByIndex })
+  }
 }
 
 /**
