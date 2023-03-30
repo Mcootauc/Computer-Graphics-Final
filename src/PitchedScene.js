@@ -11,9 +11,6 @@ import Scene from './scene/scene'
 const CANVAS_WIDTH = 512
 const CANVAS_HEIGHT = 512
 
-const FRAMES_PER_SECOND = 30
-const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
-
 const PitchedScene = props => {
   const canvasRef = useRef()
   const [objectsToDraw, setObjectsToDraw] = useState([])
@@ -32,7 +29,7 @@ const PitchedScene = props => {
       // No WebGL, no use going on...
       return
     }
-    
+    var visible = false;
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
     const objectsToDraw = [
@@ -40,69 +37,54 @@ const PitchedScene = props => {
         color: { r: 1, g: 0.5, b: 0 },
         //takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: sphere(true),
-        mode: gl.LINES
+        mode: gl.LINES,
+        translation: {x: -1.0, y: 0.5, z: 0},
+        visible: false
+      },
+      {
+        color: { r: 1, g: 0.5, b: 0 },
+        //takes in a parameter true or false to choose whether you want a wireframe or not
+        vertices: sphere(false),
+        mode: gl.TRIANGLES,
+        translation: {x: -0.2, y: 1, z: 0},
+        visible: false
       },
       {
         color: { r: 0, g: 0, b: 0 },
         //takes in a parameter of radius, height, and radial segments
-        vertices: cylinder(0.6, 0.75, 4, true),
-        mode: gl.LINES
+        //also takes in a parameter true or false to choose whether you want a wireframe or not
+        vertices: cylinder(0.3, 0.3, 8, true),
+        mode: gl.LINES,
+        translation: {x: 1.0, y: 0.5, z: 0},
+        visible: false
       },
-      //{
-      //  color: { r: 0.5, g: 1.0, b: 0 },
-      //  vertices: toRawLineArray(cone()),
-      //  mode: gl.LINES
-      //},
-      // {
-      //   color: { r: 0.5, g: 0, b: 1 },
-      //   vertices: toRawLineArray(pentagonalPyramid()),
-      //   mode: gl.LINES
-      // },
+      {
+        color: { r: 0.5, g: 0, b: 0 },
+        vertices: toRawLineArray(cone()),
+        mode: gl.LINES,
+        translation: {x: -0.5, y: -1.0, z: 0},
+        visible: false
+      },
       {
         color: { r: 0.5, g: 0, b: 1 },
         vertices: toRawLineArray(hexagonalPrism()),
-        mode: gl.LINES
+        mode: gl.LINES,
+        translation: {x: 0.8, y: -0.8, z: 0},
+        visible: false
       }
     ]
 
     Scene(pitchedCanvas, objectsToDraw)
+    const toggle = document.querySelector('#toggle');
+    toggle.addEventListener('click', function() {
+      for (let i = 0; i < objectsToDraw.length; i++) {
+        objectsToDraw[i].visible = !objectsToDraw[i].visible;
+      }
+    })
+    
   }, [canvasRef, objectsToDraw])
 
-  const addHexagonalPrism = () => {
-    const hexagonalObject = {
-      color: { r: 0, g: 1.0, b: 0.5 },
-      vertices: toRawLineArray(hexagonalPrism()),
-      mode: gl.LINES
-    }
-    setObjectsToDraw(prevObjects => [...prevObjects, hexagonalObject])
-  }
-
-  const addCylinder = () => {
-    const cylinderObject = {
-      color: { r: 1, g: 0.5, b: 0 },
-      //takes in a parameter of radius, height, and radial segments
-      vertices: toRawLineArray(cylinder(1.2 * 0.5, 1.5 * 0.5, 4)),
-      mode: gl.LINES
-    }
-    setObjectsToDraw(prevObjects => [...prevObjects, cylinderObject])
-  }
-
-  const addCone = () => {
-    const coneObject = {
-      color: { r: 0.5, g: 1.0, b: 0 },
-      vertices: toRawLineArray(cone(1.8 * 0.5, 1.2 * 0.5)),
-      mode: gl.LINES
-    }
-    setObjectsToDraw(prevObjects => [...prevObjects, coneObject])
-  }
-
-  const removePrevious = () => {
-    setObjectsToDraw(prevObjects => {
-      const newObjects = [...prevObjects]
-      newObjects.pop()
-      return newObjects
-    })
-  }
+  
 
   return (
     <article>
@@ -112,10 +94,7 @@ const PitchedScene = props => {
         Your favorite update-your-browser message here.
       </canvas>
       <div>
-        <button onClick={addCylinder}>Add Cylinder</button>
-        <button onClick={addCone}>Add Cone</button>
-        <button onClick={addHexagonalPrism}>Add Hexagonal Prism</button>
-        <button onClick={removePrevious}>Remove the previous shape</button>
+        <button id="toggle">Show shape</button>
       </div>
     </article>
   )
