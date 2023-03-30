@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism } from './shapes'
+import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, box } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -37,7 +37,7 @@ const PitchedScene = props => {
         //takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: sphere(true),
         mode: gl.LINES,
-        translation: {x: -1.0, y: 0.5, z: 0},
+        translation: { x: -1.0, y: 0.5, z: 0 },
         visible: false
       },
       {
@@ -45,7 +45,7 @@ const PitchedScene = props => {
         //takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: sphere(false),
         mode: gl.TRIANGLES,
-        translation: {x: -0.2, y: 1, z: 0},
+        translation: { x: -0.2, y: 1, z: 0 },
         visible: false
       },
       {
@@ -54,7 +54,7 @@ const PitchedScene = props => {
         //also takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: cylinder(0.3, 0.3, 4, false),
         mode: gl.TRIANGLES,
-        translation: {x: 1.0, y: 1.2, z: 0},
+        translation: { x: 1.0, y: 1.2, z: 0 },
         visible: false
       },
       {
@@ -63,37 +63,42 @@ const PitchedScene = props => {
         //also takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: cylinder(0.3, 0.3, 4, false),
         mode: gl.LINE_LOOP,
-        translation: {x: 1.4, y: 0.3, z: 0},
+        translation: { x: 1.4, y: 0.3, z: 0 },
         visible: false
       },
       {
         color: { r: 0.5, g: 0, b: 0 },
         vertices: toRawLineArray(cone()),
         mode: gl.LINES,
-        translation: {x: -0.5, y: -1.0, z: 0},
+        translation: { x: -0.5, y: -1.0, z: 0 },
         visible: false
       },
       {
         color: { r: 0.5, g: 0, b: 1 },
         vertices: toRawLineArray(hexagonalPrism()),
         mode: gl.LINES,
-        translation: {x: 0.8, y: -0.8, z: 0},
+        translation: { x: 0.8, y: -0.8, z: 0 },
+        visible: false
+      },
+      {
+        color: { r: 0.75, g: 0.5, b: 0.85 },
+        vertices: toRawLineArray(box()),
+        mode: gl.LINES,
+        translation: {x: 0.25, y: -0.25, z: 0.75},
         visible: false
       }
+      
     ]
 
     Scene(pitchedCanvas, objectsToDraw)
 
-    const toggle = document.querySelector('#toggle');
-    toggle.addEventListener('click', function() {
+    const toggle = document.querySelector('#toggle')
+    toggle.addEventListener('click', function () {
       for (const element of objectsToDraw) {
-        element.visible = !element.visible;
+        element.visible = !element.visible
       }
     })
-    
   }, [canvasRef, objectsToDraw])
-
-  
 
   return (
     <article>

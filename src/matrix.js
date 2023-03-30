@@ -1,6 +1,6 @@
 //Matrix Library
 
-import { render } from "@testing-library/react"
+import { render } from '@testing-library/react'
 
 //Matrix Generator that automatically outputs an identity matrix
 function new4x4Matrix() {
@@ -52,6 +52,17 @@ function matrixMultiplier(matrix1, matrix2) {
 
   console.log('your result is: ', result)
   return result
+}
+
+const matrixConversion = matrix => {
+  let conversionMatrix = []
+  for (let i = 0; i < 4; i++) {
+    conversionMatrix.push(matrix[i])
+    conversionMatrix.push(matrix[i + 4])
+    conversionMatrix.push(matrix[i + 8])
+    conversionMatrix.push(matrix[i + 12])
+  }
+  return conversionMatrix
 }
 
 // Translates a given matrix by whatever numbers you want. 'x' translates the x-coord,
@@ -186,6 +197,7 @@ export {
   scaleMatrix,
   matrixMultiplier,
   new4x4Matrix,
+  matrixConversion,
   translateMatrix,
   rotationMatrix,
   orthoProjection,

@@ -1,4 +1,11 @@
-import { scaleMatrix, orthoProjection, new4x4Matrix, matrixMultiplier, perspectiveProjection } from './matrix'
+import {
+  scaleMatrix,
+  orthoProjection,
+  new4x4Matrix,
+  matrixMultiplier,
+  perspectiveProjection,
+  matrixConversion
+} from './matrix'
 
 describe('Matrix Multiplication', () => {
   it('should return a 4x4 matrix using multiplication', () => {
@@ -7,6 +14,16 @@ describe('Matrix Multiplication', () => {
     const resultMatrix = [14, 28, 42, 56, 14, 28, 42, 56, 14, 28, 42, 56, 14, 28, 42, 56]
 
     expect(matrixMultiplier(matrix1, matrix2)).toEqual(resultMatrix)
+  })
+})
+
+describe('Matrix Conversion', () => {
+  it('should return a column-major matrix', () => {
+    const matrix = [1, 4, 7, 10, 13, 16, 2, 5, 8, 11, 14, 3, 6, 9, 12, 15]
+    const resultMatrix = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+
+    console.log('conversion', matrixConversion(matrix))
+    expect(matrixConversion(matrix)).toEqual(resultMatrix)
   })
 })
 
