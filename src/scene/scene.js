@@ -106,7 +106,13 @@ const Scene = (canvas, objectsToDraw) => {
     gl.uniformMatrix4fv(orthographicProjection, gl.FALSE, new Float32Array(orthoProjection(-5/2, 5/2, -5/2, 5/2, -1, 1)))
 
     // Display the objects.
-    objectsToDraw.forEach(drawObject);
+    for (let i = 0; i < objectsToDraw.length; i++)
+    {
+      const object = objectsToDraw[i];
+      if(object.visible) {
+        objectsToDraw.forEach(drawObject);
+      }
+    }
   
     // All done.
     gl.flush();
