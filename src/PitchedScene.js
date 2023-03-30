@@ -13,8 +13,7 @@ const CANVAS_HEIGHT = 512
 
 const PitchedScene = props => {
   const canvasRef = useRef()
-  const [objectsToDraw, setObjectsToDraw] = useState([])
-  let gl // Declare gl as a global variable
+  const [objectsToDraw] = useState([])
 
   useEffect(() => {
     const pitchedCanvas = canvasRef.current
@@ -29,7 +28,7 @@ const PitchedScene = props => {
       // No WebGL, no use going on...
       return
     }
-    var visible = false;
+
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
     const objectsToDraw = [
@@ -38,7 +37,7 @@ const PitchedScene = props => {
         //takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: sphere(true),
         mode: gl.LINES,
-        translation: {x: -1.0, y: 0.5, z: 0},
+        translation: { x: -1.0, y: 0.5, z: 0 },
         visible: false
       },
       {
@@ -46,45 +45,52 @@ const PitchedScene = props => {
         //takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: sphere(false),
         mode: gl.TRIANGLES,
-        translation: {x: -0.2, y: 1, z: 0},
+        translation: { x: -0.2, y: 1, z: 0 },
         visible: false
       },
       {
         color: { r: 0, g: 0, b: 0 },
         //takes in a parameter of radius, height, and radial segments
         //also takes in a parameter true or false to choose whether you want a wireframe or not
-        vertices: cylinder(0.3, 0.3, 8, true),
-        mode: gl.LINES,
-        translation: {x: 1.0, y: 0.5, z: 0},
+        vertices: cylinder(0.3, 0.3, 4, false),
+        mode: gl.TRIANGLES,
+        translation: { x: 1.0, y: 1.2, z: 0 },
+        visible: false
+      },
+      {
+        color: { r: 0, g: 0, b: 0 },
+        //takes in a parameter of radius, height, and radial segments
+        //also takes in a parameter true or false to choose whether you want a wireframe or not
+        vertices: cylinder(0.3, 0.3, 4, false),
+        mode: gl.LINE_LOOP,
+        translation: { x: 1.4, y: 0.3, z: 0 },
         visible: false
       },
       {
         color: { r: 0.5, g: 0, b: 0 },
         vertices: toRawLineArray(cone()),
         mode: gl.LINES,
-        translation: {x: -0.5, y: -1.0, z: 0},
+        translation: { x: -0.5, y: -1.0, z: 0 },
         visible: false
       },
       {
         color: { r: 0.5, g: 0, b: 1 },
         vertices: toRawLineArray(hexagonalPrism()),
         mode: gl.LINES,
-        translation: {x: 0.8, y: -0.8, z: 0},
+        translation: { x: 0.8, y: -0.8, z: 0 },
         visible: false
       }
     ]
 
     Scene(pitchedCanvas, objectsToDraw)
-    const toggle = document.querySelector('#toggle');
-    toggle.addEventListener('click', function() {
-      for (let i = 0; i < objectsToDraw.length; i++) {
-        objectsToDraw[i].visible = !objectsToDraw[i].visible;
+
+    const toggle = document.querySelector('#toggle')
+    toggle.addEventListener('click', function () {
+      for (const element of objectsToDraw) {
+        element.visible = !element.visible
       }
     })
-    
   }, [canvasRef, objectsToDraw])
-
-  
 
   return (
     <article>
