@@ -51,22 +51,6 @@ function matrixMultiplier(matrix1, matrix2) {
   console.log('your result is: ', result)
   return result
 }
-const matrixConversion = matrix => {
-  let conversionMatrix = []
-  for (let i = 0; i < 4; i++) {
-    conversionMatrix.push(matrix[i])
-  }
-  for (let i = 0; i < 4; i++) {
-    conversionMatrix.push(matrix[i + 4])
-  }
-  for (let i = 0; i < 4; i++) {
-    conversionMatrix.push(matrix[i + 8])
-  }
-  for (let i = 0; i < 4; i++) {
-    conversionMatrix.push(matrix[i + 12])
-  }
-  return conversionMatrix
-}
 
 // Translates a given matrix by whatever numbers you want. 'a' translates the x-coord,
 // 'b' translates the y-coord, 'c' translates the z-coord.
@@ -179,7 +163,6 @@ export {
   scaleMatrix,
   matrixMultiplier,
   new4x4Matrix,
-  matrixConversion,
   translateMatrix,
   rotationMatrix,
   orthoProjection,
