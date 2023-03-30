@@ -158,7 +158,19 @@ const perspectiveProjection = (left, right, bottom, top, near, far) => {
     0
   ]
 }
-
+//Attempted groups
+//function recursiveDraw(parent, node){
+//  var matrixTree = new TreeWalker
+//  matrixTree.append(parent)
+//  instanceMatrix = matrixMultiplier(parent, node)
+//  finalMatrix = matrixMultiplier(parent, instanceMatrix)
+//  render(node, finalMatrix)
+//  var child = matrixTree.firstChild
+//  if(child)
+//    matrixTree.forEach(Node => {
+//      recursiveDraw(finalMatrix, child)
+//    });
+//}
 export {
   scaleMatrix,
   matrixMultiplier,
