@@ -1,11 +1,4 @@
-import {
-  scaleMatrix,
-  orthoProjection,
-  new4x4Matrix,
-  matrixMultiplier,
-  perspectiveProjection,
-  matrixConversion
-} from './matrix'
+import { scaleMatrix, orthoProjection, new4x4Matrix, matrixMultiplier, perspectiveProjection } from './matrix'
 
 describe('Matrix Multiplication', () => {
   it('should return a 4x4 matrix using multiplication', () => {
@@ -17,6 +10,7 @@ describe('Matrix Multiplication', () => {
   })
 })
 
+<<<<<<< HEAD
 describe('Matrix Conversion', () => {
   it('should return a column-major matrix', () => {
     const matrix = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -27,6 +21,8 @@ describe('Matrix Conversion', () => {
   })
 })
 
+=======
+>>>>>>> e56b95a37392fdb5de43034e2126ff1c20b67c24
 describe('Scale Matrix implementation', () => {
   describe('Scale the given matrix by a given number', () => {
     it('should scale the x y and z by a positive number', () => {
