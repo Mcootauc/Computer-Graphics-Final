@@ -1,3 +1,4 @@
+import Vector from './vector.js'
 /*
  * This module defines/generates vertex arrays for certain predefined shapes.
  * The "shapes" are returned as indexed vertices, with utility functions for
@@ -132,6 +133,41 @@ const cylinder = (radius, height, radialSegments, wireframe) => {
   } else {
     return toRawTriangleArray({ vertices, facesByIndex })
   }
+}
+
+/**
+ * Utility function for computing vertex normals.
+ *
+ * @param {object} protoGeometry
+ */
+const computeVertexNormals = protoGeometry => {
+  const result = []
+
+  protoGeometry.facesByIndex.forEach(face => {
+    // Access each vertex of the triangle.
+    const p0 = protoGeometry.vertices[face[0]]
+    const p1 = protoGeometry.vertices[face[1]]
+    const p2 = protoGeometry.vertices[face[2]]
+
+    // Convert each point into a Vector instance so we can use the methods.
+    const p0AsVector = new Vector(...p0)
+    const p1AsVector = new Vector(...p1)
+    const p2AsVector = new Vector(...p2)
+
+    // Perform the actual vector calculation.
+    const v1 = p1AsVector.subtract(p0AsVector)
+    const v2 = p2AsVector.subtract(p0AsVector)
+
+    // Calculate the normal.
+    const N = v1.cross(v2).unit // ".unit" is not in the book.
+
+    // Push that normnal onto our result, _one per vertex_.
+    result.push(N.x, N.y, N.z)
+    result.push(N.x, N.y, N.z)
+    result.push(N.x, N.y, N.z)
+  })
+
+  return result
 }
 
 /**
@@ -271,4 +307,4 @@ const hexagonalPrism = () => {
   }
 }
 
-export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, hexagonalPrism, box }
+export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, hexagonalPrism, box, computeVertexNormals }
