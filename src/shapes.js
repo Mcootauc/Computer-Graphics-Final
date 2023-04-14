@@ -11,10 +11,11 @@ import Vector from './vector.js'
  * Let’s call the resulting data structure a “proto-geometry” because it has
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
-const sphere = wireframe => {
+
+const sphere = (wireframe, scaleFactor, subDivCount) => {
   // The core icosahedron coordinates.
-  const X = 0.13
-  const Z = 0.21
+  const X = 0.525731112119133606 * scaleFactor
+  const Z = 0.850650808352039932 * scaleFactor
 
   const vertices = [
     [-X, 0.0, Z],
@@ -30,7 +31,7 @@ const sphere = wireframe => {
     [Z, -X, 0.0],
     [-Z, -X, 0.0]
   ]
-  const facesByIndex = [
+  let facesByIndex = [
     [1, 4, 0],
     [4, 9, 0],
     [4, 5, 9],
@@ -53,27 +54,56 @@ const sphere = wireframe => {
     [11, 2, 7]
   ]
 
-  //Gets the midpoint of two vertices
-  function midpoint(v1, v2) {
-    //((x1 + x2)/2, (y1 + y2)/2, (z1 + z2)/2)
-    return [(v1[0] + v2[0]) / 2, (v1[1] + v2[1]) / 2, (v1[2] + v2[2]) / 2]
+  // Subdivide the icosahedron
+  function subdivideIcosahedron() {
+    const newVertices = [];
+    const newFaces = [];
+
+    for (const element of facesByIndex) {
+      const face = element;
+      const v1 = vertices[face[0]];
+      const v2 = vertices[face[1]];
+      const v3 = vertices[face[2]];
+
+      // Get the midpoints of each edge
+      const v4 = normalizeVertex(getMidpoint(v1, v2));
+      const v5 = normalizeVertex(getMidpoint(v2, v3));
+      const v6 = normalizeVertex(getMidpoint(v3, v1));
+
+      // Add the new vertices to the list
+      newVertices.push(v4, v5, v6);
+
+      // Add the new faces to the list
+      const v4Index = vertices.length + newVertices.length - 3;
+      const v5Index = vertices.length + newVertices.length - 2;
+      const v6Index = vertices.length + newVertices.length - 1;
+      newFaces.push([face[0], v4Index, v6Index]);
+      newFaces.push([face[1], v5Index, v4Index]);
+      newFaces.push([face[2], v6Index, v5Index]);
+      newFaces.push([v4Index, v5Index, v6Index]);
+    }
+
+    // Add the new vertices and faces to the main arrays
+    vertices.push(...newVertices);
+    facesByIndex = newFaces;
   }
 
-  //Takes the core icosahedron coordinate and
-  //subdivides each face into four smaller triangles by adding
-  //new vertices at the midpoint of each edge to make a sphere.
+  // Get the midpoint between two vertices
+  function getMidpoint(v1, v2) {
+    return [(v1[0] + v2[0]) / 2, (v1[1] + v2[1]) / 2, (v1[2] + v2[2]) / 2];
+  }
 
-  const initVertLength = vertices.length
-  for (let i = 0; i < 1; i++) {
-    for (const element of facesByIndex) {
-      const v1 = midpoint(vertices[element[0]], vertices[element[1]])
-      const v2 = midpoint(vertices[element[1]], vertices[element[2]])
-      const v3 = midpoint(vertices[element[2]], vertices[element[0]])
-      vertices.push(v1, v2, v3)
-    }
-    for (let i = initVertLength - 1; i < vertices.length - 3; i = i + 3) {
-      facesByIndex.push([i + 1, i + 2, i + 3])
-    }
+  // Normalize a vertex to be on the surface of the sphere
+  function normalizeVertex(v) {
+    const length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    const normalized = [v[0] / length, v[1] / length, v[2] / length];
+  return [normalized[0] * scaleFactor, normalized[1] * scaleFactor, normalized[2] * scaleFactor];
+  }
+
+  //sub divides to the desired amount
+  console.log(subDivCount)
+  for (let i = 0; i < subDivCount; i++) {
+    subdivideIcosahedron()
   }
 
   if (wireframe === true) {
@@ -82,6 +112,7 @@ const sphere = wireframe => {
     return toRawTriangleArray({ vertices, facesByIndex })
   }
 }
+
 
 const cylinder = (radius, height, radialSegments, wireframe) => {
   const vertices = [
@@ -114,11 +145,9 @@ const cylinder = (radius, height, radialSegments, wireframe) => {
   facesByIndex.push([0, radialSegments, 1])
   // generate faces for the base
   for (let i = 1; i < radialSegments; i++) {
-    console.log('bottom: ' + (1 + radialSegments) + (i + 2 + radialSegments) + (i + 1 + radialSegments))
     facesByIndex.push([1 + radialSegments, i + 2 + radialSegments, i + 1 + radialSegments])
   }
   facesByIndex.push([1 + radialSegments, 2 + radialSegments, 1 + radialSegments + radialSegments])
-  console.log('faces: ' + facesByIndex)
 
   // generate faces for the sides
   facesByIndex.push([radialSegments + 2, 1, radialSegments])

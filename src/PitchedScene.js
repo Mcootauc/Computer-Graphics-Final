@@ -34,7 +34,8 @@ const PitchedScene = props => {
       {
         color: { r: 1, g: 0.5, b: 0 },
         //takes in a parameter true or false to choose whether you want a wireframe or not
-        vertices: sphere(true),
+        //also takes in a scalefactor parameter
+        vertices: sphere(true, 0.5, 3.0),
         mode: gl.LINES,
         translation: {x: -1.0, y: 0.5, z: 0},
         visible: false
@@ -42,25 +43,26 @@ const PitchedScene = props => {
       {
         color: { r: 1, g: 0.5, b: 0 },
         //takes in a parameter true or false to choose whether you want a wireframe or not
-        vertices: sphere(false),
+        //also takes in a scalefactor parameter and a subdivision parameter
+        vertices: sphere(false, 0.5, 3.0),
         mode: gl.TRIANGLES,
-        translation: {x: -0.2, y: 1, z: 0},
+        translation: {x: -0.3, y: 1.5, z: 0},
         visible: false
       },
       {
-        color: { r: 0, g: 0, b: 0 },
+        color: { r: 1, g: 0, b: 0 },
         //takes in a parameter of radius, height, and radial segments
         //also takes in a parameter true or false to choose whether you want a wireframe or not
-        vertices: cylinder(0.3, 0.3, 8, true),
+        vertices: cylinder(0.3, 0.3, 5, true),
         mode: gl.LINES,
         translation: {x: 1.0, y: 1, z: 0},
         visible: false
       },
       {
-        color: { r: 0, g: 0, b: 0 },
+        color: { r: 1, g: 0, b: 0 },
         //takes in a parameter of radius, height, and radial segments
         //also takes in a parameter true or false to choose whether you want a wireframe or not
-        vertices: cylinder(0.3, 0.3, 8, false),
+        vertices: cylinder(0.3, 0.3, 5, false),
         mode: gl.TRIANGLES,
         translation: {x: 1.3, y: 0.1, z: 0},
         visible: false
@@ -79,13 +81,6 @@ const PitchedScene = props => {
         translation: {x: 0.8, y: -0.8, z: 0},
         visible: false
       },
-      {
-        color: { r: 0.75, g: 0.5, b: 0.85 },
-        vertices: toRawLineArray(box()),
-        mode: gl.LINES,
-        translation: {x: 0.25, y: -0.25, z: 0.75},
-        visible: false
-      }
     ]
 
     Scene(pitchedCanvas, objectsToDraw)
