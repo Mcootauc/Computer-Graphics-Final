@@ -12,7 +12,9 @@ import Vector from './vector.js'
  * the beginnings of a geometry but nothing close to what three.js has (yet).
  */
 
-const sphere = (wireframe, scaleFactor, subDivCount) => {
+//takes in a parameter of radius, height, and radial segments
+//also takes in a parameter true or false to choose whether you want a wireframe or not
+const sphere = (scaleFactor, subDivCount) => {
   // The core icosahedron coordinates.
   const X = 0.525731112119133606 * scaleFactor
   const Z = 0.850650808352039932 * scaleFactor
@@ -106,11 +108,7 @@ const sphere = (wireframe, scaleFactor, subDivCount) => {
     subdivideIcosahedron()
   }
 
-  if (wireframe === true) {
-    return toRawLineArray({ vertices, facesByIndex })
-  } else {
-    return toRawTriangleArray({ vertices, facesByIndex })
-  }
+  return { vertices, facesByIndex }
 }
 
 

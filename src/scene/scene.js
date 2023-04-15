@@ -7,12 +7,19 @@ const VERTEX_SHADER = `
   #endif
 
   attribute vec3 vertexPosition;
+
+  uniform vec3 color;
+  varying vec4 finalVertexColor;
+
   uniform mat4 theTranslationMatrix;
   uniform mat4 theRotationMatrix;
   uniform mat4 theOrthoProjection;
 
+  attribute vec3 normalVector;
+
   void main(void) {
     gl_Position = theOrthoProjection * theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
+    finalVertexColor = vec4(color, 1.0);
   }
 `
 
@@ -21,10 +28,10 @@ const FRAGMENT_SHADER = `
   precision highp float;
   #endif
 
-  uniform vec3 color;
+  varying vec4 finalVertexColor;
 
   void main(void) {
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
   }
 `
 const Scene = (canvas, objectsToDraw) => {

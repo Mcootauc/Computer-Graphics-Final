@@ -4,7 +4,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, box } from './shapes'
+import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, box, computeVertexNormals, toRawTriangleArray } from './shapes'
 import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
@@ -35,24 +35,21 @@ const PitchedScene = props => {
         color: { r: 1, g: 0.5, b: 0 },
         //takes in a parameter true or false to choose whether you want a wireframe or not
         //also takes in a scalefactor parameter
-        vertices: sphere(true, 0.5, 3.0),
+        vertices: toRawLineArray(sphere(0.5, 1.0)),
         mode: gl.LINES,
         translation: {x: -1.0, y: 0.5, z: 0},
         visible: false
       },
       {
         color: { r: 1, g: 0.5, b: 0 },
-        //takes in a parameter true or false to choose whether you want a wireframe or not
-        //also takes in a scalefactor parameter and a subdivision parameter
-        vertices: sphere(false, 0.5, 3.0),
+        vertices: toRawTriangleArray(sphere(0.5, 1.0)),
         mode: gl.TRIANGLES,
         translation: {x: -0.3, y: 1.5, z: 0},
+        normals: computeVertexNormals(sphere(0.5, 1.0)),
         visible: false
       },
       {
         color: { r: 1, g: 0, b: 0 },
-        //takes in a parameter of radius, height, and radial segments
-        //also takes in a parameter true or false to choose whether you want a wireframe or not
         vertices: cylinder(0.3, 0.3, 5, true),
         mode: gl.LINES,
         translation: {x: 1.0, y: 1, z: 0},
