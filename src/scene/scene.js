@@ -1,5 +1,6 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
-import { translateMatrix, rotationMatrix, orthoProjection} from '../matrix'
+import { translateMatrix, rotationMatrix, orthoProjection } from '../matrix'
+import Vector from '../vector'
 
 const VERTEX_SHADER = `
   #ifdef GL_ES
@@ -14,11 +15,12 @@ const VERTEX_SHADER = `
   uniform mat4 theTranslationMatrix;
   uniform mat4 theRotationMatrix;
   uniform mat4 theOrthoProjection;
+  uniform mat4 cameraMatrix;
 
   attribute vec3 normalVector;
 
   void main(void) {
-    gl_Position = theOrthoProjection * theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
+    gl_Position = cameraMatrix * theOrthoProjection * theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(color, 1.0);
   }
 `
@@ -89,6 +91,22 @@ const Scene = (canvas, objectsToDraw) => {
   const rotatingMatrix = gl.getUniformLocation(shaderProgram, 'theRotationMatrix')
   const translationMatrix = gl.getUniformLocation(shaderProgram, 'theTranslationMatrix')
   const orthographicProjection = gl.getUniformLocation(shaderProgram, 'theOrthoProjection')
+  const cameraMatrix = gl.getUniformLocation(shaderProgram, 'cameraMatrix')
+
+  const P = new Vector(0, 0, 0)
+  const Q = new Vector(0, 0, -1)
+  const up = new Vector(1, 1, 0)
+
+  const ze = P.subtract(Q).unit
+  const ye = up.subtract(up.projection(ze)).unit
+  const xe = ye.cross(ze)
+
+  const cameraMatrixArray = [
+    xe.x, ye.x, ze.x, 0,
+    xe.y, ye.y, ze.y, 0,
+    xe.z, ye.z, ze.z, 0,
+    -P.dot(xe), -P.dot(ye), -P.dot(ze), 1
+  ]
 
   const drawObject = object => {
     // Set up the translation matrix with each object's unique translation on scene
@@ -111,6 +129,9 @@ const Scene = (canvas, objectsToDraw) => {
 
     // Set up the rotation matrix.
     gl.uniformMatrix4fv(orthographicProjection, gl.FALSE, new Float32Array(orthoProjection(-5/2, 5/2, -5/2, 5/2, -1, 1)))
+
+    //camera
+    gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, new Float32Array(cameraMatrixArray))
 
     // Display the objects.
     for (let i = 0; i < objectsToDraw.length; i++)

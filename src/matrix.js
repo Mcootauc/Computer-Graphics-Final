@@ -16,6 +16,7 @@ function new4x4Matrix() {
   return matrix
 }
 
+
 // 4x4 Matrix multiplier
 function matrixMultiplier(matrix1, matrix2) {
   let result = []
