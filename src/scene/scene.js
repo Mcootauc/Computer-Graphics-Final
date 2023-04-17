@@ -20,7 +20,7 @@ const VERTEX_SHADER = `
   attribute vec3 normalVector;
 
   void main(void) {
-    vec3 lightVector = normalize(vectorPosition);
+    vec3 lightVector = normalize(vertexPosition);
     float lightContribution = dot(normalize(normalVector), lightVector);
     gl_Position = theRotationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
