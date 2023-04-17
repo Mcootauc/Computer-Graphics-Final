@@ -9,7 +9,7 @@ const VERTEX_SHADER = `
 
   attribute vec3 vertexPosition;
 
-  uniform vec3 color;
+  attribute vec3 vertexColor;
   varying vec4 finalVertexColor;
 
   uniform mat4 theTranslationMatrix;
@@ -90,12 +90,14 @@ const Scene = (canvas, objectsToDraw) => {
   // Hold on to the important variables within the shaders.
   const vertexPosition = gl.getUniformLocation(shaderProgram, 'vertexPosition')
   gl.enableVertexAttribArray(vertexPosition)
+  const vertexColor = gl.getAttribLocation(shaderProgram, 'vertexColor')
+  gl.enableVertexAttribArray(vertexColor)
+  const normalVector = gl.getAttribLocation(shaderProgram, 'normalVector')
+  gl.enableVertexAttribArray(normalVector)
   const rotatingMatrix = gl.getUniformLocation(shaderProgram, 'theRotationMatrix')
   const translationMatrix = gl.getUniformLocation(shaderProgram, 'theTranslationMatrix')
   const orthographicProjection = gl.getUniformLocation(shaderProgram, 'theOrthoProjection')
   const cameraMatrix = gl.getUniformLocation(shaderProgram, 'cameraMatrix')
-  const color = gl.getAttribLocation(shaderProgram, 'color')
-  gl.enableVertexAttribArray(color)
 
   const P = new Vector(0, 0, 0)
   const Q = new Vector(0, 0, -1)
