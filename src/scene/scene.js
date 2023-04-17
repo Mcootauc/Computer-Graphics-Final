@@ -20,8 +20,10 @@ const VERTEX_SHADER = `
   attribute vec3 normalVector;
 
   void main(void) {
-    gl_Position = cameraMatrix * theOrthoProjection * theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
-    finalVertexColor = vec4(color, 1.0);
+    vec3 lightVector = normalize(vectorPosition);
+    float lightContribution = dot(normalize(normalVector), lightVector);
+    gl_Position = theRotationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
+    finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
   }
 `
 
@@ -44,7 +46,7 @@ const Scene = (canvas, objectsToDraw) => {
     // No WebGL, no use going on...
     return
   }
-  
+
   gl.enable(gl.DEPTH_TEST)
   gl.enable(gl.CULL_FACE)
   gl.clearColor(0.0, 0.0, 0.0, 0.0)
@@ -92,6 +94,8 @@ const Scene = (canvas, objectsToDraw) => {
   const translationMatrix = gl.getUniformLocation(shaderProgram, 'theTranslationMatrix')
   const orthographicProjection = gl.getUniformLocation(shaderProgram, 'theOrthoProjection')
   const cameraMatrix = gl.getUniformLocation(shaderProgram, 'cameraMatrix')
+  const color = gl.getAttribLocation(shaderProgram, 'color')
+  gl.enableVertexAttribArray(color)
 
   const P = new Vector(0, 0, 0)
   const Q = new Vector(0, 0, -1)
@@ -102,15 +106,31 @@ const Scene = (canvas, objectsToDraw) => {
   const xe = ye.cross(ze)
 
   const cameraMatrixArray = [
-    xe.x, ye.x, ze.x, 0,
-    xe.y, ye.y, ze.y, 0,
-    xe.z, ye.z, ze.z, 0,
-    -P.dot(xe), -P.dot(ye), -P.dot(ze), 1
+    xe.x,
+    ye.x,
+    ze.x,
+    0,
+    xe.y,
+    ye.y,
+    ze.y,
+    0,
+    xe.z,
+    ye.z,
+    ze.z,
+    0,
+    -P.dot(xe),
+    -P.dot(ye),
+    -P.dot(ze),
+    1
   ]
 
   const drawObject = object => {
     // Set up the translation matrix with each object's unique translation on scene
-    gl.uniformMatrix4fv(translationMatrix, gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)))
+    gl.uniformMatrix4fv(
+      translationMatrix,
+      gl.FALSE,
+      new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z))
+    )
     gl.uniform3f(gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b)
     gl.bindBuffer(gl.ARRAY_BUFFER, object.verticesBuffer)
     gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0)
@@ -118,33 +138,36 @@ const Scene = (canvas, objectsToDraw) => {
   }
 
   /*
-  * Displays the scene.
-  */
+   * Displays the scene.
+   */
   const drawScene = () => {
     // Clear the display.
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
     // Set up the rotation matrix.
     gl.uniformMatrix4fv(rotatingMatrix, gl.FALSE, new Float32Array(rotationMatrix(currentRotation, 1, 1, 1)))
 
     // Set up the rotation matrix.
-    gl.uniformMatrix4fv(orthographicProjection, gl.FALSE, new Float32Array(orthoProjection(-5/2, 5/2, -5/2, 5/2, -1, 1)))
+    gl.uniformMatrix4fv(
+      orthographicProjection,
+      gl.FALSE,
+      new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
+    )
 
     //camera
     gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, new Float32Array(cameraMatrixArray))
 
     // Display the objects.
-    for (let i = 0; i < objectsToDraw.length; i++)
-    {
-      const object = objectsToDraw[i];
-      if(object.visible) {
-        objectsToDraw.forEach(drawObject);
+    for (let i = 0; i < objectsToDraw.length; i++) {
+      const object = objectsToDraw[i]
+      if (object.visible) {
+        objectsToDraw.forEach(drawObject)
       }
     }
-  
+
     // All done.
-    gl.flush();
-  };
+    gl.flush()
+  }
 
   let currentRotation = 0.0
   const FRAMES_PER_SECOND = 30
@@ -170,7 +193,7 @@ const Scene = (canvas, objectsToDraw) => {
     }
     // All clear.
     currentRotation += DEGREES_PER_MILLISECOND * progress
-    
+
     drawScene()
 
     if (currentRotation >= FULL_CIRCLE) {
@@ -194,4 +217,4 @@ const Scene = (canvas, objectsToDraw) => {
   )
 }
 
-export default Scene;
+export default Scene
