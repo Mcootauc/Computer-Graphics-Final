@@ -18,12 +18,15 @@ const VERTEX_SHADER = `
   uniform mat4 cameraMatrix;
 
   attribute vec3 normalVector;
+  attribute vec3 lightVector;
 
   void main(void) {
-    vec3 lightVector = normalize(vertexPosition);
-    float lightContribution = dot(normalize(normalVector), lightVector);
-    gl_Position = theRotationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
+    vec3 lightDirection = vec3(0);
+    vec3 lightVector = normalize(vertexPosition - lightDirection);
+    float lightContribution = max(dot(normalize(normalVector), lightVector));
+    // multiple sources of light should add up to light contribution
     finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
+    gl_Position = theRotationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
   }
 `
 
