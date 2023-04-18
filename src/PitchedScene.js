@@ -88,7 +88,7 @@ const PitchedScene = props => {
         element.visible = !element.visible;
       }
     })
-  }, [])
+  }, [objectsToDraw])
 
   return (
     <article>
