@@ -1,45 +1,33 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
 import { translateMatrix, rotationMatrix, orthoProjection } from '../matrix'
+import { toRawLineArray, toRawTriangleArray } from '../shapes'
 import Vector from '../vector'
 
 const VERTEX_SHADER = `
 attribute vec3 vertexPosition;
 attribute vec3 normalVector;
-
 uniform vec3 color;
 varying vec4 finalVertexColor;
-
 uniform mat4 theTranslationMatrix;
 uniform mat4 theRotationMatrix;
 uniform mat4 theOrthoProjection;
-
-uniform vec3 lightPosition;
-uniform vec3 lightColor;
-
 void main(void) {
   vec4 worldPosition = theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
   gl_Position = theOrthoProjection * worldPosition;
   
   vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
-  vec3 lightDirection = normalize(lightPosition - worldPosition.xyz);
-  float lightIntensity = max(dot(worldNormal, lightDirection), 0.0);
-
-  finalVertexColor = vec4(color * lightColor * lightIntensity, 1.0);
+  finalVertexColor = vec4(color, 1.0);
 }
-
 `
 
 const FRAGMENT_SHADER = `
 #ifdef GL_ES
 precision highp float;
 #endif
-
 varying vec4 finalVertexColor;
-
 void main(void) {
   gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
 }
-
 `
 
 class Scene {
@@ -54,7 +42,6 @@ class Scene {
 
     // Update the gl property when the canvas changes
     this.gl = getGL(canvas)
-    console.log(canvas)
   }
 
   setObjectsToDraw(objectsToDraw) {
@@ -62,7 +49,6 @@ class Scene {
   }
 
   drawScene() {
-    console.log(this.gl)
     if (!this.gl) {
       alert('No WebGL context found...sorry.')
 
@@ -75,12 +61,13 @@ class Scene {
     this.gl.clearColor(0.0, 0.0, 0.0, 0.0)
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height)
 
-    const lightPositionUniform = this.gl.getUniformLocation(shaderProgram, 'lightPosition')
-    const lightColorUniform = this.gl.getUniformLocation(shaderProgram, 'lightColor')
-
     // Pass the vertices to WebGL.
     this.objectsToDraw.forEach(objectToDraw => {
-      objectToDraw.verticesBuffer = initVertexBuffer(this.gl, objectToDraw.vertices)
+      if (objectToDraw.wireframe === true) {
+        objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawLineArray(objectToDraw.vertices))
+      } else {
+        objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawTriangleArray(objectToDraw.vertices))
+      }
       objectToDraw.normalsBuffer = initVertexBuffer(this.gl, objectToDraw.normals)
     })
 
@@ -143,7 +130,11 @@ class Scene {
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer) // Add this line
       this.gl.vertexAttribPointer(normalPosition, 3, this.gl.FLOAT, false, 0, 0) // Add this line
 
-      this.gl.drawArrays(/* TODO object.mode */ this.gl.TRIANGLES, 0, object.vertices.length / 3)
+      if (object.wireframe === true) {
+        this.gl.drawArrays(this.gl.LINES, 0, toRawLineArray(object.vertices).length / 3)
+      } else {
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, toRawTriangleArray(object.vertices).length / 3)
+      }
     }
 
     /*
@@ -167,11 +158,6 @@ class Scene {
         new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
       )
 
-      const lightPosition = new Vector(0, 5, 0) // Light source above the scene
-      const lightColor = new Vector(1, 1, 1) // White light
-      this.gl.uniform3f(lightPositionUniform, lightPosition.x, lightPosition.y, lightPosition.z)
-      this.gl.uniform3f(lightColorUniform, lightColor.x, lightColor.y, lightColor.z)
-
       // Display the objects.
       for (let i = 0; i < this.objectsToDraw.length; i++) {
         const object = this.objectsToDraw[i]
@@ -179,9 +165,6 @@ class Scene {
           drawObject(object)
         }
       }
-
-      const lightDirection = this.gl.getUniformLocation(shaderProgram, 'lightDirection')
-      this.gl.uniform3f(lightDirection, 0.0, -1.0, 0.0) // Light from above (positive Y direction)
 
       // All done.
       this.gl.flush()
