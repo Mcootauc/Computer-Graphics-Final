@@ -49,7 +49,6 @@ class Scene {
 
     // Update the gl property when the canvas changes
     this.gl = getGL(canvas);
-    console.log(canvas)
   }
 
   setObjectsToDraw(objectsToDraw) {
@@ -57,7 +56,6 @@ class Scene {
   }
 
   drawScene() {
-    console.log(this.gl)
     if (!this.gl) {
       alert('No WebGL context found...sorry.')
   
@@ -73,7 +71,6 @@ class Scene {
     // Pass the vertices to WebGL.
     this.objectsToDraw.forEach(objectToDraw => {
       if (objectToDraw.wireframe === true) {
-        console.log("RAN")
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawLineArray(objectToDraw.vertices));
       } else {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawTriangleArray(objectToDraw.vertices));
@@ -155,7 +152,6 @@ class Scene {
       for (let i = 0; i < this.objectsToDraw.length; i++)
       {
         const object = this.objectsToDraw[i];
-        console.log(object.visible)
         if(object.visible) {
           drawObject(object);
         }

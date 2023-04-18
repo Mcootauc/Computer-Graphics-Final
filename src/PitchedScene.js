@@ -29,7 +29,7 @@ const PitchedScene = props => {
     {
       color: { r: 1, g: 0.5, b: 0 },
       vertices: sphere(1.0, 1.0),
-      wireframe: false, // Possible approach to hiding the mode.
+      wireframe: true, // Possible approach to hiding the mode.
       translation: {x: 0, y: 0, z: 0},
       normals: computeVertexNormals(sphere(1.0, 1.0)),
       visible: true
