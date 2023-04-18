@@ -68,7 +68,6 @@ const PitchedScene = props => {
   ])
 
   const [scene] = useState(new Scene())
-
   useEffect(() => {
     console.log('EFFECT', canvasRef, objectsToDraw)
 
@@ -78,8 +77,9 @@ const PitchedScene = props => {
     }
 
     //Scene(pitchedCanvas, objectsToDraw)
-    scene.canvas = pitchedCanvas
-    scene.objectsToDraw = objectsToDraw
+    scene.setCanvas(pitchedCanvas)
+    scene.setObjectsToDraw(objectsToDraw)
+    scene.drawScene()
 
     const toggle = document.querySelector('#toggle');
     toggle.addEventListener('click', function() {

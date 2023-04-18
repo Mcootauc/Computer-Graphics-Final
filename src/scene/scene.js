@@ -45,7 +45,8 @@ class Scene {
     this.canvas = canvas;
 
     // Update the gl property when the canvas changes
-    this.gl = getGL(this.canvas);
+    this.gl = getGL(canvas);
+    console.log(canvas)
   }
 
   setObjectsToDraw(objectsToDraw) {
@@ -53,6 +54,7 @@ class Scene {
   }
 
   drawScene() {
+    console.log(this.gl)
     if (!this.gl) {
       alert('No WebGL context found...sorry.')
   
