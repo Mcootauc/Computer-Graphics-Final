@@ -1,39 +1,47 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
 import { translateMatrix, rotationMatrix, orthoProjection} from '../matrix'
+import Vector from '../vector'
 
 const VERTEX_SHADER = `
-  #ifdef GL_ES
-  precision highp float;
-  #endif
+attribute vec3 vertexPosition;
+attribute vec3 normalVector;
 
-  attribute vec3 vertexPosition;
+uniform vec3 color;
+varying vec4 finalVertexColor;
 
-  uniform vec3 color;
-  varying vec4 finalVertexColor;
+uniform mat4 theTranslationMatrix;
+uniform mat4 theRotationMatrix;
+uniform mat4 theOrthoProjection;
 
-  uniform mat4 theTranslationMatrix;
-  uniform mat4 theRotationMatrix;
-  uniform mat4 theOrthoProjection;
+uniform vec3 lightPosition;
+uniform vec3 lightColor;
 
-  attribute vec3 normalVector;
+void main(void) {
+  vec4 worldPosition = theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
+  gl_Position = theOrthoProjection * worldPosition;
+  
+  vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
+  vec3 lightDirection = normalize(lightPosition - worldPosition.xyz);
+  float lightIntensity = max(dot(worldNormal, lightDirection), 0.0);
 
-  void main(void) {
-    gl_Position = theOrthoProjection * theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
-    finalVertexColor = vec4(color, 1.0);
-  }
+  finalVertexColor = vec4(color * lightColor * lightIntensity, 1.0);
+}
+
 `
 
 const FRAGMENT_SHADER = `
-  #ifdef GL_ES
-  precision highp float;
-  #endif
+#ifdef GL_ES
+precision highp float;
+#endif
 
-  varying vec4 finalVertexColor;
+varying vec4 finalVertexColor;
 
-  void main(void) {
-    gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
-  }
+void main(void) {
+  gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
+}
+
 `
+
 class Scene {
   constructor() {
     this.canvas = null;
@@ -67,9 +75,14 @@ class Scene {
     this.gl.clearColor(0.0, 0.0, 0.0, 0.0)
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height)
 
+    const lightPositionUniform = this.gl.getUniformLocation(shaderProgram, 'lightPosition');
+    const lightColorUniform = this.gl.getUniformLocation(shaderProgram, 'lightColor');
+
+
     // Pass the vertices to WebGL.
     this.objectsToDraw.forEach(objectToDraw => {
-      objectToDraw.verticesBuffer = initVertexBuffer(this.gl, objectToDraw.vertices)
+      objectToDraw.verticesBuffer = initVertexBuffer(this.gl, objectToDraw.vertices);
+      objectToDraw.normalsBuffer = initVertexBuffer(this.gl, objectToDraw.normals);
     })
 
     // Initialize the shaders.
@@ -111,13 +124,20 @@ class Scene {
 
     const drawObject = object => {
       // Set up the translation matrix with each object's unique translation on scene
-      this.gl.uniformMatrix4fv(translationMatrix, this.gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)))
-      this.gl.uniform3f(this.gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b)
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.verticesBuffer)
-      this.gl.vertexAttribPointer(vertexPosition, 3, this.gl.FLOAT, false, 0, 0)
-      this.gl.drawArrays(/* TODO object.mode */ this.gl.TRIANGLES, 0, object.vertices.length / 3)
-    }
-
+      this.gl.uniformMatrix4fv(translationMatrix, this.gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)));
+      this.gl.uniform3f(this.gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b);
+    
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.verticesBuffer);
+      this.gl.vertexAttribPointer(vertexPosition, 3, this.gl.FLOAT, false, 0, 0);
+    
+      const normalPosition = this.gl.getAttribLocation(shaderProgram, 'normalVector'); // Add this line
+      this.gl.enableVertexAttribArray(normalPosition); // Add this line
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer); // Add this line
+      this.gl.vertexAttribPointer(normalPosition, 3, this.gl.FLOAT, false, 0, 0); // Add this line
+    
+      this.gl.drawArrays(/* TODO object.mode */ this.gl.TRIANGLES, 0, object.vertices.length / 3);
+    };
+    
     /*
     * Displays the scene.
     */
@@ -130,15 +150,24 @@ class Scene {
 
       // Set up the rotation matrix.
       this.gl.uniformMatrix4fv(orthographicProjection, this.gl.FALSE, new Float32Array(orthoProjection(-5/2, 5/2, -5/2, 5/2, -1, 1)))
+      
+      const lightPosition = new Vector(0, 5, 0); // Light source above the scene
+      const lightColor = new Vector(1, 1, 1); // White light
+      this.gl.uniform3f(lightPositionUniform, lightPosition.x, lightPosition.y, lightPosition.z);
+      this.gl.uniform3f(lightColorUniform, lightColor.x, lightColor.y, lightColor.z);
 
       // Display the objects.
       for (let i = 0; i < this.objectsToDraw.length; i++)
       {
         const object = this.objectsToDraw[i];
         if(object.visible) {
-          this.objectsToDraw.forEach(drawObject);
+          drawObject(object);
         }
       }
+
+      const lightDirection = this.gl.getUniformLocation(shaderProgram, 'lightDirection');
+      this.gl.uniform3f(lightDirection, 0.0, -1.0, 0.0); // Light from above (positive Y direction)
+
     
       // All done.
       this.gl.flush();

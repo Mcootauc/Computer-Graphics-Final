@@ -68,6 +68,7 @@ const PitchedScene = props => {
   ])
 
   const [scene] = useState(new Scene())
+  console.log('Scene', scene)
   useEffect(() => {
     console.log('EFFECT', canvasRef, objectsToDraw)
 
@@ -87,7 +88,7 @@ const PitchedScene = props => {
         element.visible = !element.visible;
       }
     })
-  }, [scene, objectsToDraw])
+  }, [])
 
   return (
     <article>
