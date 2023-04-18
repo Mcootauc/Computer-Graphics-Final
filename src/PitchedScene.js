@@ -77,14 +77,6 @@ const PitchedScene = props => {
       return
     }
 
-    const gl = getGL(pitchedCanvas)
-    if (!gl) {
-      alert('No WebGL context found...sorry.')
-
-      // No WebGL, no use going on...
-      return
-    }
-
     //Scene(pitchedCanvas, objectsToDraw)
     scene.canvas = pitchedCanvas
     scene.objectsToDraw = objectsToDraw
