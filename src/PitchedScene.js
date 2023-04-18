@@ -28,12 +28,11 @@ const PitchedScene = props => {
     // },
     {
       color: { r: 1, g: 0.5, b: 0 },
-      vertices: toRawTriangleArray(sphere(1.0, 1.0)),
-      // mode: gl.TRIANGLES,
+      vertices: sphere(1.0, 1.0),
       wireframe: false, // Possible approach to hiding the mode.
       translation: {x: 0, y: 0, z: 0},
       normals: computeVertexNormals(sphere(1.0, 1.0)),
-      visible: false
+      visible: true
     },
     // {
     //   color: { r: 1, g: 0, b: 0 },
@@ -85,6 +84,7 @@ const PitchedScene = props => {
     const toggle = document.querySelector('#toggle');
     toggle.addEventListener('click', function() {
       for (const element of objectsToDraw) {
+        console.log("CLICKED")
         element.visible = !element.visible;
       }
     })
