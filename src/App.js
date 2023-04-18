@@ -36,7 +36,7 @@ const App = () => {
       <main>
         <Routes>
           <Route path="" element={<Greeting />} />
-          //<Route path="sandbox" element={<Sandbox />} />
+          <Route path="sandbox" element={<Sandbox />} />
           <Route path="pitched" element={<PitchedScene />} />
         </Routes>
       </main>

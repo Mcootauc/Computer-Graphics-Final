@@ -5,7 +5,6 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, box, computeVertexNormals, toRawTriangleArray } from './shapes'
-import { getGL } from './glsl-utilities'
 import Scene from './scene/scene'
 
 const CANVAS_WIDTH = 512
@@ -29,7 +28,7 @@ const PitchedScene = props => {
     {
       color: { r: 1, g: 0.5, b: 0 },
       vertices: sphere(1.0, 1.0),
-      wireframe: true, // Possible approach to hiding the mode.
+      wireframe: false, // Possible approach to hiding the mode.
       translation: {x: 0, y: 0, z: 0},
       normals: computeVertexNormals(sphere(1.0, 1.0)),
       visible: true
