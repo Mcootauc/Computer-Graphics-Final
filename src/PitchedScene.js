@@ -11,7 +11,8 @@ import {
   toRawLineArray,
   hexagonalPrism,
   box,
-  computeVertexNormals,
+  computeFacetedNormals,
+  computeSmoothNormals,
   toRawTriangleArray
 } from './shapes'
 import Scene from './scene/scene'
@@ -21,7 +22,7 @@ const CANVAS_HEIGHT = 512
 
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
-  const sphereMesh = sphere(0.7, 2.0)
+  const sphereMesh = sphere(0.7, 0.0)
   const cylinerMesh = cylinder(0.3, 0.3, 5)
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
@@ -40,17 +41,17 @@ const PitchedScene = props => {
       vertices: sphereMesh,
       wireframe: false, // Possible approach to hiding the mode.
       translation: { x: -1.5, y: 0, z: 0 },
-      normals: computeVertexNormals(sphereMesh),
+      normals: computeSmoothNormals(sphereMesh),
       visible: true
     },
-    {
-      color: { r: 1, g: 0, b: 0 },
-      vertices: cylinerMesh,
-      wireframe: false,
-      translation: { x: 1.0, y: 0, z: 0 },
-      normals: computeVertexNormals(cylinerMesh),
-      visible: true
-    }
+    // {
+    //   color: { r: 1, g: 0, b: 0 },
+    //   vertices: cylinerMesh,
+    //   wireframe: false,
+    //   translation: { x: 1.0, y: 0, z: 0 },
+    //   normals: computeFacetedNormals(cylinerMesh),
+    //   visible: true
+    // }
     // {
     //   color: { r: 1, g: 0, b: 0 },
     //   //takes in a parameter of radius, height, and radial segments
@@ -75,7 +76,9 @@ const PitchedScene = props => {
     //   visible: false
     // },
   ])
-
+  console.log("SPHERE MESH VERTICES", sphereMesh.vertices)
+  // console.log("FACETED NORMALS", computeFacetedNormals(sphereMesh))
+  // console.log("SMOOTH NORMALS", computeSmoothNormals(sphereMesh))
   const [scene] = useState(new Scene())
   useEffect(() => {
     const pitchedCanvas = canvasContainerRef.current

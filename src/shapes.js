@@ -107,6 +107,7 @@ const sphere = (scaleFactor, subDivCount) => {
     subdivideIcosahedron()
   }
 
+  //console.log("SPHERE INDEX", facesByIndex)
   return { vertices, facesByIndex }
 }
 
@@ -153,7 +154,8 @@ const cylinder = (radius, height, radialSegments) => {
     facesByIndex.push([i + 1 + radialSegments, i - 1, i + radialSegments])
   }
 
-  return { vertices, facesByIndex }
+  console.log("SPHERE VERTICES", vertices)
+  return { vertices, facesByIndex } 
 }
 
 /**
@@ -161,9 +163,9 @@ const cylinder = (radius, height, radialSegments) => {
  *
  * @param {object} protoGeometry
  */
-const computeVertexNormals = protoGeometry => {
+const computeFacetedNormals = protoGeometry => {
   const result = []
-
+  //console.log("FACETED", protoGeometry)
   protoGeometry.facesByIndex.forEach(face => {
     // Access each vertex of the triangle.
     const p0 = protoGeometry.vertices[face[0]]
@@ -187,7 +189,62 @@ const computeVertexNormals = protoGeometry => {
     result.push(N.x, N.y, N.z)
     result.push(N.x, N.y, N.z)
   })
+  //console.log("FACETED NORMALS", result)
+  return result
+}
 
+const computeAllFaceNormals = geometry => {
+  let sumVector = new Vector(0, 0, 0)
+  const result = []
+  geometry.facesByIndex.forEach(face => {
+    // Access each vertex of the triangle.
+    const p0 = geometry.vertices[face[0]]
+    const p1 = geometry.vertices[face[1]]
+    const p2 = geometry.vertices[face[2]]
+
+    // Convert each point into a Vector instance so we can use the methods.
+    const p0AsVector = new Vector(...p0)
+    const p1AsVector = new Vector(...p1)
+    const p2AsVector = new Vector(...p2)
+
+    // Perform the actual vector calculation.
+    const v1 = p1AsVector.subtract(p0AsVector)
+    const v2 = p2AsVector.subtract(p0AsVector)
+
+    // Calculate the normal.
+    const N = v1.cross(v2).unit // ".unit" is not in the book.
+
+    //Sum of the normals of every triangle that the vertex is in
+    sumVector = sumVector.add(N)
+  })
+  result.push(sumVector.x, sumVector.y, sumVector.z)
+  // Push that normnal onto our result, _one per vertex_.
+  return result
+}
+
+const computeSmoothNormals = protoGeometry => {
+  const vertices =  protoGeometry.vertices
+  const theFaces = []
+  const smoothNormalArr = []
+  for (let i = 0; i < vertices.length; i++) {
+    const triangles = []
+    for (let j = 0; j < protoGeometry.facesByIndex.length; j++) {
+      if (protoGeometry.facesByIndex[j].includes(i)) {
+        triangles.push(protoGeometry.facesByIndex[j])
+      }
+    }
+    theFaces.push(triangles)
+  }
+
+  for (let i = 0; i < theFaces.length; i++) {
+    const facesByIndex = theFaces[i]
+    const geometry = {vertices, facesByIndex}
+    //console.log("SMOOTH GEOMETRY", geometry)
+    const smoothNormal = computeAllFaceNormals(geometry)
+    smoothNormalArr.push(smoothNormal)
+  }
+  //console.log("RESULT ARR" , result)
+  const result = toRawTriangleArray({vertices: smoothNormalArr, facesByIndex: protoGeometry.facesByIndex})
   return result
 }
 
@@ -328,4 +385,4 @@ const hexagonalPrism = () => {
   }
 }
 
-export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, hexagonalPrism, box, computeVertexNormals }
+export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, hexagonalPrism, box, computeFacetedNormals, computeSmoothNormals }

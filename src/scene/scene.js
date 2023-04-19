@@ -98,6 +98,7 @@ class Scene {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawLineArray(objectToDraw.vertices))
       } else {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawTriangleArray(objectToDraw.vertices))
+        console.log("VERTICES", toRawTriangleArray(objectToDraw.vertices))
       }
       if (!objectToDraw.colors) {
         // If we have a single color, we expand that into an array
@@ -113,6 +114,7 @@ class Scene {
       }
       objectToDraw.colorsBuffer = initVertexBuffer(this.gl, objectToDraw.colors)
       objectToDraw.normalsBuffer = initVertexBuffer(this.gl, objectToDraw.normals)
+      console.log("NORMALS", objectToDraw.normals)
     })
     // Hold on to the important variables within the shaders.
     const vertexPosition = this.gl.getAttribLocation(this.shaderProgram, 'vertexPosition')
