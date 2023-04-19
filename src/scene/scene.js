@@ -5,10 +5,11 @@ import Vector from '../vector'
 const VERTEX_SHADER = `
   attribute vec3 vertexPosition;
   attribute vec3 normalVector;
-  // attribute vec3 lightPosition
+  // attribute vec3 ligthPosition;
   
   uniform vec3 vertexColor;
   varying vec4 finalVertexColor;
+  
   uniform mat4 theTranslationMatrix;
   uniform mat4 theRotationMatrix;
   uniform mat4 theOrthoProjection;
@@ -20,7 +21,7 @@ const VERTEX_SHADER = `
     
     vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
 
-    // vec3 lightDirection = normalize(lightPosition - vectorPosition);
+    // vec3 lightDirection = normalize(lightPosition - vertexPosition);
     vec3 hardcodedLightVector = normalize(vec3(0.5, 1.0, 1.0));
     float lightContribution = max(dot(normalize(worldNormal), hardcodedLightVector), 0.0);
 
@@ -34,7 +35,7 @@ const FRAGMENT_SHADER = `
   #endif
 
   varying vec4 finalVertexColor;
-  
+
   void main(void) {
     gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
   }
@@ -46,6 +47,7 @@ class Scene {
     this.canvas.width = 500
     this.canvas.height = 500
     this.objectsToDraw = []
+    //this.light = []
     this.gl = getGL(this.canvas)
 
     // Initialize the shaders.

@@ -47,10 +47,10 @@ const PitchedScene = props => {
       color: { r: 1, g: 0, b: 0 },
       vertices: cylinerMesh,
       wireframe: false,
-      translation: {x: 1.0, y: 0, z: 0},
+      translation: { x: 1.0, y: 0, z: 0 },
       normals: computeVertexNormals(cylinerMesh),
       visible: true
-    },
+    }
     // {
     //   color: { r: 1, g: 0, b: 0 },
     //   //takes in a parameter of radius, height, and radial segments
@@ -87,6 +87,7 @@ const PitchedScene = props => {
     scene.setCanvas(pitchedCanvas)
     scene.setObjectsToDraw(objectsToDraw)
     scene.drawScene()
+    // scene.addLight()
 
     const toggle = document.querySelector('#toggle')
     toggle.addEventListener('click', function () {
