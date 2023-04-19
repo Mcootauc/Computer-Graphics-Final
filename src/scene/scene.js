@@ -17,7 +17,7 @@ const VERTEX_SHADER = `
     
     vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
 
-    vec3 hardcodedLightVector = normalize(vec3(0.25, 1.0, -1.0));
+    vec3 hardcodedLightVector = normalize(vec3(0.5, 1.0, 1.0));
     float lightContribution = max(dot(normalize(worldNormal), hardcodedLightVector), 0.0);
 
     finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
@@ -85,6 +85,7 @@ class Scene {
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height)
     // Pass the vertices to WebGL.
     this.objectsToDraw.forEach(objectToDraw => {
+
       if (objectToDraw.wireframe === true) {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawLineArray(objectToDraw.vertices))
       } else {
