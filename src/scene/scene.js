@@ -16,9 +16,14 @@ const VERTEX_SHADER = `
     gl_Position = theOrthoProjection * worldPosition;
     
     vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
-    finalVertexColor = vec4(vertexColor, 1.0);
+
+    vec3 hardcodedLightVector = normalize(vec3(0.25, 1.0, -1.0));
+    float lightContribution = max(dot(normalize(worldNormal), hardcodedLightVector), 0.0);
+
+    finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
   }
 `
+
 const FRAGMENT_SHADER = `
   #ifdef GL_ES
   precision highp float;
@@ -28,6 +33,7 @@ const FRAGMENT_SHADER = `
     gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
   }
 `
+
 class Scene {
   constructor() {
     this.canvas = document.createElement('canvas')
