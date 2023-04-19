@@ -40,7 +40,7 @@ const Sandbox = props => {
       // This is not the code you’re looking for.
       renderingContext.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
       renderingContext.fillText(`timestamp: ${timestamp}`, 10, 20)
-      
+
       // Request the next frame.
       previousTimestamp = timestamp
       window.requestAnimationFrame(nextFrame)

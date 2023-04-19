@@ -11,7 +11,7 @@ const CANVAS_WIDTH = 512
 const CANVAS_HEIGHT = 512
 
 const PitchedScene = props => {
-  const canvasRef = useRef()
+  const canvasContainerRef = useRef()
 
     // This variable stores 3D model information. We inline it for now but will want to separate it later.
     // Think of these as proto-meshes, with no distinct geometry nor material.
@@ -68,9 +68,9 @@ const PitchedScene = props => {
   const [scene] = useState(new Scene())
   console.log('Scene', scene)
   useEffect(() => {
-    console.log('EFFECT', canvasRef, objectsToDraw)
+    console.log('EFFECT', canvasContainerRef, objectsToDraw)
 
-    const pitchedCanvas = canvasRef.current
+    const pitchedCanvas = canvasContainerRef.current
     if (!pitchedCanvas) {
       return
     }
@@ -87,15 +87,15 @@ const PitchedScene = props => {
         element.visible = !element.visible;
       }
     })
-  }, [objectsToDraw])
-
+  }, [])
+  console.log("RENDER")
   return (
     <article>
       <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
 
-      <canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasRef}>
+      <section width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasContainerRef}>
         Your favorite update-your-browser message here.
-      </canvas>
+      </section>
       <div>
         <button id="toggle">Show shape</button>
       </div>

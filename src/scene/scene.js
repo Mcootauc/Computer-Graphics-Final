@@ -4,24 +4,20 @@ import { toRawLineArray, toRawTriangleArray } from '../shapes'
 import Vector from '../vector'
 
 const VERTEX_SHADER = `
-  #ifdef GL_ES
-  precision highp float;
-  #endif
-
   attribute vec3 vertexPosition;
-
-  // Note this new additional output.
-  attribute vec3 vertexColor;
-  varying vec4 finalVertexColor;
-  uniform mat4 rotationMatrix;
-
   attribute vec3 normalVector;
-
+  
+  uniform vec3 vertexColor;
+  varying vec4 finalVertexColor;
+  uniform mat4 theTranslationMatrix;
+  uniform mat4 theRotationMatrix;
+  uniform mat4 theOrthoProjection;
   void main(void) {
-    vec3 hardcodedLightVector = normalize(vec3(0.25, 1.0, -1.0));
-    float lightContribution = dot(normalize(normalVector), hardcodedLightVector);
-    gl_Position = rotationMatrix * vec4(vertexPosition, 1.0);
-    finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
+    vec4 worldPosition = theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
+    gl_Position = theOrthoProjection * worldPosition;
+    
+    vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
+    finalVertexColor = vec4(vertexColor, 1.0);
   }
 `
 
@@ -29,9 +25,7 @@ const FRAGMENT_SHADER = `
   #ifdef GL_ES
   precision highp float;
   #endif
-
   varying vec4 finalVertexColor;
-
   void main(void) {
     gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
   }
@@ -39,16 +33,45 @@ const FRAGMENT_SHADER = `
 
 class Scene {
   constructor() {
-    this.canvas = null
+    this.canvas = document.createElement('canvas')
+    this.canvas.width = 500
+    this.canvas.height = 500
     this.objectsToDraw = []
-    this.gl = null
+    this.gl = getGL(this.canvas)
+
+    // Initialize the shaders.
+    let abort = false
+    this.shaderProgram = initSimpleShaderProgram(
+      this.gl,
+      VERTEX_SHADER,
+      FRAGMENT_SHADER,
+
+      // Very cursory error-checking here...
+      shader => {
+        abort = true
+        alert('Shader problem: ' + this.gl.getShaderInfoLog(shader))
+      },
+
+      // Another simplistic error check: we don't even access the faulty
+      // shader program.
+      shaderProgram => {
+        abort = true
+        alert('Could not link shaders...sorry.')
+      }
+    )
+
+    // If the abort variable is true here, we can't continue.
+    if (abort) {
+      alert('Fatal errors encountered; we cannot continue.')
+      return
+    }
+
+    // All done --- tell WebGL to use the shader program from now on.
+    this.gl.useProgram(this.shaderProgram)
   }
 
-  setCanvas(canvas) {
-    this.canvas = canvas
-
-    // Update the gl property when the canvas changes
-    this.gl = getGL(canvas)
+  setCanvas(canvasContainer) {
+    canvasContainer.appendChild(this.canvas)
   }
 
   setObjectsToDraw(objectsToDraw) {
@@ -75,72 +98,56 @@ class Scene {
       } else {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawTriangleArray(objectToDraw.vertices))
       }
+
+      if (!objectToDraw.colors) {
+        // If we have a single color, we expand that into an array
+        // of the same color over and over.
+        objectToDraw.colors = []
+        for (let i = 0, maxi = objectToDraw.vertices.length / 3; i < maxi; i += 1) {
+          objectToDraw.colors = objectToDraw.colors.concat(
+            objectToDraw.color.r,
+            objectToDraw.color.g,
+            objectToDraw.color.b
+          )
+        }
+      }
+
+      objectToDraw.colorsBuffer = initVertexBuffer(this.gl, objectToDraw.colors)
       objectToDraw.normalsBuffer = initVertexBuffer(this.gl, objectToDraw.normals)
     })
 
-    // Initialize the shaders.
-    let abort = false
-    const shaderProgram = initSimpleShaderProgram(
-      this.gl,
-      VERTEX_SHADER,
-      FRAGMENT_SHADER,
-
-      // Very cursory error-checking here...
-      shader => {
-        abort = true
-        alert('Shader problem: ' + this.gl.getShaderInfoLog(shader))
-      },
-
-      // Another simplistic error check: we don't even access the faulty
-      // shader program.
-      shaderProgram => {
-        abort = true
-        alert('Could not link shaders...sorry.')
-      }
-    )
-
-    // If the abort variable is true here, we can't continue.
-    if (abort) {
-      alert('Fatal errors encountered; we cannot continue.')
-      return
-    }
-    // All done --- tell WebGL to use the shader program from now on.
-    this.gl.useProgram(shaderProgram)
-
     // Hold on to the important variables within the shaders.
-    const vertexPosition = this.gl.getUniformLocation(shaderProgram, 'vertexPosition')
+    const vertexPosition = this.gl.getAttribLocation(this.shaderProgram, 'vertexPosition')
     this.gl.enableVertexAttribArray(vertexPosition)
-    const vertexColor = this.gl.getAttribLocation(shaderProgram, 'vertexColor')
-    this.gl.enableVertexAttribArray(vertexColor)
-    const normalVector = this.gl.getAttribLocation(shaderProgram, 'normalVector')
+
+    // const vertexColor = this.gl.getAttribLocation(this.shaderProgram, 'vertexColor')
+    // this.gl.enableVertexAttribArray(vertexColor)
+    const normalVector = this.gl.getAttribLocation(this.shaderProgram, 'normalVector')
     this.gl.enableVertexAttribArray(normalVector)
-    const theRotationMatrix = this.gl.getUniformLocation(shaderProgram, 'theRotationMatrix')
-    // const translationMatrix = this.gl.getUniformLocation(shaderProgram, 'theTranslationMatrix')
-    const orthographicProjection = this.gl.getUniformLocation(shaderProgram, 'theOrthoProjection')    
+
+    const theRotationMatrix = this.gl.getUniformLocation(this.shaderProgram, 'theRotationMatrix')
+    const translationMatrix = this.gl.getUniformLocation(this.shaderProgram, 'theTranslationMatrix')
+    const orthographicProjection = this.gl.getUniformLocation(this.shaderProgram, 'theOrthoProjection')    
 
     const drawObject = object => {
       // Set up the translation matrix with each object's unique translation on scene
-      // this.gl.uniformMatrix4fv(translationMatrix, this.gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)));
-      // this.gl.uniform3f(this.gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b);
+      this.gl.uniformMatrix4fv(translationMatrix, this.gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)));
+      this.gl.uniform3f(this.gl.getUniformLocation(this.shaderProgram, 'vertexColor'), object.color.r, object.color.g, object.color.b);
     
-      // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.verticesBuffer);
-      // this.gl.vertexAttribPointer(vertexPosition, 3, this.gl.FLOAT, false, 0, 0);
-
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.colorsBuffer)
-      this.gl.vertexAttribPointer(vertexColor, 3, this.gl.FLOAT, false, 0, 0)
-
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer)
-      this.gl.vertexAttribPointer(normalVector, 3, this.gl.FLOAT, false, 0, 0)
+      // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.colorsBuffer)
+      // this.gl.vertexAttribPointer(vertexColor, 3, this.gl.FLOAT, false, 0, 0)
+      
+      // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer)
+      // this.gl.vertexAttribPointer(normalVector, 3, this.gl.FLOAT, false, 0, 0)
 
       // Set the varying vertex coordinates.
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.verticesBuffer)
       this.gl.vertexAttribPointer(vertexPosition, 3, this.gl.FLOAT, false, 0, 0)
-      this.gl.drawArrays(object.mode, 0, object.vertices.length / 3)
 
-      // const normalPosition = this.gl.getAttribLocation(shaderProgram, 'normalVector'); 
+      // const normalPosition = this.gl.getAttribLocation(this.shaderProgram, 'normalVector'); 
       // this.gl.enableVertexAttribArray(normalPosition); 
-      // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer); 
-      // this.gl.vertexAttribPointer(normalPosition, 3, this.gl.FLOAT, false, 0, 0); 
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer); 
+      this.gl.vertexAttribPointer(normalVector, 3, this.gl.FLOAT, false, 0, 0); 
     
       if (object.wireframe === true) {
         this.gl.drawArrays(this.gl.LINES, 0, toRawLineArray(object.vertices).length / 3)
@@ -163,7 +170,7 @@ class Scene {
         new Float32Array(rotationMatrix(currentRotation, 1, 1, 1))
       )
 
-      // Set up the rotation matrix.
+      // Set up the orthographic matrix.
       this.gl.uniformMatrix4fv(
         orthographicProjection,
         this.gl.FALSE,
@@ -205,7 +212,6 @@ class Scene {
       }
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
-
       drawScene()
 
       if (currentRotation >= FULL_CIRCLE) {
