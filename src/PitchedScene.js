@@ -75,10 +75,7 @@ const PitchedScene = props => {
   ])
 
   const [scene] = useState(new Scene())
-  console.log('Scene', scene)
   useEffect(() => {
-    console.log('EFFECT', canvasContainerRef, objectsToDraw)
-
     const pitchedCanvas = canvasContainerRef.current
     if (!pitchedCanvas) {
       return
@@ -92,12 +89,11 @@ const PitchedScene = props => {
     const toggle = document.querySelector('#toggle')
     toggle.addEventListener('click', function () {
       for (const element of objectsToDraw) {
-        console.log('CLICKED')
         element.visible = !element.visible
       }
     })
   }, [])
-  console.log("RENDER")
+
   return (
     <article>
       <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>

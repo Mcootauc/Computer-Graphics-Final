@@ -103,7 +103,6 @@ const sphere = (scaleFactor, subDivCount) => {
   }
 
   //sub divides to the desired amount
-  console.log(subDivCount)
   for (let i = 0; i < subDivCount; i++) {
     subdivideIcosahedron()
   }
