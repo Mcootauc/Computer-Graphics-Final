@@ -1,5 +1,5 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
-import { translateMatrix, rotationMatrix, orthoProjection } from '../matrix'
+import { translateMatrix, rotationMatrix, orthoProjection, lookAt, perspective } from '../matrix'
 import { toRawLineArray, toRawTriangleArray } from '../shapes'
 import Vector from '../vector'
 const VERTEX_SHADER = `
@@ -11,9 +11,10 @@ const VERTEX_SHADER = `
   uniform mat4 theTranslationMatrix;
   uniform mat4 theRotationMatrix;
   uniform mat4 theOrthoProjection;
+  uniform mat4 cameraMatrix;
   void main(void) {
     vec4 worldPosition = theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
-    gl_Position = theOrthoProjection * worldPosition;
+    gl_Position = theRotationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
     
     vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
 
@@ -41,6 +42,9 @@ class Scene {
     this.canvas.height = 500
     this.objectsToDraw = []
     this.gl = getGL(this.canvas)
+
+
+    
     // Initialize the shaders.
     let abort = false
     this.shaderProgram = initSimpleShaderProgram(
@@ -115,6 +119,25 @@ class Scene {
     const theRotationMatrix = this.gl.getUniformLocation(this.shaderProgram, 'theRotationMatrix')
     const translationMatrix = this.gl.getUniformLocation(this.shaderProgram, 'theTranslationMatrix')
     const orthographicProjection = this.gl.getUniformLocation(this.shaderProgram, 'theOrthoProjection')
+    const cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix')
+
+    const P = new Vector(0, 0, 0)
+    const Q = new Vector(0, 0, -1)
+    const up = new Vector(1, 1, 0)
+
+    const ze = P.subtract(Q).unit
+    const ye = up.subtract(up.projection(ze)).unit
+    const xe = ye.cross(ze)
+
+    // prettier-ignore
+    const cameraMatrixArray = [
+      xe.x, ye.x, ze.x, 0,
+      xe.y, ye.y, ze.y, 0,
+      xe.z, ye.z, ze.z, 0,
+      -P.dot(xe), -P.dot(ye), -P.dot(ze), 1
+    ]
+
+
     const drawObject = object => {
       // Set up the translation matrix with each object's unique translation on scene
       this.gl.uniformMatrix4fv(
@@ -166,6 +189,8 @@ class Scene {
         this.gl.FALSE,
         new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
       )
+      this.gl.uniformMatrix4fv(cameraMatrix, this.gl.FALSE, new Float32Array(cameraMatrixArray))
+
       // Display the objects.
       for (let i = 0; i < this.objectsToDraw.length; i++) {
         const object = this.objectsToDraw[i]

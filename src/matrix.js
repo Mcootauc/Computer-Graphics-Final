@@ -159,6 +159,43 @@ const perspectiveProjection = (left, right, bottom, top, near, far) => {
     0
   ]
 }
+export function lookAt(eye, center, up) {
+  const z = eye.subtract(center).unit
+  const x = up.cross(z).unit
+  const y = z.cross(x)
+
+  const m = [
+    x.x, y.x, z.x, 0,
+    x.y, y.y, z.y, 0,
+    x.z, y.z, z.z, 0,
+    0, 0, 0, 1
+  ]
+
+  const t = [
+    1, 0, 0, -eye.x,
+    0, 1, 0, -eye.y,
+    0, 0, 1, -eye.z,
+    0, 0, 0, 1
+  ]
+
+  // Multiply translation matrix on the left to avoid negating the translation
+  // vector when the view matrix is used to transform points.
+  return multiply(t, m)
+}
+export function multiply(a, b) {
+  const m = []
+
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 4; j++) {
+      let sum = 0
+      for (let k = 0; k < 4; k++) {
+        sum += a[k * 4 + j] * b[i * 4 + k]
+      }
+      m[i * 4 + j] = sum
+    }
+  }
+  return m
+}
 //Attempted groups
 //function recursiveDraw(parent, node){
 //  var matrixTree = new TreeWalker
