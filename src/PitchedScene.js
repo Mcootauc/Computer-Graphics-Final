@@ -4,7 +4,16 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { sphere, cone, cylinder, toRawLineArray, hexagonalPrism, box, computeVertexNormals, toRawTriangleArray } from './shapes'
+import {
+  sphere,
+  cone,
+  cylinder,
+  toRawLineArray,
+  hexagonalPrism,
+  box,
+  computeVertexNormals,
+  toRawTriangleArray
+} from './shapes'
 import Scene from './scene/scene'
 
 const CANVAS_WIDTH = 512
@@ -13,8 +22,8 @@ const CANVAS_HEIGHT = 512
 const PitchedScene = props => {
   const canvasRef = useRef()
 
-    // This variable stores 3D model information. We inline it for now but will want to separate it later.
-    // Think of these as proto-meshes, with no distinct geometry nor material.
+  // This variable stores 3D model information. We inline it for now but will want to separate it later.
+  // Think of these as proto-meshes, with no distinct geometry nor material.
   const [objectsToDraw] = useState([
     // {
     //   color: { r: 1, g: 0.5, b: 0 },
@@ -29,10 +38,10 @@ const PitchedScene = props => {
       color: { r: 1, g: 0.5, b: 0 },
       vertices: sphere(1.0, 1.0),
       wireframe: false, // Possible approach to hiding the mode.
-      translation: {x: 0, y: 0, z: 0},
+      translation: { x: 0, y: 0, z: 0 },
       normals: computeVertexNormals(sphere(1.0, 1.0)),
       visible: true
-    },
+    }
     // {
     //   color: { r: 1, g: 0, b: 0 },
     //   vertices: cylinder(0.3, 0.3, 5, true),
@@ -80,11 +89,11 @@ const PitchedScene = props => {
     scene.setObjectsToDraw(objectsToDraw)
     scene.drawScene()
 
-    const toggle = document.querySelector('#toggle');
-    toggle.addEventListener('click', function() {
+    const toggle = document.querySelector('#toggle')
+    toggle.addEventListener('click', function () {
       for (const element of objectsToDraw) {
-        console.log("CLICKED")
-        element.visible = !element.visible;
+        console.log('CLICKED')
+        element.visible = !element.visible
       }
     })
   }, [objectsToDraw])

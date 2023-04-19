@@ -58,48 +58,48 @@ const sphere = (scaleFactor, subDivCount) => {
 
   // Subdivide the icosahedron
   function subdivideIcosahedron() {
-    const newVertices = [];
-    const newFaces = [];
+    const newVertices = []
+    const newFaces = []
 
     for (const element of facesByIndex) {
-      const face = element;
-      const v1 = vertices[face[0]];
-      const v2 = vertices[face[1]];
-      const v3 = vertices[face[2]];
+      const face = element
+      const v1 = vertices[face[0]]
+      const v2 = vertices[face[1]]
+      const v3 = vertices[face[2]]
 
       // Get the midpoints of each edge
-      const v4 = normalizeVertex(getMidpoint(v1, v2));
-      const v5 = normalizeVertex(getMidpoint(v2, v3));
-      const v6 = normalizeVertex(getMidpoint(v3, v1));
+      const v4 = normalizeVertex(getMidpoint(v1, v2))
+      const v5 = normalizeVertex(getMidpoint(v2, v3))
+      const v6 = normalizeVertex(getMidpoint(v3, v1))
 
       // Add the new vertices to the list
-      newVertices.push(v4, v5, v6);
+      newVertices.push(v4, v5, v6)
 
       // Add the new faces to the list
-      const v4Index = vertices.length + newVertices.length - 3;
-      const v5Index = vertices.length + newVertices.length - 2;
-      const v6Index = vertices.length + newVertices.length - 1;
-      newFaces.push([face[0], v4Index, v6Index]);
-      newFaces.push([face[1], v5Index, v4Index]);
-      newFaces.push([face[2], v6Index, v5Index]);
-      newFaces.push([v4Index, v5Index, v6Index]);
+      const v4Index = vertices.length + newVertices.length - 3
+      const v5Index = vertices.length + newVertices.length - 2
+      const v6Index = vertices.length + newVertices.length - 1
+      newFaces.push([face[0], v4Index, v6Index])
+      newFaces.push([face[1], v5Index, v4Index])
+      newFaces.push([face[2], v6Index, v5Index])
+      newFaces.push([v4Index, v5Index, v6Index])
     }
 
     // Add the new vertices and faces to the main arrays
-    vertices.push(...newVertices);
-    facesByIndex = newFaces;
+    vertices.push(...newVertices)
+    facesByIndex = newFaces
   }
 
   // Get the midpoint between two vertices
   function getMidpoint(v1, v2) {
-    return [(v1[0] + v2[0]) / 2, (v1[1] + v2[1]) / 2, (v1[2] + v2[2]) / 2];
+    return [(v1[0] + v2[0]) / 2, (v1[1] + v2[1]) / 2, (v1[2] + v2[2]) / 2]
   }
 
   // Normalize a vertex to be on the surface of the sphere
   function normalizeVertex(v) {
-    const length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-    const normalized = [v[0] / length, v[1] / length, v[2] / length];
-  return [normalized[0] * scaleFactor, normalized[1] * scaleFactor, normalized[2] * scaleFactor];
+    const length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2])
+    const normalized = [v[0] / length, v[1] / length, v[2] / length]
+    return [normalized[0] * scaleFactor, normalized[1] * scaleFactor, normalized[2] * scaleFactor]
   }
 
   //sub divides to the desired amount
@@ -110,7 +110,6 @@ const sphere = (scaleFactor, subDivCount) => {
 
   return { vertices, facesByIndex }
 }
-
 
 const cylinder = (radius, height, radialSegments, wireframe) => {
   const vertices = [

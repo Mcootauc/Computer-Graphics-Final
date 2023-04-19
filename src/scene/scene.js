@@ -116,13 +116,13 @@ class Scene {
     this.gl.enableVertexAttribArray(normalVector)
     const theRotationMatrix = this.gl.getUniformLocation(shaderProgram, 'theRotationMatrix')
     // const translationMatrix = this.gl.getUniformLocation(shaderProgram, 'theTranslationMatrix')
-    const orthographicProjection = this.gl.getUniformLocation(shaderProgram, 'theOrthoProjection')    
+    const orthographicProjection = this.gl.getUniformLocation(shaderProgram, 'theOrthoProjection')
 
     const drawObject = object => {
       // Set up the translation matrix with each object's unique translation on scene
       // this.gl.uniformMatrix4fv(translationMatrix, this.gl.FALSE, new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z)));
       // this.gl.uniform3f(this.gl.getUniformLocation(shaderProgram, 'color'), object.color.r, object.color.g, object.color.b);
-    
+
       // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.verticesBuffer);
       // this.gl.vertexAttribPointer(vertexPosition, 3, this.gl.FLOAT, false, 0, 0);
 
@@ -137,11 +137,11 @@ class Scene {
       this.gl.vertexAttribPointer(vertexPosition, 3, this.gl.FLOAT, false, 0, 0)
       this.gl.drawArrays(object.mode, 0, object.vertices.length / 3)
 
-      // const normalPosition = this.gl.getAttribLocation(shaderProgram, 'normalVector'); 
-      // this.gl.enableVertexAttribArray(normalPosition); 
-      // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer); 
-      // this.gl.vertexAttribPointer(normalPosition, 3, this.gl.FLOAT, false, 0, 0); 
-    
+      // const normalPosition = this.gl.getAttribLocation(shaderProgram, 'normalVector');
+      // this.gl.enableVertexAttribArray(normalPosition);
+      // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer);
+      // this.gl.vertexAttribPointer(normalPosition, 3, this.gl.FLOAT, false, 0, 0);
+
       if (object.wireframe === true) {
         this.gl.drawArrays(this.gl.LINES, 0, toRawLineArray(object.vertices).length / 3)
       } else {
