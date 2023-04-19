@@ -2,7 +2,6 @@ import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilit
 import { translateMatrix, rotationMatrix, orthoProjection } from '../matrix'
 import { toRawLineArray, toRawTriangleArray } from '../shapes'
 import Vector from '../vector'
-
 const VERTEX_SHADER = `
   attribute vec3 vertexPosition;
   attribute vec3 normalVector;
@@ -20,7 +19,6 @@ const VERTEX_SHADER = `
     finalVertexColor = vec4(vertexColor, 1.0);
   }
 `
-
 const FRAGMENT_SHADER = `
   #ifdef GL_ES
   precision highp float;
@@ -30,7 +28,6 @@ const FRAGMENT_SHADER = `
     gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
   }
 `
-
 class Scene {
   constructor() {
     this.canvas = document.createElement('canvas')
@@ -38,20 +35,17 @@ class Scene {
     this.canvas.height = 500
     this.objectsToDraw = []
     this.gl = getGL(this.canvas)
-
     // Initialize the shaders.
     let abort = false
     this.shaderProgram = initSimpleShaderProgram(
       this.gl,
       VERTEX_SHADER,
       FRAGMENT_SHADER,
-
       // Very cursory error-checking here...
       shader => {
         abort = true
         alert('Shader problem: ' + this.gl.getShaderInfoLog(shader))
       },
-
       // Another simplistic error check: we don't even access the faulty
       // shader program.
       shaderProgram => {
@@ -59,38 +53,30 @@ class Scene {
         alert('Could not link shaders...sorry.')
       }
     )
-
     // If the abort variable is true here, we can't continue.
     if (abort) {
       alert('Fatal errors encountered; we cannot continue.')
       return
     }
-
     // All done --- tell WebGL to use the shader program from now on.
     this.gl.useProgram(this.shaderProgram)
   }
-
   setCanvas(canvasContainer) {
     canvasContainer.appendChild(this.canvas)
   }
-
   setObjectsToDraw(objectsToDraw) {
     this.objectsToDraw = objectsToDraw
   }
-
   drawScene() {
     if (!this.gl) {
       alert('No WebGL context found...sorry.')
-
       // No WebGL, no use going on...
       return
     }
-
     this.gl.enable(this.gl.DEPTH_TEST)
     this.gl.enable(this.gl.CULL_FACE)
     this.gl.clearColor(0.0, 0.0, 0.0, 0.0)
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height)
-
     // Pass the vertices to WebGL.
     this.objectsToDraw.forEach(objectToDraw => {
       if (objectToDraw.wireframe === true) {
@@ -98,7 +84,6 @@ class Scene {
       } else {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawTriangleArray(objectToDraw.vertices))
       }
-
       if (!objectToDraw.colors) {
         // If we have a single color, we expand that into an array
         // of the same color over and over.
@@ -111,24 +96,19 @@ class Scene {
           )
         }
       }
-
       objectToDraw.colorsBuffer = initVertexBuffer(this.gl, objectToDraw.colors)
       objectToDraw.normalsBuffer = initVertexBuffer(this.gl, objectToDraw.normals)
     })
-
     // Hold on to the important variables within the shaders.
     const vertexPosition = this.gl.getAttribLocation(this.shaderProgram, 'vertexPosition')
-    this.gl.enableVertexAttribArray(this.vertexPosition)
-
+    this.gl.enableVertexAttribArray(vertexPosition)
     // const vertexColor = this.gl.getAttribLocation(this.shaderProgram, 'vertexColor')
     // this.gl.enableVertexAttribArray(vertexColor)
     const normalVector = this.gl.getAttribLocation(this.shaderProgram, 'normalVector')
-    this.gl.enableVertexAttribArray(this.normalVector)
-
+    this.gl.enableVertexAttribArray(normalVector)
     const theRotationMatrix = this.gl.getUniformLocation(this.shaderProgram, 'theRotationMatrix')
     const translationMatrix = this.gl.getUniformLocation(this.shaderProgram, 'theTranslationMatrix')
     const orthographicProjection = this.gl.getUniformLocation(this.shaderProgram, 'theOrthoProjection')
-
     const drawObject = object => {
       // Set up the translation matrix with each object's unique translation on scene
       this.gl.uniformMatrix4fv(
@@ -148,15 +128,13 @@ class Scene {
 
       // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer)
       // this.gl.vertexAttribPointer(normalVector, 3, this.gl.FLOAT, false, 0, 0)
-
       // Set the varying vertex coordinates.
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.verticesBuffer)
-      this.gl.vertexAttribPointer(this.vertexPosition, 3, this.gl.FLOAT, false, 0, 0)
-
+      this.gl.vertexAttribPointer(vertexPosition, 3, this.gl.FLOAT, false, 0, 0)
       // const normalPosition = this.gl.getAttribLocation(this.shaderProgram, 'normalVector');
       // this.gl.enableVertexAttribArray(normalPosition);
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer)
-      this.gl.vertexAttribPointer(this.normalVector, 3, this.gl.FLOAT, false, 0, 0)
+      this.gl.vertexAttribPointer(normalVector, 3, this.gl.FLOAT, false, 0, 0)
 
       if (object.wireframe === true) {
         this.gl.drawArrays(this.gl.LINES, 0, toRawLineArray(object.vertices).length / 3)
@@ -164,28 +142,24 @@ class Scene {
         this.gl.drawArrays(this.gl.TRIANGLES, 0, toRawTriangleArray(object.vertices).length / 3)
       }
     }
-
     /*
      * Displays the scene.
      */
     const drawScene = () => {
       // Clear the display.
       this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
-
       // Set up the rotation matrix.
       this.gl.uniformMatrix4fv(
         theRotationMatrix,
         this.gl.FALSE,
         new Float32Array(rotationMatrix(currentRotation, 1, 1, 1))
       )
-
       // Set up the orthographic matrix.
       this.gl.uniformMatrix4fv(
         orthographicProjection,
         this.gl.FALSE,
         new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
       )
-
       // Display the objects.
       for (let i = 0; i < this.objectsToDraw.length; i++) {
         const object = this.objectsToDraw[i]
@@ -193,7 +167,6 @@ class Scene {
           drawObject(object)
         }
       }
-
       // All done.
       this.gl.flush()
     }
@@ -202,7 +175,6 @@ class Scene {
     const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
     const DEGREES_PER_MILLISECOND = 0.033
     const FULL_CIRCLE = 360.0
-
     let previousTimestamp
     const nextFrame = timestamp => {
       // Initialize the timestamp.
@@ -211,7 +183,6 @@ class Scene {
         window.requestAnimationFrame(nextFrame)
         return
       }
-
       // Check if it’s time to advance.
       const progress = timestamp - previousTimestamp
       if (progress < MILLISECONDS_PER_FRAME) {
@@ -222,17 +193,14 @@ class Scene {
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
       drawScene()
-
       if (currentRotation >= FULL_CIRCLE) {
         currentRotation -= FULL_CIRCLE
       }
       // This is not the code you’re looking for.
-
       // Request the next frame.
       previousTimestamp = timestamp
       window.requestAnimationFrame(nextFrame)
     }
-
     window.requestAnimationFrame(nextFrame)
     return (
       <article>
