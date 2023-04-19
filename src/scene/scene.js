@@ -5,7 +5,6 @@ import Vector from '../vector'
 const VERTEX_SHADER = `
   attribute vec3 vertexPosition;
   attribute vec3 normalVector;
-  // attribute vec3 ligthPosition;
   
   uniform vec3 vertexColor;
   varying vec4 finalVertexColor;
@@ -21,7 +20,6 @@ const VERTEX_SHADER = `
     
     vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
 
-    // vec3 lightDirection = normalize(lightPosition - vertexPosition);
     vec3 hardcodedLightVector = normalize(vec3(0.5, 1.0, 1.0));
     float lightContribution = max(dot(normalize(worldNormal), hardcodedLightVector), 0.0);
 
@@ -47,7 +45,6 @@ class Scene {
     this.canvas.width = 500
     this.canvas.height = 500
     this.objectsToDraw = []
-    //this.light = []
     this.gl = getGL(this.canvas)
 
     // Initialize the shaders.
@@ -76,12 +73,15 @@ class Scene {
     // All done --- tell WebGL to use the shader program from now on.
     this.gl.useProgram(this.shaderProgram)
   }
+
   setCanvas(canvasContainer) {
     canvasContainer.appendChild(this.canvas)
   }
+
   setObjectsToDraw(objectsToDraw) {
     this.objectsToDraw = objectsToDraw
   }
+
   drawScene() {
     if (!this.gl) {
       alert('No WebGL context found...sorry.')
@@ -114,6 +114,7 @@ class Scene {
       objectToDraw.colorsBuffer = initVertexBuffer(this.gl, objectToDraw.colors)
       objectToDraw.normalsBuffer = initVertexBuffer(this.gl, objectToDraw.normals)
     })
+
     // Hold on to the important variables within the shaders.
     const vertexPosition = this.gl.getAttribLocation(this.shaderProgram, 'vertexPosition')
     this.gl.enableVertexAttribArray(vertexPosition)
@@ -175,6 +176,7 @@ class Scene {
         this.gl.drawArrays(this.gl.TRIANGLES, 0, toRawTriangleArray(object.vertices).length / 3)
       }
     }
+
     /*
      * Displays the scene.
      */
@@ -205,12 +207,14 @@ class Scene {
       // All done.
       this.gl.flush()
     }
+
     let currentRotation = 0.0
     const FRAMES_PER_SECOND = 30
     const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
     const DEGREES_PER_MILLISECOND = 0.033
     const FULL_CIRCLE = 360.0
     let previousTimestamp
+
     const nextFrame = timestamp => {
       // Initialize the timestamp.
       if (!previousTimestamp) {

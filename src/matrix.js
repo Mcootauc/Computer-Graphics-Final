@@ -158,11 +158,13 @@ const perspectiveProjection = (left, right, bottom, top, near, far) => {
     0
   ]
 }
+
 export function lookAt(eye, center, up) {
   const z = eye.subtract(center).unit
   const x = up.cross(z).unit
   const y = z.cross(x)
 
+  //prettier-ignore
   const m = [
     x.x, y.x, z.x, 0,
     x.y, y.y, z.y, 0,
@@ -170,6 +172,7 @@ export function lookAt(eye, center, up) {
     0, 0, 0, 1
   ]
 
+  //prettier-ignore
   const t = [
     1, 0, 0, -eye.x,
     0, 1, 0, -eye.y,
@@ -181,6 +184,7 @@ export function lookAt(eye, center, up) {
   // vector when the view matrix is used to transform points.
   return multiply(t, m)
 }
+
 export function multiply(a, b) {
   const m = []
 

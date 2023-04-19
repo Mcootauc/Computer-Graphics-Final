@@ -191,6 +191,38 @@ const computeVertexNormals = protoGeometry => {
   return result
 }
 
+const computeSmoothVertexNormals = protoGeometry => {
+  const result = []
+
+  const vertexVisited = []
+
+  protoGeometry.facesByIndex.forEach(face => {
+    // Access each vertex of the triangle.
+    const p0 = protoGeometry.vertices[face[0]]
+    const p1 = protoGeometry.vertices[face[1]]
+    const p2 = protoGeometry.vertices[face[2]]
+
+    // Convert each point into a Vector instance so we can use the methods.
+    const p0AsVector = new Vector(...p0)
+    const p1AsVector = new Vector(...p1)
+    const p2AsVector = new Vector(...p2)
+
+    // Perform the actual vector calculation.
+    const v1 = p1AsVector.subtract(p0AsVector)
+    const v2 = p2AsVector.subtract(p0AsVector)
+
+    // Calculate the normal.
+    const N = v1.cross(v2).unit // ".unit" is not in the book.
+
+    // Push that normnal onto our result, _one per vertex_.
+    result.push(N.x, N.y, N.z)
+    result.push(N.x, N.y, N.z)
+    result.push(N.x, N.y, N.z)
+  })
+
+  return result
+}
+
 /**
  * Utility function for turning our nascent geometry object into a “raw” coordinate array
  * arranged as triangles.
