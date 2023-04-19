@@ -30,7 +30,7 @@ const FRAGMENT_SHADER = `
   #endif
   varying vec4 finalVertexColor;
   void main(void) {
-    gl_FragColor = finalVertexColor
+    gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
   }
 `
 
