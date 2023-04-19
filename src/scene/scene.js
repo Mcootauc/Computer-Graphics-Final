@@ -5,6 +5,7 @@ import Vector from '../vector'
 const VERTEX_SHADER = `
   attribute vec3 vertexPosition;
   attribute vec3 normalVector;
+  attribute vec3 lightPosition;
   
   uniform vec3 vertexColor;
   varying vec4 finalVertexColor;
@@ -20,8 +21,8 @@ const VERTEX_SHADER = `
     
     vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
 
-    vec3 hardcodedLightVector = normalize(vec3(0.5, 1.0, 1.0));
-    float lightContribution = max(dot(normalize(worldNormal), hardcodedLightVector), 0.0);
+    vec3 lightDirection = normalize(lightPosition - vertexPosition);
+    float lightContribution = max(dot(lightDirection, worldNormal), 0.0);
 
     finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
   }
@@ -98,7 +99,7 @@ class Scene {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawLineArray(objectToDraw.vertices))
       } else {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawTriangleArray(objectToDraw.vertices))
-        console.log("VERTICES", toRawTriangleArray(objectToDraw.vertices))
+        console.log('VERTICES', toRawTriangleArray(objectToDraw.vertices))
       }
       if (!objectToDraw.colors) {
         // If we have a single color, we expand that into an array
@@ -114,7 +115,7 @@ class Scene {
       }
       objectToDraw.colorsBuffer = initVertexBuffer(this.gl, objectToDraw.colors)
       objectToDraw.normalsBuffer = initVertexBuffer(this.gl, objectToDraw.normals)
-      console.log("NORMALS", objectToDraw.normals)
+      console.log('NORMALS', objectToDraw.normals)
     })
 
     // Hold on to the important variables within the shaders.
