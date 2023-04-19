@@ -21,7 +21,8 @@ const CANVAS_HEIGHT = 512
 
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
-
+  const sphereMesh = sphere(0.7, 2.0)
+  const cylinerMesh = cylinder(0.3, 0.3, 5)
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
   const [objectsToDraw] = useState([
@@ -35,20 +36,21 @@ const PitchedScene = props => {
     //   visible: false
     // },
     {
-      color: { r: 1, g: 0.5, b: 0 },
-      vertices: sphere(1.0, 1.0),
+      color: { r: 0, g: 0.7, b: 1 },
+      vertices: sphereMesh,
       wireframe: false, // Possible approach to hiding the mode.
-      translation: { x: 0, y: 0, z: 0 },
-      normals: computeVertexNormals(sphere(1.0, 1.0)),
+      translation: { x: -1.5, y: 0, z: 0 },
+      normals: computeVertexNormals(sphereMesh),
       visible: true
-    }
-    // {
-    //   color: { r: 1, g: 0, b: 0 },
-    //   vertices: cylinder(0.3, 0.3, 5, true),
-    //   mode: gl.LINES,
-    //   translation: {x: 1.0, y: 1, z: 0},
-    //   visible: false
-    // },
+    },
+    {
+      color: { r: 1, g: 0, b: 0 },
+      vertices: cylinerMesh,
+      wireframe: false,
+      translation: {x: 1.0, y: 0, z: 0},
+      normals: computeVertexNormals(cylinerMesh),
+      visible: true
+    },
     // {
     //   color: { r: 1, g: 0, b: 0 },
     //   //takes in a parameter of radius, height, and radial segments

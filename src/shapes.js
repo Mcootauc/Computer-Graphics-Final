@@ -110,7 +110,7 @@ const sphere = (scaleFactor, subDivCount) => {
   return { vertices, facesByIndex }
 }
 
-const cylinder = (radius, height, radialSegments, wireframe) => {
+const cylinder = (radius, height, radialSegments) => {
   const vertices = [
     [0, height, 0] // top vertex
   ]
@@ -153,11 +153,7 @@ const cylinder = (radius, height, radialSegments, wireframe) => {
     facesByIndex.push([i + 1 + radialSegments, i - 1, i + radialSegments])
   }
 
-  if (wireframe === true) {
-    return toRawLineArray({ vertices, facesByIndex })
-  } else {
-    return toRawTriangleArray({ vertices, facesByIndex })
-  }
+  return { vertices, facesByIndex }
 }
 
 /**
