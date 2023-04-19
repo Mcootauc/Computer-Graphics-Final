@@ -5,6 +5,7 @@ import Vector from '../vector'
 const VERTEX_SHADER = `
   attribute vec3 vertexPosition;
   attribute vec3 normalVector;
+  // attribute vec3 lightPosition
   
   uniform vec3 vertexColor;
   varying vec4 finalVertexColor;
@@ -12,12 +13,14 @@ const VERTEX_SHADER = `
   uniform mat4 theRotationMatrix;
   uniform mat4 theOrthoProjection;
   uniform mat4 cameraMatrix;
+
   void main(void) {
     vec4 worldPosition = theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
     gl_Position = theRotationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
     
     vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
 
+    // vec3 lightDirection = normalize(lightPosition - vectorPosition);
     vec3 hardcodedLightVector = normalize(vec3(0.5, 1.0, 1.0));
     float lightContribution = max(dot(normalize(worldNormal), hardcodedLightVector), 0.0);
 
@@ -29,7 +32,9 @@ const FRAGMENT_SHADER = `
   #ifdef GL_ES
   precision highp float;
   #endif
+
   varying vec4 finalVertexColor;
+  
   void main(void) {
     gl_FragColor = vec4(finalVertexColor.rgb, 1.0);
   }
@@ -43,8 +48,6 @@ class Scene {
     this.objectsToDraw = []
     this.gl = getGL(this.canvas)
 
-
-    
     // Initialize the shaders.
     let abort = false
     this.shaderProgram = initSimpleShaderProgram(
@@ -89,7 +92,6 @@ class Scene {
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height)
     // Pass the vertices to WebGL.
     this.objectsToDraw.forEach(objectToDraw => {
-
       if (objectToDraw.wireframe === true) {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawLineArray(objectToDraw.vertices))
       } else {
@@ -137,7 +139,6 @@ class Scene {
       xe.z, ye.z, ze.z, 0,
       -P.dot(xe), -P.dot(ye), -P.dot(ze), 1
     ]
-
 
     const drawObject = object => {
       // Set up the translation matrix with each object's unique translation on scene
