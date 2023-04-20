@@ -6,6 +6,7 @@ const VERTEX_SHADER = `
 attribute vec3 vertexPosition;
 attribute vec3 normalVector;
 
+uniform vec3 lightPosition;
 uniform vec3 vertexColor;
 varying vec4 finalVertexColor;
 
@@ -18,8 +19,8 @@ void main(void) {
   gl_Position = theOrthoProjection * theTranslationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
   
   vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
-  vec3 hardcodedLightVector = normalize(vec3(0.5, 1.0, 1.0));
-  float lightContribution = max(dot(normalize(worldNormal), hardcodedLightVector), 0.0);
+  vec3 normalLightVector = normalize(lightPosition);
+  float lightContribution = max(dot(normalize(worldNormal), normalLightVector), 0.0);
   finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
 }
 `
@@ -47,7 +48,7 @@ class Scene {
     this.cameraPosition = new Vector(0, 0, 0);
     this.targetPosition = new Vector(0, 0, 0);
     this.upVector = new Vector(0, 0, 0);
-
+    this.lightPosition = {x: 0.0, y: 0.0, z: 0.0};
     // Initialize the shaders.
     let abort = false
     this.shaderProgram = initSimpleShaderProgram(
@@ -71,10 +72,10 @@ class Scene {
       alert('Fatal errors encountered; we cannot continue.')
       return
     }
+
     // All done --- tell WebGL to use the shader program from now on.
     this.gl.useProgram(this.shaderProgram)
     this.cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix');
-
   }
 
   setCameraPositionAndOrientation(cameraPosition, targetPosition, upVector) {
@@ -103,7 +104,11 @@ class Scene {
     this.gl.uniformMatrix4fv(this.cameraMatrix, this.gl.FALSE, new Float32Array(cameraMatrixArray));
   }
 
-
+  setLightPosition(x, y, z) {
+    this.lightPosition.x = x
+    this.lightPosition.y = y
+    this.lightPosition.z = z
+  }
 
   toggleView() {
     // Set bird's eye view as default
@@ -223,6 +228,13 @@ class Scene {
         object.color.r,
         object.color.g,
         object.color.b
+      )
+
+      this.gl.uniform3f(
+        this.gl.getUniformLocation(this.shaderProgram, 'lightPosition'),
+        this.lightPosition.x,
+        this.lightPosition.y,
+        this.lightPosition.z
       )
 
       // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.colorsBuffer)

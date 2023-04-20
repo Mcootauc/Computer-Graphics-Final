@@ -63,6 +63,7 @@ const PitchedScene = props => {
 
     scene.setCanvas(pitchedCanvas);
     scene.setObjectsToDraw(objectsToDraw);
+    scene.setLightPosition(1.5, 0.0, 1.0)
     scene.drawScene();
   }, []);
 
@@ -98,6 +99,19 @@ const PitchedScene = props => {
     });
   }
 
+  const lightUp = () => {
+    scene.setLightPosition(0.0, 2.0, 0.0)
+  }
+  const lightDown = () => {
+    scene.setLightPosition(0.0, -2.0, 0.0)
+  }
+  const lightLeft = () => {
+    scene.setLightPosition(-2.0, 0.0, 0.0)
+  }
+  const lightRight = () => {
+    scene.setLightPosition(2.0, 0.0, 0.0)
+  }
+
   return (
     <article>
       <p>
@@ -117,6 +131,10 @@ const PitchedScene = props => {
         <button onClick={handleWireframe}>Wireframe</button>
         <button onClick={handleBirdsEyeView}>Birds Eye View</button>
         <button onClick={handleBehindView}>Behind View</button>
+        <button onClick={lightUp}>Light Up</button>
+        <button onClick={lightDown}>Light Down</button>
+        <button onClick={lightRight}>Light Left</button>
+        <button onClick={lightLeft}>Light Right</button>
       </div>
     </article>
   );
