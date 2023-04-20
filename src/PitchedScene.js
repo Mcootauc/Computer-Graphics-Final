@@ -29,28 +29,14 @@ const PitchedScene = props => {
   const sphereMesh = new Mesh(sphere(0.7, 0.0), true)
   sphereMesh.setColor({ r: 0, g: 0.7, b: 1 })
   sphereMesh.setTranslation({ x: -1.5, y: 0, z: 0 })
-  //const cylinerMesh = cylinder(0.3, 0.3, 5)
+  const cylinderMesh = new Mesh(cylinder(0.3, 0.3, 5, false), true)
+  cylinderMesh.setColor({ r: 1, g: 0, b: 0 })
+  cylinderMesh.setTranslation({ x: 1.3, y: 0.1, z: 0 })
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
   const [objectsToDraw] = useState([
     sphereMesh,
-    // {
-    //   color: { r: 1, g: 0, b: 0 },
-    //   vertices: cylinerMesh,
-    //   wireframe: false,
-    //   translation: { x: 1.0, y: 0, z: 0 },
-    //   normals: computeFacetedNormals(cylinerMesh),
-    //   visible: true
-    // }
-    // {
-    //   color: { r: 1, g: 0, b: 0 },
-    //   //takes in a parameter of radius, height, and radial segments
-    //   //also takes in a parameter true or false to choose whether you want a wireframe or not
-    //   vertices: cylinder(0.3, 0.3, 5, false),
-    //   mode: gl.TRIANGLES,
-    //   translation: {x: 1.3, y: 0.1, z: 0},
-    //   visible: false
-    // },
+    cylinderMesh,
     // {
     //   color: { r: 0.5, g: 0, b: 0 },
     //   vertices: toRawLineArray(cone()),
