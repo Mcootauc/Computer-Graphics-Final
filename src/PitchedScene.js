@@ -26,31 +26,49 @@ const CANVAS_HEIGHT = 512
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
 
-  const sphereMesh = new Mesh(sphere(0.7, 0.0), true)
-  sphereMesh.setColor({ r: 0, g: 0.7, b: 1 })
-  sphereMesh.setTranslation({ x: -1.5, y: 0, z: 0 })
-  const cylinderMesh = new Mesh(cylinder(0.3, 0.3, 5, false), true)
-  cylinderMesh.setColor({ r: 1, g: 0, b: 0 })
-  cylinderMesh.setTranslation({ x: 1.3, y: 0.1, z: 0 })
+  const blueSphereMesh = new Mesh(sphere(0.6, 1.0), true)
+  blueSphereMesh.setColor({ r: 0, g: 0.7, b: 1 })
+  blueSphereMesh.setTranslation({ x: -1.5, y: 0.7, z: 0 })
+
+  const pinkSphereMesh = new Mesh(sphere(0.6, 1.0), false)
+  pinkSphereMesh.setColor({ r: 1, g: 0.5, b: 1 })
+  pinkSphereMesh.setTranslation({ x: -1.5, y: -0.7, z: 0 })
+
+  const redCylinderMesh = new Mesh(cylinder(0.3, 0.3, 8), true)
+  redCylinderMesh.setColor({ r: 1, g: 0, b: 0 })
+  redCylinderMesh.setTranslation({ x: 1.5, y: 0.7, z: 0 })
+
+  const lightBlueCylinderMesh = new Mesh(cylinder(0.3, 0.3, 8), false)
+  lightBlueCylinderMesh.setColor({ r: 0.5, g: 1, b: 1 })
+  lightBlueCylinderMesh.setTranslation({ x: 1.5, y: -0.7, z: 0 })
+
+  const yellowConeMesh = new Mesh(cone(), true)
+  yellowConeMesh.setColor({ r: 1, g: 1, b: 0 })
+  yellowConeMesh.setTranslation({ x: -0.3, y: 1.5, z: 0 })
+
+  const lavenderConeMesh = new Mesh(cone(), false)
+  lavenderConeMesh.setColor({ r: 1, g: 1, b: 2 })
+  lavenderConeMesh.setTranslation({ x: 0.8, y: 1.5, z: 0 })
+
+  const limeHexagonalPrismMesh = new Mesh(hexagonalPrism(), true)
+  limeHexagonalPrismMesh.setColor({ r: 1, g: 1.5, b: 1 })
+  limeHexagonalPrismMesh.setTranslation({ x: -0.4, y: -1.5, z: 0 })
+
+  const orangeHexagonalPrismMesh = new Mesh(hexagonalPrism(), false)
+  orangeHexagonalPrismMesh.setColor({ r: 1.0, g: 0.6, b: 0})
+  orangeHexagonalPrismMesh.setTranslation({ x: 0.7, y: -1.5, z: 0 })
+
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
   const [objectsToDraw] = useState([
-    sphereMesh,
-    cylinderMesh,
-    // {
-    //   color: { r: 0.5, g: 0, b: 0 },
-    //   vertices: toRawLineArray(cone()),
-    //   mode: gl.LINES,
-    //   translation: {x: -0.5, y: -1.0, z: 0},
-    //   visible: false
-    // },
-    // {
-    //   color: { r: 0.5, g: 0, b: 1 },
-    //   vertices: toRawLineArray(hexagonalPrism()),
-    //   mode: gl.LINES,
-    //   translation: {x: 0.8, y: -0.8, z: 0},
-    //   visible: false
-    // },
+    blueSphereMesh,
+    pinkSphereMesh,
+    redCylinderMesh,
+    lightBlueCylinderMesh,
+    yellowConeMesh,
+    lavenderConeMesh,
+    limeHexagonalPrismMesh,
+    orangeHexagonalPrismMesh
   ])
   
   const [scene] = useState(new Scene());

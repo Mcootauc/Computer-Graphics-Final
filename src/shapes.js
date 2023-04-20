@@ -223,16 +223,16 @@ const computeSmoothNormals = protoGeometry => {
   const smoothNormalArr = []
   for (let i = 0; i < vertices.length; i++) {
     const triangles = []
-    for (let j = 0; j < protoGeometry.facesByIndex.length; j++) {
-      if (protoGeometry.facesByIndex[j].includes(i)) {
-        triangles.push(protoGeometry.facesByIndex[j])
+    for (const element of protoGeometry.facesByIndex) {
+      if (element.includes(i)) {
+        triangles.push(element)
       }
     }
     theFaces.push(triangles)
   }
 
-  for (let i = 0; i < theFaces.length; i++) {
-    const facesByIndex = theFaces[i]
+  for (const element of theFaces) {
+    const facesByIndex = element
     const geometry = {vertices, facesByIndex}
     const smoothNormal = computeAllFaceNormals(geometry)
     smoothNormalArr.push(smoothNormal)
