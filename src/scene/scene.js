@@ -14,13 +14,13 @@ uniform mat4 theTranslationMatrix;
 uniform mat4 theRotationMatrix;
 uniform mat4 theOrthoProjection;
 uniform mat4 cameraMatrix;
+
 void main(void) {
   vec4 worldPosition = theTranslationMatrix * vec4(vertexPosition, 1.0);
   gl_Position = theOrthoProjection * theTranslationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
   
-  vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
   vec3 normalLightVector = normalize(lightPosition);
-  float lightContribution = max(dot(normalize(worldNormal), normalLightVector), 0.0);
+  float lightContribution = max(dot(normalize(normalVector), normalLightVector), 0.0);
   finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
 }
 `
@@ -72,10 +72,8 @@ class Scene {
       alert('Fatal errors encountered; we cannot continue.')
       return
     }
-
     // All done --- tell WebGL to use the shader program from now on.
     this.gl.useProgram(this.shaderProgram)
-    this.cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix');
   }
 
   setCameraPositionAndOrientation(cameraPosition, targetPosition, upVector) {
