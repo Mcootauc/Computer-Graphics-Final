@@ -20,7 +20,7 @@ void main(void) {
   gl_Position = theOrthoProjection * theTranslationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
   
   vec3 normalLightVector = normalize(lightPosition);
-  float lightContribution = max(dot(normalize(normalVector), normalLightVector), 0.0);
+  float lightContribution = dot(normalize(normalVector), normalLightVector);
   finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
 }
 `
@@ -197,9 +197,9 @@ class Scene {
     const orthographicProjection = this.gl.getUniformLocation(this.shaderProgram, 'theOrthoProjection')
     const cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix')
 
-    const P = new Vector(0, 0, 0)
-    const Q = new Vector(0, 0, -1)
-    const up = new Vector(1, 1, 0)
+    let P = new Vector(0, 0, 0)
+    let Q = new Vector(0, 0, -1)
+    let up = new Vector(1, 1, 0)
 
     const ze = P.subtract(Q).unit
     const ye = up.subtract(up.projection(ze)).unit
