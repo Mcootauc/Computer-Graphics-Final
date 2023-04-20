@@ -16,6 +16,8 @@ import {
   toRawTriangleArray
 } from './shapes'
 import Scene from './scene/scene'
+import Vector from './vector'
+
 
 const CANVAS_WIDTH = 512
 const CANVAS_HEIGHT = 512
@@ -76,42 +78,69 @@ const PitchedScene = props => {
     //   visible: false
     // },
   ])
+
   console.log("SPHERE MESH VERTICES", sphereMesh.vertices)
   // console.log("FACETED NORMALS", computeFacetedNormals(sphereMesh))
   // console.log("SMOOTH NORMALS", computeSmoothNormals(sphereMesh))
-  const [scene] = useState(new Scene())
+  const [scene] = useState(new Scene());
+
   useEffect(() => {
-    const pitchedCanvas = canvasContainerRef.current
+    const pitchedCanvas = canvasContainerRef.current;
     if (!pitchedCanvas) {
-      return
+      return;
     }
 
-    //Scene(pitchedCanvas, objectsToDraw)
-    scene.setCanvas(pitchedCanvas)
-    scene.setObjectsToDraw(objectsToDraw)
-    scene.drawScene()
-    // scene.addLight()
+    scene.setCanvas(pitchedCanvas);
+    scene.setObjectsToDraw(objectsToDraw);
+    scene.drawScene();
+  }, []);
 
-    const toggle = document.querySelector('#toggle')
-    toggle.addEventListener('click', function () {
-      for (const element of objectsToDraw) {
-        element.visible = !element.visible
-      }
-    })
-  }, [])
+  const handleToggle = () => {
+    objectsToDraw.forEach((element) => {
+      element.visible = !element.visible;
+    });
+    scene.drawScene();
+  };
+
+  const handleBirdsEyeView = () => {
+    scene.setCameraPositionAndOrientation(
+      new Vector(0, 10, 0),
+      new Vector(0, 0, 0),
+      new Vector(0, 0, -1)
+    );
+    scene.drawScene();
+  };
+
+  const handleBehindView = () => {
+    scene.setCameraPositionAndOrientation(
+      new Vector(0, 0, 10),
+      new Vector(0, 0, 0),
+      new Vector(0, 1, 0)
+    );
+    scene.drawScene();
+  };
 
   return (
     <article>
-      <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
+      <p>
+        Use this component to implement your pitched scene—the one with an
+        intended purpose, use cases, etc.
+      </p>
 
-      <section width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasContainerRef}>
+      <section
+        width={CANVAS_WIDTH}
+        height={CANVAS_HEIGHT}
+        ref={canvasContainerRef}
+      >
         Your favorite update-your-browser message here.
       </section>
       <div>
-        <button id="toggle">Show shape</button>
+        <button onClick={handleToggle}>Show shape</button>
+        <button onClick={handleBirdsEyeView}>Birds Eye View</button>
+        <button onClick={handleBehindView}>Behind View</button>
       </div>
     </article>
-  )
-}
+  );
+};
 
-export default PitchedScene
+export default PitchedScene;

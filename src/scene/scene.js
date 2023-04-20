@@ -47,6 +47,11 @@ class Scene {
     this.canvas.height = 500
     this.objectsToDraw = []
     this.gl = getGL(this.canvas)
+    this.cameraMatrix = null;
+
+    this.cameraPosition = new Vector(0, 0, 0);
+    this.targetPosition = new Vector(0, 0, -1);
+    this.upVector = new Vector(1, 1, 0);
 
     // Initialize the shaders.
     let abort = false
@@ -73,8 +78,35 @@ class Scene {
     }
     // All done --- tell WebGL to use the shader program from now on.
     this.gl.useProgram(this.shaderProgram)
+    this.cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix');
+
   }
 
+  setCameraPositionAndOrientation(cameraPosition, targetPosition, upVector) {
+    this.cameraPosition = cameraPosition;
+    this.targetPosition = targetPosition;
+    this.upVector = upVector;
+    this.updateCameraMatrix();
+  }
+
+  updateCameraMatrix() {
+    const P = this.cameraPosition;
+    const Q = this.targetPosition;
+    const up = this.upVector;
+
+    const ze = P.subtract(Q).unit;
+    const ye = up.subtract(up.projection(ze)).unit;
+    const xe = ye.cross(ze);
+
+    const cameraMatrixArray = [
+      xe.x, ye.x, ze.x, 0,
+      xe.y, ye.y, ze.y, 0,
+      xe.z, ye.z, ze.z, 0,
+      -P.dot(xe), -P.dot(ye), -P.dot(ze), 1
+    ];
+
+    this.gl.uniformMatrix4fv(this.cameraMatrix, this.gl.FALSE, new Float32Array(cameraMatrixArray));
+  }
   setCanvas(canvasContainer) {
     canvasContainer.appendChild(this.canvas)
   }
@@ -145,6 +177,7 @@ class Scene {
       xe.z, ye.z, ze.z, 0,
       -P.dot(xe), -P.dot(ye), -P.dot(ze), 1
     ]
+    
 
     const drawObject = object => {
       // Set up the translation matrix with each object's unique translation on scene
@@ -180,12 +213,14 @@ class Scene {
       }
     }
 
+    
     /*
      * Displays the scene.
      */
     const drawScene = () => {
       // Clear the display.
       this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
+      this.updateCameraMatrix();
       // Set up the rotation matrix.
       this.gl.uniformMatrix4fv(
         theRotationMatrix,
