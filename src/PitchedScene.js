@@ -89,12 +89,10 @@ const PitchedScene = props => {
   };
 
   const handleBirdsEyeView = () => {
-    scene.setCameraPositionAndOrientation(
-      new Vector(0, 10, 0),
-      new Vector(0, 0, 0),
-      new Vector(0, 0, -1)
-    );
-    scene.drawScene();
+    scene.cameraPosition(0, 10, 0);
+    scene.upVector(0, 0, -1)
+    scene.targetPosition(0, 0, 0)
+    scene.updateCameraMatrix()
   };
 
   const handleBehindView = () => {
@@ -105,6 +103,12 @@ const PitchedScene = props => {
     );
     scene.drawScene();
   };
+
+  const handleWireframe = () => {
+    objectsToDraw.forEach((element) => {
+      element.wireframe = !element.wireframe;
+    });
+  }
 
   return (
     <article>
@@ -122,6 +126,7 @@ const PitchedScene = props => {
       </section>
       <div>
         <button onClick={handleToggle}>Show shape</button>
+        <button onClick={handleWireframe}>Wireframe</button>
         <button onClick={handleBirdsEyeView}>Birds Eye View</button>
         <button onClick={handleBehindView}>Behind View</button>
       </div>
