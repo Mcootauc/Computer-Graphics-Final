@@ -181,8 +181,6 @@ class Scene {
     // Hold on to the important variables within the shaders.
     const vertexPosition = this.gl.getAttribLocation(this.shaderProgram, 'vertexPosition')
     this.gl.enableVertexAttribArray(vertexPosition)
-    // const vertexColor = this.gl.getAttribLocation(this.shaderProgram, 'vertexColor')
-    // this.gl.enableVertexAttribArray(vertexColor)
     const normalVector = this.gl.getAttribLocation(this.shaderProgram, 'normalVector')
     this.gl.enableVertexAttribArray(normalVector)
     const theRotationMatrix = this.gl.getUniformLocation(this.shaderProgram, 'theRotationMatrix')
@@ -229,16 +227,9 @@ class Scene {
         this.lightPosition.z
       )
 
-      // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.colorsBuffer)
-      // this.gl.vertexAttribPointer(vertexColor, 3, this.gl.FLOAT, false, 0, 0)
-
-      // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer)
-      // this.gl.vertexAttribPointer(normalVector, 3, this.gl.FLOAT, false, 0, 0)
       // Set the varying vertex coordinates.
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.verticesBuffer)
       this.gl.vertexAttribPointer(vertexPosition, 3, this.gl.FLOAT, false, 0, 0)
-      // const normalPosition = this.gl.getAttribLocation(this.shaderProgram, 'normalVector');
-      // this.gl.enableVertexAttribArray(normalPosition);
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, object.normalsBuffer)
       this.gl.vertexAttribPointer(normalVector, 3, this.gl.FLOAT, false, 0, 0)
 
