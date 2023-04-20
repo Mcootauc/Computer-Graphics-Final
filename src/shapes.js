@@ -106,8 +106,6 @@ const sphere = (scaleFactor, subDivCount) => {
   for (let i = 0; i < subDivCount; i++) {
     subdivideIcosahedron()
   }
-
-  //console.log("SPHERE INDEX", facesByIndex)
   return { vertices, facesByIndex }
 }
 
@@ -154,7 +152,6 @@ const cylinder = (radius, height, radialSegments) => {
     facesByIndex.push([i + 1 + radialSegments, i - 1, i + radialSegments])
   }
 
-  console.log("SPHERE VERTICES", vertices)
   return { vertices, facesByIndex } 
 }
 
@@ -165,7 +162,6 @@ const cylinder = (radius, height, radialSegments) => {
  */
 const computeFacetedNormals = protoGeometry => {
   const result = []
-  //console.log("FACETED", protoGeometry)
   protoGeometry.facesByIndex.forEach(face => {
     // Access each vertex of the triangle.
     const p0 = protoGeometry.vertices[face[0]]
@@ -189,7 +185,6 @@ const computeFacetedNormals = protoGeometry => {
     result.push(N.x, N.y, N.z)
     result.push(N.x, N.y, N.z)
   })
-  //console.log("FACETED NORMALS", result)
   return result
 }
 
@@ -239,11 +234,9 @@ const computeSmoothNormals = protoGeometry => {
   for (let i = 0; i < theFaces.length; i++) {
     const facesByIndex = theFaces[i]
     const geometry = {vertices, facesByIndex}
-    //console.log("SMOOTH GEOMETRY", geometry)
     const smoothNormal = computeAllFaceNormals(geometry)
     smoothNormalArr.push(smoothNormal)
   }
-  //console.log("RESULT ARR" , result)
   const result = toRawTriangleArray({vertices: smoothNormalArr, facesByIndex: protoGeometry.facesByIndex})
   return result
 }

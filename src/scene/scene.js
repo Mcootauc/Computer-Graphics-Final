@@ -5,7 +5,6 @@ import Vector from '../vector'
 const VERTEX_SHADER = `
   attribute vec3 vertexPosition;
   attribute vec3 normalVector;
-  attribute vec3 lightPosition;
   
   uniform vec3 vertexColor;
   varying vec4 finalVertexColor;
@@ -14,20 +13,13 @@ const VERTEX_SHADER = `
   uniform mat4 theRotationMatrix;
   uniform mat4 theOrthoProjection;
   uniform mat4 cameraMatrix;
-
   void main(void) {
-    vec4 worldPosition = theTranslationMatrix * theRotationMatrix * vec4(vertexPosition, 1.0);
-    gl_Position = theRotationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
-    
-    vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
-
-    vec3 lightDirection = normalize(lightPosition - vertexPosition);
-    float lightContribution = max(dot(lightDirection, worldNormal), 0.0);
-
+    vec3 hardcodedLightVector = normalize(vec3(0.0, 2.0, 0.0));
+    float lightContribution = dot(normalize(normalVector), hardcodedLightVector);
+    gl_Position = cameraMatrix * vec4(vertexPosition, 1.0);
     finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
   }
 `
-
 const FRAGMENT_SHADER = `
   #ifdef GL_ES
   precision highp float;
@@ -50,8 +42,8 @@ class Scene {
     this.cameraMatrix = null;
 
     this.cameraPosition = new Vector(0, 0, 0);
-    this.targetPosition = new Vector(0, 0, -1);
-    this.upVector = new Vector(1, 1, 0);
+    this.targetPosition = new Vector(0, 0, 0);
+    this.upVector = new Vector(0, 0, 0);
 
     // Initialize the shaders.
     let abort = false
@@ -107,6 +99,7 @@ class Scene {
 
     this.gl.uniformMatrix4fv(this.cameraMatrix, this.gl.FALSE, new Float32Array(cameraMatrixArray));
   }
+
   setCanvas(canvasContainer) {
     canvasContainer.appendChild(this.canvas)
   }
@@ -131,7 +124,6 @@ class Scene {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawLineArray(objectToDraw.vertices))
       } else {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawTriangleArray(objectToDraw.vertices))
-        console.log('VERTICES', toRawTriangleArray(objectToDraw.vertices))
       }
       if (!objectToDraw.colors) {
         // If we have a single color, we expand that into an array
@@ -147,7 +139,6 @@ class Scene {
       }
       objectToDraw.colorsBuffer = initVertexBuffer(this.gl, objectToDraw.colors)
       objectToDraw.normalsBuffer = initVertexBuffer(this.gl, objectToDraw.normals)
-      console.log('NORMALS', objectToDraw.normals)
     })
 
     // Hold on to the important variables within the shaders.
@@ -236,8 +227,8 @@ class Scene {
       this.gl.uniformMatrix4fv(cameraMatrix, this.gl.FALSE, new Float32Array(cameraMatrixArray))
 
       // Display the objects.
-      for (let i = 0; i < this.objectsToDraw.length; i++) {
-        const object = this.objectsToDraw[i]
+      for (const element of this.objectsToDraw) {
+        const object = element
         if (object.visible) {
           drawObject(object)
         }

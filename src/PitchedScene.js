@@ -17,6 +17,7 @@ import {
 } from './shapes'
 import Scene from './scene/scene'
 import Vector from './vector'
+import Mesh from './createMesh'
 
 
 const CANVAS_WIDTH = 512
@@ -24,28 +25,14 @@ const CANVAS_HEIGHT = 512
 
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
-  const sphereMesh = sphere(0.7, 0.0)
+  const sphereMesh = new Mesh(sphere(0.7, 0.0), true)
+  sphereMesh.setColor({ r: 0, g: 0.7, b: 1 })
+  sphereMesh.setTranslation({ x: -1.5, y: 0, z: 0 })
   const cylinerMesh = cylinder(0.3, 0.3, 5)
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
   const [objectsToDraw] = useState([
-    // {
-    //   color: { r: 1, g: 0.5, b: 0 },
-    //   //takes in a parameter true or false to choose whether you want a wireframe or not
-    //   //also takes in a scalefactor parameter
-    //   vertices: toRawLineArray(sphere(0.5, 1.0)),
-    //   mode: gl.LINES,
-    //   translation: {x: -1.0, y: 0.5, z: 0},
-    //   visible: false
-    // },
-    {
-      color: { r: 0, g: 0.7, b: 1 },
-      vertices: sphereMesh,
-      wireframe: false, // Possible approach to hiding the mode.
-      translation: { x: -1.5, y: 0, z: 0 },
-      normals: computeSmoothNormals(sphereMesh),
-      visible: true
-    },
+    sphereMesh,
     // {
     //   color: { r: 1, g: 0, b: 0 },
     //   vertices: cylinerMesh,
@@ -78,10 +65,7 @@ const PitchedScene = props => {
     //   visible: false
     // },
   ])
-
-  console.log("SPHERE MESH VERTICES", sphereMesh.vertices)
-  // console.log("FACETED NORMALS", computeFacetedNormals(sphereMesh))
-  // console.log("SMOOTH NORMALS", computeSmoothNormals(sphereMesh))
+  
   const [scene] = useState(new Scene());
 
   useEffect(() => {
