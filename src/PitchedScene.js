@@ -28,7 +28,7 @@ const PitchedScene = props => {
   const sphereMesh = new Mesh(sphere(0.7, 0.0), true)
   sphereMesh.setColor({ r: 0, g: 0.7, b: 1 })
   sphereMesh.setTranslation({ x: -1.5, y: 0, z: 0 })
-  const cylinerMesh = cylinder(0.3, 0.3, 5)
+  //const cylinerMesh = cylinder(0.3, 0.3, 5)
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
   const [objectsToDraw] = useState([
@@ -87,20 +87,23 @@ const PitchedScene = props => {
   };
 
   const handleBirdsEyeView = () => {
-    scene.cameraPosition(0, 10, 0);
-    scene.upVector(0, 0, -1)
-    scene.targetPosition(0, 0, 0)
-    scene.updateCameraMatrix()
+    scene.setCameraPositionAndOrientation(
+      new Vector(0, 50, 0),
+      new Vector(0, 0, 0),
+      new Vector(0, 0, -1)
+    );
+    scene.updateCamera();
   };
-
+  
   const handleBehindView = () => {
     scene.setCameraPositionAndOrientation(
-      new Vector(0, 0, 10),
+      new Vector(0, 0, 50),
       new Vector(0, 0, 0),
       new Vector(0, 1, 0)
     );
-    scene.drawScene();
+    scene.updateCamera();
   };
+  
 
   const handleWireframe = () => {
     objectsToDraw.forEach((element) => {
