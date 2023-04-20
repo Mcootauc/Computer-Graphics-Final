@@ -198,7 +198,7 @@ class Scene {
       this.gl.vertexAttribPointer(normalVector, 3, this.gl.FLOAT, false, 0, 0)
 
       if (object.wireframe === true) {
-        this.gl.drawArrays(this.gl.LINES, 0, toRawLineArray(object.vertices).length / 3)
+        this.gl.drawArrays(this.gl.LINES, 0, toRawLineArray(object.vertices).length / 2)
       } else {
         this.gl.drawArrays(this.gl.TRIANGLES, 0, toRawTriangleArray(object.vertices).length / 3)
       }
