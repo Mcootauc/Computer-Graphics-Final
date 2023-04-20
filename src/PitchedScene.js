@@ -92,22 +92,22 @@ const PitchedScene = props => {
     scene.drawScene();
   };
 
-  const handleBirdsEyeView = () => {
+  const handleBirdsEyeView = () => {  //attempted this and behind view but couldn't figure it out in the end 
+    console.log("bird")
     scene.setCameraPositionAndOrientation(
-      new Vector(0, 50, 0),
+      new Vector(0, 1, 0),
       new Vector(0, 0, 0),
       new Vector(0, 0, -1)
     );
-    scene.updateCamera();
   };
   
   const handleBehindView = () => {
+    console.log("behind")
     scene.setCameraPositionAndOrientation(
-      new Vector(0, 0, 50),
+      new Vector(0, 0, 1),
       new Vector(0, 0, 0),
       new Vector(0, 1, 0)
     );
-    scene.updateCamera();
   };
   
 
@@ -147,7 +147,7 @@ const PitchedScene = props => {
       <div>
         <button onClick={handleToggle}>Show shape</button>
         <button onClick={handleWireframe}>Wireframe</button>
-        <button onClick={handleBirdsEyeView}>Birds Eye View</button>
+        <button onClick={handleBirdsEyeView}>Birds Eye View</button> 
         <button onClick={handleBehindView}>Behind View</button>
         <button onClick={lightUp}>Light Up</button>
         <button onClick={lightDown}>Light Down</button>

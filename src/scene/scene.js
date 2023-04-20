@@ -1,5 +1,5 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
-import { translateMatrix, rotationMatrix, orthoProjection, lookAt, perspective } from '../matrix'
+import { translateMatrix, rotationMatrix, orthoProjection } from '../matrix'
 import { toRawLineArray, toRawTriangleArray } from '../shapes'
 import Vector from '../vector'
 const VERTEX_SHADER = `
@@ -76,31 +76,27 @@ class Scene {
     this.gl.useProgram(this.shaderProgram)
   }
 
-  setCameraPositionAndOrientation(cameraPosition, targetPosition, upVector) {
-    this.cameraPosition = cameraPosition;
-    this.targetPosition = targetPosition;
-    this.upVector = upVector;
-    this.updateCameraMatrix();
-  }
-
-  updateCameraMatrix() {
-    const P = this.cameraPosition;
-    const Q = this.targetPosition;
-    const up = this.upVector;
-
-    const ze = P.subtract(Q).unit;
-    const ye = up.subtract(up.projection(ze)).unit;
-    const xe = ye.cross(ze);
-
+  setCameraPositionAndOrientation(position, target, up) {
+    this.cameraPosition = position;
+    this.targetPosition = target;
+    this.upVector = up;
+  
+    const ze = position.subtract(target).unit
+    const ye = up.subtract(up.projection(ze)).unit
+    const xe = ye.cross(ze)
+  
     const cameraMatrixArray = [
       xe.x, ye.x, ze.x, 0,
       xe.y, ye.y, ze.y, 0,
       xe.z, ye.z, ze.z, 0,
-      -P.dot(xe), -P.dot(ye), -P.dot(ze), 1
-    ];
+      -position.dot(xe), -position.dot(ye), -position.dot(ze), 1
+    ]
+  
+    this.cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix')
 
-    this.gl.uniformMatrix4fv(this.cameraMatrix, this.gl.FALSE, new Float32Array(cameraMatrixArray));
+    console.log("New Matrix for Camera", cameraMatrixArray)
   }
+  
 
   setLightPosition(x, y, z) {
     this.lightPosition.x = x
@@ -138,6 +134,8 @@ class Scene {
     this.objectsToDraw.push(newShape);
   }
 
+ 
+
   setCanvas(canvasContainer) {
     canvasContainer.appendChild(this.canvas)
   }
@@ -146,11 +144,6 @@ class Scene {
     this.objectsToDraw = objectsToDraw
   }
 
-  updateCamera() {
-    this.updateCameraMatrix();
-    this.drawScene();
-  }
-  
   drawScene() {
     if (!this.gl) {
       alert('No WebGL context found...sorry.')
@@ -197,9 +190,9 @@ class Scene {
     const orthographicProjection = this.gl.getUniformLocation(this.shaderProgram, 'theOrthoProjection')
     const cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix')
 
-    let P = new Vector(0, 0, 0)
-    let Q = new Vector(0, 0, -1)
-    let up = new Vector(1, 1, 0)
+    const P = new Vector(0, 0, 0)
+    const Q = new Vector(0, 0, -1)
+    const up = new Vector(1, 1, 0)
 
     const ze = P.subtract(Q).unit
     const ye = up.subtract(up.projection(ze)).unit
@@ -212,6 +205,7 @@ class Scene {
       xe.z, ye.z, ze.z, 0,
       -P.dot(xe), -P.dot(ye), -P.dot(ze), 1
     ]
+
     
 
     const drawObject = object => {
@@ -262,7 +256,6 @@ class Scene {
     const drawScene = () => {
       // Clear the display.
       this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
-      this.updateCameraMatrix();
       // Set up the rotation matrix.
       this.gl.uniformMatrix4fv(
         theRotationMatrix,
@@ -276,6 +269,7 @@ class Scene {
         new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
       )
       this.gl.uniformMatrix4fv(cameraMatrix, this.gl.FALSE, new Float32Array(cameraMatrixArray))
+      //console.log("Camera Matrix: ", cameraMatrixArray)
 
       // Display the objects.
       for (const element of this.objectsToDraw) {
