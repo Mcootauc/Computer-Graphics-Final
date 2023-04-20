@@ -3,22 +3,25 @@ import { translateMatrix, rotationMatrix, orthoProjection, lookAt, perspective }
 import { toRawLineArray, toRawTriangleArray } from '../shapes'
 import Vector from '../vector'
 const VERTEX_SHADER = `
-  attribute vec3 vertexPosition;
-  attribute vec3 normalVector;
+attribute vec3 vertexPosition;
+attribute vec3 normalVector;
+
+uniform vec3 vertexColor;
+varying vec4 finalVertexColor;
+
+uniform mat4 theTranslationMatrix;
+uniform mat4 theRotationMatrix;
+uniform mat4 theOrthoProjection;
+uniform mat4 cameraMatrix;
+void main(void) {
+  vec4 worldPosition = theTranslationMatrix * vec4(vertexPosition, 1.0);
+  gl_Position = theOrthoProjection * theTranslationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
   
-  uniform vec3 vertexColor;
-  varying vec4 finalVertexColor;
-  
-  uniform mat4 theTranslationMatrix;
-  uniform mat4 theRotationMatrix;
-  uniform mat4 theOrthoProjection;
-  uniform mat4 cameraMatrix;
-  void main(void) {
-    vec3 hardcodedLightVector = normalize(vec3(0.0, 2.0, 0.0));
-    float lightContribution = dot(normalize(normalVector), hardcodedLightVector);
-    gl_Position = cameraMatrix * vec4(vertexPosition, 1.0);
-    finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
-  }
+  vec3 worldNormal = mat3(theRotationMatrix) * normalVector;
+  vec3 hardcodedLightVector = normalize(vec3(0.5, 1.0, 1.0));
+  float lightContribution = max(dot(normalize(worldNormal), hardcodedLightVector), 0.0);
+  finalVertexColor = vec4(vertexColor, 1.0) * lightContribution;
+}
 `
 const FRAGMENT_SHADER = `
   #ifdef GL_ES
