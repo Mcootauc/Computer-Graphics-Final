@@ -1,20 +1,20 @@
-  import Vector from './vector.js'
-  /*
-  * This module defines/generates vertex arrays for certain predefined shapes.
-  * The "shapes" are returned as indexed vertices, with utility functions for
-  * converting these into "raw" coordinate arrays.
-  */
+import Vector from './vector.js'
+/*
+ * This module defines/generates vertex arrays for certain predefined shapes.
+ * The "shapes" are returned as indexed vertices, with utility functions for
+ * converting these into "raw" coordinate arrays.
+ */
 
-  /**
-  *
-  *
-  * Let’s call the resulting data structure a “proto-geometry” because it has
-  * the beginnings of a geometry but nothing close to what three.js has (yet).
-  */
+/**
+ *
+ *
+ * Let’s call the resulting data structure a “proto-geometry” because it has
+ * the beginnings of a geometry but nothing close to what three.js has (yet).
+ */
 
-  //takes in a parameter of radius, height, and radial segments
-  //also takes in a parameter true or false to choose whether you want a wireframe or not
-  const sphere = (scaleFactor, subDivCount) => {
+//takes in a parameter of radius, height, and radial segments
+//also takes in a parameter true or false to choose whether you want a wireframe or not
+const sphere = (scaleFactor, subDivCount) => {
   // The core icosahedron coordinates.
   const X = 0.525731112119133606 * scaleFactor
   const Z = 0.850650808352039932 * scaleFactor
@@ -33,7 +33,7 @@
     [Z, -X, 0.0],
     [-Z, -X, 0.0]
   ]
-  
+
   let facesByIndex = [
     [1, 4, 0],
     [4, 9, 0],
@@ -108,9 +108,9 @@
     subdivideIcosahedron()
   }
   return { vertices, facesByIndex }
-  }
+}
 
-  const cylinder = (radius, height, radialSegments) => {
+const cylinder = (radius, height, radialSegments) => {
   const vertices = [
     [0, height, 0] // top vertex
   ]
@@ -153,9 +153,9 @@
     facesByIndex.push([i + 1 + radialSegments, i - 1, i + radialSegments])
   }
   return { vertices, facesByIndex }
-  }
+}
 
-  const cone = () => {
+const cone = () => {
   const radius = 0.9 * 0.5
   const height = 1.2 * 0.5
 
@@ -187,9 +187,9 @@
   facesByIndex.push([8, 1, 0])
 
   return { vertices, facesByIndex }
-  }
+}
 
-  const box = () => {
+const box = () => {
   return {
     vertices: [
       [0, 0, 0], //0
@@ -217,9 +217,9 @@
       [0, 1, 5]
     ]
   }
-  }
+}
 
-  const hexagonalPrism = () => {
+const hexagonalPrism = () => {
   return {
     vertices: [
       // FACE
@@ -240,25 +240,33 @@
     ],
 
     facesByIndex: [
-      [0, 1, 7],
+      [0, 1, 2],
+      [0, 2, 3],
+      [0, 3, 4],
+      [0, 4, 5],
       [0, 5, 6],
       [1, 2, 8],
-      [2, 8, 9],
+      [1, 8, 11],
       [2, 3, 9],
-      [3, 4, 10],
+      [2, 8, 9],
       [3, 9, 10],
-      [4, 5, 11],
-      [6, 7, 8],
-      [6, 10, 11]
+      [3, 4, 10],
+      [4, 5, 10],
+      [5, 6, 11],
+      [5, 9, 10],
+      [6, 10, 11],
+      [7, 8, 9],
+      [7, 9, 10],
+      [7, 10, 11]
     ]
   }
-  }
+}
 
-  /**
-  * Utility function for turning our nascent geometry object into a “raw” coordinate array
-  * arranged as triangles.
-  */
-  const toRawTriangleArray = protoGeometry => {
+/**
+ * Utility function for turning our nascent geometry object into a “raw” coordinate array
+ * arranged as triangles.
+ */
+const toRawTriangleArray = protoGeometry => {
   const result = []
 
   protoGeometry.facesByIndex.forEach(face => {
@@ -268,13 +276,13 @@
   })
 
   return result
-  }
+}
 
-  /*
-  * Utility function for turning indexed vertices into a “raw” coordinate array
-  * arranged as line segments.
-  */
-  const toRawLineArray = protoGeometry => {
+/*
+ * Utility function for turning indexed vertices into a “raw” coordinate array
+ * arranged as line segments.
+ */
+const toRawLineArray = protoGeometry => {
   const result = []
 
   protoGeometry.facesByIndex.forEach(face => {
@@ -291,14 +299,14 @@
   })
 
   return result
-  }
+}
 
-  /**
-  * Utility function for computing vertex normals.
-  *
-  * @param {object} protoGeometry
-  */
-  const computeFacetedNormals = protoGeometry => {
+/**
+ * Utility function for computing vertex normals.
+ *
+ * @param {object} protoGeometry
+ */
+const computeFacetedNormals = protoGeometry => {
   const result = []
   protoGeometry.facesByIndex.forEach(face => {
     // Access each vertex of the triangle.
@@ -324,9 +332,9 @@
     result.push(N.x, N.y, N.z)
   })
   return result
-  }
+}
 
-  const computeAllFaceNormals = geometry => {
+const computeAllFaceNormals = geometry => {
   let sumVector = new Vector(0, 0, 0)
   const result = []
   geometry.facesByIndex.forEach(face => {
@@ -353,10 +361,10 @@
   result.push(sumVector.x, sumVector.y, sumVector.z)
   // Push that normnal onto our result, _one per vertex_.
   return result
-  }
+}
 
-  const computeSmoothNormals = protoGeometry => {
-  const vertices =  protoGeometry.vertices
+const computeSmoothNormals = protoGeometry => {
+  const vertices = protoGeometry.vertices
   const theFaces = []
   const smoothNormalArr = []
   for (let i = 0; i < vertices.length; i++) {
@@ -371,12 +379,22 @@
 
   for (const element of theFaces) {
     const facesByIndex = element
-    const geometry = {vertices, facesByIndex}
+    const geometry = { vertices, facesByIndex }
     const smoothNormal = computeAllFaceNormals(geometry)
     smoothNormalArr.push(smoothNormal)
   }
-  const result = toRawTriangleArray({vertices: smoothNormalArr, facesByIndex: protoGeometry.facesByIndex})
+  const result = toRawTriangleArray({ vertices: smoothNormalArr, facesByIndex: protoGeometry.facesByIndex })
   return result
-  }
+}
 
-  export { sphere, cone, cylinder, toRawTriangleArray, toRawLineArray, hexagonalPrism, box, computeFacetedNormals, computeSmoothNormals }
+export {
+  sphere,
+  cone,
+  cylinder,
+  toRawTriangleArray,
+  toRawLineArray,
+  hexagonalPrism,
+  box,
+  computeFacetedNormals,
+  computeSmoothNormals
+}
