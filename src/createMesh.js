@@ -1,13 +1,6 @@
 import {
-  sphere,
-  cone,
-  cylinder,
-  toRawLineArray,
-  hexagonalPrism,
-  box,
   computeFacetedNormals,
-  computeSmoothNormals,
-  toRawTriangleArray
+  computeSmoothNormals
 } from './shapes'
 
 class Mesh {

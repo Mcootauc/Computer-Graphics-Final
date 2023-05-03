@@ -126,10 +126,10 @@ const Sandbox = props => {
     scene.setLightPosition(2.0, 0.0, 0.0)
   }
   const lightForward = () => {
-    scene.setLightPosition(0.0, 0.0, 2.0)
+    scene.setLightPosition(0.0, 0.0, -2.0)
   }
   const lightBackward = () => {
-    scene.setLightPosition(0.0, 0.0, -2.0)
+    scene.setLightPosition(0.0, 0.0, 2.0)
   }
 
   return (

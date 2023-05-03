@@ -21,6 +21,7 @@ import {
 import Scene from './scene/scene'
 import Vector from './vector'
 import Mesh from './createMesh'
+import Group from './group'
 
 const CANVAS_WIDTH = 512
 const CANVAS_HEIGHT = 512
@@ -28,14 +29,23 @@ const CANVAS_HEIGHT = 512
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
 
-  const sunMesh = new Mesh(sphere(0.5, 2.0), true)
+  const sunMesh = new Mesh(sphere(0.3, 2.0), true)
   sunMesh.setColor({ r: 1.0, g: 0.72, b: 0.0})
   sunMesh.setTranslation({ x: 0, y: 0, z: 0 })
+
+  const cylinderPlanet = new Mesh(cylinder(0.3, 0.3, 8), true)
+  cylinderPlanet.setColor({ r: 0.0, g: 0.5, b: 1.0 })
+  cylinderPlanet.setTranslation({ x: 1.5, y: 0.0, z: 0.0 })
+
+  const planets = new Group()
+  planets.add(sunMesh)
+  planets.add(cylinderPlanet)
 
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
   const [objectsToDraw] = useState([
     sunMesh,
+    cylinderPlanet,
   ])
 
   const [scene] = useState(new Scene())
@@ -90,10 +100,10 @@ const PitchedScene = props => {
     scene.setLightPosition(2.0, 0.0, 0.0)
   }
   const lightForward = () => {
-    scene.setLightPosition(0.0, 0.0, 2.0)
+    scene.setLightPosition(0.0, 0.0, -2.0)
   }
   const lightBackward = () => {
-    scene.setLightPosition(0.0, 0.0, -2.0)
+    scene.setLightPosition(0.0, 0.0, 2.0)
   }
 
   return (

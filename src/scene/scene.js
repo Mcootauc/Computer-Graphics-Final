@@ -39,7 +39,7 @@ const FRAGMENT_SHADER = `
 class Scene {
   constructor() {
     this.canvas = document.createElement('canvas')
-    this.canvas.width = 500
+    this.canvas.width = 1024
     this.canvas.height = 500
     this.objectsToDraw = []
     this.gl = getGL(this.canvas)
