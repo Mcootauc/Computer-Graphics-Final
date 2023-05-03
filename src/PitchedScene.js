@@ -26,49 +26,14 @@ const CANVAS_HEIGHT = 512
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
 
-  const blueSphereMesh = new Mesh(sphere(0.6, 1.0), true)
-  blueSphereMesh.setColor({ r: 0, g: 0.7, b: 1 })
-  blueSphereMesh.setTranslation({ x: -1.5, y: 0.7, z: 0 })
-
-  const pinkSphereMesh = new Mesh(sphere(0.6, 1.0), false)
-  pinkSphereMesh.setColor({ r: 1, g: 0.5, b: 1 })
-  pinkSphereMesh.setTranslation({ x: -1.5, y: -0.7, z: 0 })
-
-  const redCylinderMesh = new Mesh(cylinder(0.3, 0.3, 8), true)
-  redCylinderMesh.setColor({ r: 1, g: 0, b: 0 })
-  redCylinderMesh.setTranslation({ x: 1.5, y: 0.7, z: 0 })
-
-  const lightBlueCylinderMesh = new Mesh(cylinder(0.3, 0.3, 8), false)
-  lightBlueCylinderMesh.setColor({ r: 0.5, g: 1, b: 1 })
-  lightBlueCylinderMesh.setTranslation({ x: 1.5, y: -0.7, z: 0 })
-
-  const yellowConeMesh = new Mesh(cone(), true)
-  yellowConeMesh.setColor({ r: 1, g: 1, b: 0 })
-  yellowConeMesh.setTranslation({ x: -0.3, y: 1.5, z: 0 })
-
-  const lavenderConeMesh = new Mesh(cone(), false)
-  lavenderConeMesh.setColor({ r: 1, g: 1, b: 2 })
-  lavenderConeMesh.setTranslation({ x: 0.8, y: 1.5, z: 0 })
-
-  const limeHexagonalPrismMesh = new Mesh(hexagonalPrism(), true)
-  limeHexagonalPrismMesh.setColor({ r: 1, g: 1.5, b: 1 })
-  limeHexagonalPrismMesh.setTranslation({ x: -0.4, y: -1.5, z: 0 })
-
-  const orangeHexagonalPrismMesh = new Mesh(hexagonalPrism(), false)
-  orangeHexagonalPrismMesh.setColor({ r: 1.0, g: 0.6, b: 0})
-  orangeHexagonalPrismMesh.setTranslation({ x: 0.7, y: -1.5, z: 0 })
+  const sunMesh = new Mesh(sphere(0.5, 6.0), true)
+  sunMesh.setColor({ r: 1.0, g: 0.72, b: 0.0})
+  sunMesh.setTranslation({ x: 0, y: 0, z: 0 })
 
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
   const [objectsToDraw] = useState([
-    blueSphereMesh,
-    pinkSphereMesh,
-    redCylinderMesh,
-    lightBlueCylinderMesh,
-    yellowConeMesh,
-    lavenderConeMesh,
-    limeHexagonalPrismMesh,
-    orangeHexagonalPrismMesh
+    sunMesh,
   ])
   
   const [scene] = useState(new Scene());
