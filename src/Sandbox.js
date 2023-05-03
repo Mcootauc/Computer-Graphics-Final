@@ -146,5 +146,3 @@ const Sandbox = props => {
 };
 
 export default Sandbox;
-
-export default Sandbox
