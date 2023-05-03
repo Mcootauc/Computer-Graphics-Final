@@ -142,7 +142,7 @@ const Sandbox = props => {
         <button onClick={lightLeft}>Light Right</button>
       </div>
     </article>
-  );
-};
+  )
+}
 
-export default Sandbox;
+export default Sandbox
