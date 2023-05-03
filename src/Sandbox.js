@@ -125,6 +125,12 @@ const Sandbox = props => {
   const lightRight = () => {
     scene.setLightPosition(2.0, 0.0, 0.0)
   }
+  const lightForward = () => {
+    scene.setLightPosition(0.0, 0.0, 2.0)
+  }
+  const lightBackward = () => {
+    scene.setLightPosition(0.0, 0.0, -2.0)
+  }
 
   return (
     <article>
@@ -149,6 +155,8 @@ const Sandbox = props => {
           <button onClick={lightDown}>Light Down</button>
           <button onClick={lightRight}>Light Left</button>
           <button onClick={lightLeft}>Light Right</button>
+          <button onClick={lightForward}>Light Forward</button>
+          <button onClick={lightBackward}>Light Backward</button>
         </div>
     </div>
     </article>

@@ -59,14 +59,16 @@ const PitchedScene = props => {
     scene.drawScene()
   }
 
-  const handleBirdsEyeView = () => {
-    //attempted this and behind view but couldn't figure it out in the end
-    console.log('bird')
+  const handleTopView = () => {
     scene.setCameraPositionAndOrientation(new Vector(0, 1, 0), new Vector(0, 0, 0), new Vector(0, 0, -1))
   }
-
+  const handleBottomView = () => {
+    scene.setCameraPositionAndOrientation(new Vector(0, -1, 0), new Vector(0, 0, 0), new Vector(0, 0, -1))
+  }
+  const handleFrontView = () => {
+    scene.setCameraPositionAndOrientation(new Vector(0, 0, 0), new Vector(0, 0, 1), new Vector(0, 1, 0))
+  }
   const handleBehindView = () => {
-    console.log('behind')
     scene.setCameraPositionAndOrientation(new Vector(0, 0, 1), new Vector(0, 0, 0), new Vector(0, 1, 0))
   }
 
@@ -75,7 +77,6 @@ const PitchedScene = props => {
       element.wireframe = !element.wireframe
     })
   }
-
   const lightUp = () => {
     scene.setLightPosition(0.0, 2.0, 0.0)
   }
@@ -88,6 +89,12 @@ const PitchedScene = props => {
   const lightRight = () => {
     scene.setLightPosition(2.0, 0.0, 0.0)
   }
+  const lightForward = () => {
+    scene.setLightPosition(0.0, 0.0, 2.0)
+  }
+  const lightBackward = () => {
+    scene.setLightPosition(0.0, 0.0, -2.0)
+  }
 
   return (
     <article>
@@ -97,17 +104,27 @@ const PitchedScene = props => {
         Your favorite update-your-browser message here.
       </section>
       <div>
-        <button onClick={handleToggle}>Show shape</button>
-        <button onClick={handleWireframe}>Wireframe</button>
-        <button onClick={handleBirdsEyeView}>Birds Eye View</button>
-        <button onClick={handleBehindView}>Behind View</button>
-        <button onClick={lightUp}>Light Up</button>
-        <button onClick={lightDown}>Light Down</button>
-        <button onClick={lightRight}>Light Left</button>
-        <button onClick={lightLeft}>Light Right</button>
-      </div>
+        <div>
+          <button onClick={handleToggle}>Show shape</button>
+          <button onClick={handleWireframe}>Wireframe</button>
+        </div>
+        <div>
+          <button onClick={handleTopView}>Top View</button>
+          <button onClick={handleBottomView}>Bottom View</button>
+          <button onClick={handleFrontView}>Front View</button>
+          <button onClick={handleBehindView}>Behind View</button>
+        </div>
+        <div>
+          <button onClick={lightUp}>Light Up</button>
+          <button onClick={lightDown}>Light Down</button>
+          <button onClick={lightRight}>Light Left</button>
+          <button onClick={lightLeft}>Light Right</button>
+          <button onClick={lightForward}>Light Forward</button>
+          <button onClick={lightBackward}>Light Backward</button>
+        </div>
+    </div>
     </article>
-  );
+  )
 };
 
 export default PitchedScene;
