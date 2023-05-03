@@ -11,7 +11,7 @@ class Group {
   add(object) {
     if (object.parent !== null) {
       object.parent.remove(object)
-    } else if (!this.object.parent.includes(object)) {
+    } else if (!object.parent.includes(object)) {
       object.parent = this
       this.children.push(object)
     }
