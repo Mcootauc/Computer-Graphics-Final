@@ -170,6 +170,7 @@ class Scene {
     this.objectsToDraw.forEach(objectToDraw => {
       if (objectToDraw.wireframe === true) {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawLineArray(objectToDraw.vertices))
+        //console.log("Wireframe buffer length: ", toRawLineArray(objectToDraw.vertices).length)
       } else {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawTriangleArray(objectToDraw.vertices))
       }
