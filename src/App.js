@@ -26,7 +26,6 @@ const App = () => {
       <nav>
         <NavLink className={classNamePicker} to="/sandbox">
           Sandbox Scene
-        </NavLink> }
         </NavLink>
 
         <NavLink className={classNamePicker} to="/pitched">
