@@ -159,7 +159,8 @@ const cone = () => {
   const radius = 0.9 * 0.5
   const height = 1.2 * 0.5
 
-  const vertices = [    [0, height, 0] // top vertex
+  const vertices = [
+    [0, height, 0] // top vertex
   ]
 
   // generate base vertices around the circle
@@ -206,8 +207,6 @@ const cone = () => {
 
   return { vertices, facesByIndex }
 }
-
-
 
 const box = () => {
   return {
