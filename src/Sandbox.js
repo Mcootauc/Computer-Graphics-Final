@@ -44,7 +44,7 @@ const Sandbox = props => {
   lightBlueCylinderMesh.setColor({ r: 0.5, g: 1, b: 1 })
   lightBlueCylinderMesh.setTranslation({ x: 1.5, y: -0.7, z: 0 })
 
-  const yellowConeMesh = new Mesh(cone(), true)
+  const yellowConeMesh = new Mesh(cone(), false)
   yellowConeMesh.setColor({ r: 1, g: 1, b: 0 })
   yellowConeMesh.setTranslation({ x: -0.3, y: 1.5, z: 0 })
 
