@@ -46,8 +46,19 @@ class Scene {
     this.cameraMatrix = null;
 
     this.cameraPosition = new Vector(0, 0, 0);
-    this.targetPosition = new Vector(0, 0, 0);
-    this.upVector = new Vector(0, 0, 0);
+    this.targetPosition = new Vector(0, 0, -1);
+    this.upVector = new Vector(1, 1, 0);
+
+    const ze = this.cameraPosition.subtract(this.targetPosition).unit
+    const ye = this.upVector.subtract(this.upVector.projection(ze)).unit
+    const xe = ye.cross(ze)
+
+    this.cameraMatrixArray = [
+      xe.x, ye.x, ze.x, 0,
+      xe.y, ye.y, ze.y, 0,
+      xe.z, ye.z, ze.z, 0,
+      -this.cameraPosition.dot(xe), -this.cameraPosition.dot(ye), -this.cameraPosition.dot(ze), 1
+    ]
     this.lightPosition = {x: 0.0, y: 0.0, z: 0.0};
     // Initialize the shaders.
     let abort = false
@@ -85,7 +96,7 @@ class Scene {
     const ye = up.subtract(up.projection(ze)).unit
     const xe = ye.cross(ze)
   
-    const cameraMatrixArray = [
+    this.cameraMatrixArray = [
       xe.x, ye.x, ze.x, 0,
       xe.y, ye.y, ze.y, 0,
       xe.z, ye.z, ze.z, 0,
@@ -94,7 +105,7 @@ class Scene {
   
     this.cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix')
 
-    console.log("New Matrix for Camera", cameraMatrixArray)
+    console.log("New Matrix for Camera", this.cameraMatrixArray)
   }
   
 
@@ -188,24 +199,6 @@ class Scene {
     const orthographicProjection = this.gl.getUniformLocation(this.shaderProgram, 'theOrthoProjection')
     const cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix')
 
-    const P = new Vector(0, 0, 0)
-    const Q = new Vector(0, 0, -1)
-    const up = new Vector(1, 1, 0)
-
-    const ze = P.subtract(Q).unit
-    const ye = up.subtract(up.projection(ze)).unit
-    const xe = ye.cross(ze)
-
-    // prettier-ignore
-    const cameraMatrixArray = [
-      xe.x, ye.x, ze.x, 0,
-      xe.y, ye.y, ze.y, 0,
-      xe.z, ye.z, ze.z, 0,
-      -P.dot(xe), -P.dot(ye), -P.dot(ze), 1
-    ]
-
-    
-
     const drawObject = object => {
       // Set up the translation matrix with each object's unique translation on scene
       this.gl.uniformMatrix4fv(
@@ -259,7 +252,7 @@ class Scene {
         this.gl.FALSE,
         new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
       )
-      this.gl.uniformMatrix4fv(cameraMatrix, this.gl.FALSE, new Float32Array(cameraMatrixArray))
+      this.gl.uniformMatrix4fv(cameraMatrix, this.gl.FALSE, new Float32Array(this.cameraMatrixArray))
       //console.log("Camera Matrix: ", cameraMatrixArray)
 
       // Display the objects.

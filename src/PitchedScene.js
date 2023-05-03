@@ -28,7 +28,7 @@ const CANVAS_HEIGHT = 512
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
 
-  const sunMesh = new Mesh(sphere(0.5, 6.0), true)
+  const sunMesh = new Mesh(sphere(0.5, 2.0), true)
   sunMesh.setColor({ r: 1.0, g: 0.72, b: 0.0})
   sunMesh.setTranslation({ x: 0, y: 0, z: 0 })
 
