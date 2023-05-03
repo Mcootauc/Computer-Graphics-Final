@@ -159,8 +159,7 @@ const cone = () => {
   const radius = 0.9 * 0.5
   const height = 1.2 * 0.5
 
-  const vertices = [
-    [0, height, 0] // top vertex
+  const vertices = [    [0, height, 0] // top vertex
   ]
 
   // generate base vertices around the circle
@@ -172,13 +171,32 @@ const cone = () => {
     vertices.push([x, y, z])
   }
 
+  // generate vertices for the base
+  for (let i = 0; i < 8; i++) {
+    const angle = (i / 8) * Math.PI * 2
+    const x = Math.sin(angle) * radius
+    const y = 0
+    const z = Math.cos(angle) * radius
+    vertices.push([x, y, z])
+  }
+
   const facesByIndex = []
 
-  // generate faces for the base
+  // generate faces for the top
   for (let i = 1; i < 8; i++) {
     facesByIndex.push([0, i, i + 1])
   }
   facesByIndex.push([0, 8, 1])
+
+  // generate faces for the base
+  const baseStartIndex = 9
+  for (let i = baseStartIndex; i < vertices.length; i++) {
+    const firstIndex = i
+    const secondIndex = (i + 1) % vertices.length
+    const thirdIndex = baseStartIndex - 1
+    facesByIndex.push([thirdIndex, secondIndex, firstIndex])
+  }
+  facesByIndex.push([8, 1, 0])
 
   // generate faces for the sides
   for (let i = 1; i < 8; i++) {
@@ -188,6 +206,8 @@ const cone = () => {
 
   return { vertices, facesByIndex }
 }
+
+
 
 const box = () => {
   return {
