@@ -39,7 +39,7 @@ const FRAGMENT_SHADER = `
 class Scene {
   constructor() {
     this.canvas = document.createElement('canvas')
-    this.canvas.width = 500
+    this.canvas.width = 1000
     this.canvas.height = 500
     this.objectsToDraw = []
     this.gl = getGL(this.canvas)
@@ -165,7 +165,7 @@ class Scene {
     this.gl.enable(this.gl.DEPTH_TEST)
     this.gl.enable(this.gl.CULL_FACE)
     this.gl.clearColor(0.0, 0.0, 0.0, 0.0)
-    this.gl.viewport(0, 0, this.canvas.width, this.canvas.height)
+    this.gl.viewport(0, 0, this.canvas.width - 500, this.canvas.height)
     // Pass the vertices to WebGL.
     this.objectsToDraw.forEach(objectToDraw => {
       if (objectToDraw.wireframe === true) {
