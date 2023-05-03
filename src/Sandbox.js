@@ -2,6 +2,9 @@
  * Build out this component to display your pitched scene—the one that goes full circle to the first assignment,
  * but now done using your own 3D library. It doesn’t have to be the same scene of course—that was done with
  * a different group, many many weeks ago!
+ * Build out this component to display your pitched scene—the one that goes full circle to the first assignment,
+ * but now done using your own 3D library. It doesn’t have to be the same scene of course—that was done with
+ * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -18,7 +21,6 @@ import {
 import Scene from './scene/scene'
 import Vector from './vector'
 import Mesh from './createMesh'
-
 
 const CANVAS_WIDTH = 512
 const CANVAS_HEIGHT = 512
@@ -55,7 +57,7 @@ const Sandbox = props => {
   limeHexagonalPrismMesh.setTranslation({ x: -0.4, y: -1.5, z: 0 })
 
   const orangeHexagonalPrismMesh = new Mesh(hexagonalPrism(), false)
-  orangeHexagonalPrismMesh.setColor({ r: 1.0, g: 0.6, b: 0})
+  orangeHexagonalPrismMesh.setColor({ r: 1.0, g: 0.6, b: 0 })
   orangeHexagonalPrismMesh.setTranslation({ x: 0.7, y: -1.5, z: 0 })
 
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
@@ -70,51 +72,43 @@ const Sandbox = props => {
     limeHexagonalPrismMesh,
     orangeHexagonalPrismMesh
   ])
-  
-  const [scene] = useState(new Scene());
+
+  const [scene] = useState(new Scene())
 
   useEffect(() => {
-    const pitchedCanvas = canvasContainerRef.current;
+    const pitchedCanvas = canvasContainerRef.current
     if (!pitchedCanvas) {
-      return;
+      return
     }
 
-    scene.setCanvas(pitchedCanvas);
-    scene.setObjectsToDraw(objectsToDraw);
+    scene.setCanvas(pitchedCanvas)
+    scene.setObjectsToDraw(objectsToDraw)
     scene.setLightPosition(1.5, 0.0, 1.0)
-    scene.drawScene();
-  }, []);
+    scene.drawScene()
+  }, [])
 
   const handleToggle = () => {
-    objectsToDraw.forEach((element) => {
-      element.visible = !element.visible;
-    });
-    scene.drawScene();
-  };
+    objectsToDraw.forEach(element => {
+      element.visible = !element.visible
+    })
+    scene.drawScene()
+  }
 
-  const handleBirdsEyeView = () => {  //attempted this and behind view but couldn't figure it out in the end 
-    console.log("bird")
-    scene.setCameraPositionAndOrientation(
-      new Vector(0, 1, 0),
-      new Vector(0, 0, 0),
-      new Vector(0, 0, -1)
-    );
-  };
-  
+  const handleBirdsEyeView = () => {
+    //attempted this and behind view but couldn't figure it out in the end
+    console.log('bird')
+    scene.setCameraPositionAndOrientation(new Vector(0, 1, 0), new Vector(0, 0, 0), new Vector(0, 0, -1))
+  }
+
   const handleBehindView = () => {
-    console.log("behind")
-    scene.setCameraPositionAndOrientation(
-      new Vector(0, 0, 1),
-      new Vector(0, 0, 0),
-      new Vector(0, 1, 0)
-    );
-  };
-  
+    console.log('behind')
+    scene.setCameraPositionAndOrientation(new Vector(0, 0, 1), new Vector(0, 0, 0), new Vector(0, 1, 0))
+  }
 
   const handleWireframe = () => {
-    objectsToDraw.forEach((element) => {
-      element.wireframe = !element.wireframe;
-    });
+    objectsToDraw.forEach(element => {
+      element.wireframe = !element.wireframe
+    })
   }
 
   const lightUp = () => {
@@ -132,22 +126,15 @@ const Sandbox = props => {
 
   return (
     <article>
-      <p>
-        Use this component to implement your pitched scene—the one with an
-        intended purpose, use cases, etc.
-      </p>
+      <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
 
-      <section
-        width={CANVAS_WIDTH}
-        height={CANVAS_HEIGHT}
-        ref={canvasContainerRef}
-      >
+      <section width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasContainerRef}>
         Your favorite update-your-browser message here.
       </section>
       <div>
         <button onClick={handleToggle}>Show shape</button>
         <button onClick={handleWireframe}>Wireframe</button>
-        <button onClick={handleBirdsEyeView}>Birds Eye View</button> 
+        <button onClick={handleBirdsEyeView}>Birds Eye View</button>
         <button onClick={handleBehindView}>Behind View</button>
         <button onClick={lightUp}>Light Up</button>
         <button onClick={lightDown}>Light Down</button>
@@ -159,3 +146,5 @@ const Sandbox = props => {
 };
 
 export default Sandbox;
+
+export default Sandbox

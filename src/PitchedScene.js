@@ -3,25 +3,13 @@
  * but now done using your own 3D library. It doesn’t have to be the same scene of course—that was done with
  * a different group, many many weeks ago!
  */
-import { useEffect, useRef, useState } from 'react'
-import {
-  sphere,
-  cone,
-  cylinder,
-  toRawLineArray,
-  hexagonalPrism,
-  box,
-  computeFacetedNormals,
-  computeSmoothNormals,
-  toRawTriangleArray
-} from './shapes'
-import Scene from './scene/scene'
-import Vector from './vector'
-import Mesh from './createMesh'
-
+import { useEffect, useRef } from 'react'
 
 const CANVAS_WIDTH = 512
 const CANVAS_HEIGHT = 512
+
+const FRAMES_PER_SECOND = 30
+const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
 
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
@@ -39,88 +27,51 @@ const PitchedScene = props => {
   const [scene] = useState(new Scene());
 
   useEffect(() => {
-    const pitchedCanvas = canvasContainerRef.current;
-    if (!pitchedCanvas) {
-      return;
+    const canvas = canvasRef.current
+    if (!canvas) {
+      return
     }
 
-    scene.setCanvas(pitchedCanvas);
-    scene.setObjectsToDraw(objectsToDraw);
-    scene.setLightPosition(1.5, 0.0, 1.0)
-    scene.drawScene();
-  }, []);
+    const renderingContext = canvas.getContext('2d')
 
-  const handleToggle = () => {
-    objectsToDraw.forEach((element) => {
-      element.visible = !element.visible;
-    });
-    scene.drawScene();
-  };
+    let previousTimestamp
+    const nextFrame = timestamp => {
+      // Initialize the timestamp.
+      if (!previousTimestamp) {
+        previousTimestamp = timestamp
+        window.requestAnimationFrame(nextFrame)
+        return
+      }
 
-  const handleBirdsEyeView = () => {  //attempted this and behind view but couldn't figure it out in the end 
-    console.log("bird")
-    scene.setCameraPositionAndOrientation(
-      new Vector(0, 1, 0),
-      new Vector(0, 0, 0),
-      new Vector(0, 0, -1)
-    );
-  };
-  
-  const handleBehindView = () => {
-    console.log("behind")
-    scene.setCameraPositionAndOrientation(
-      new Vector(0, 0, 1),
-      new Vector(0, 0, 0),
-      new Vector(0, 1, 0)
-    );
-  };
-  
+      // Check if it’s time to advance.
+      const progress = timestamp - previousTimestamp
+      if (progress < MILLISECONDS_PER_FRAME) {
+        // Do nothing if it’s too soon.
+        window.requestAnimationFrame(nextFrame)
+        return
+      }
 
-  const handleWireframe = () => {
-    objectsToDraw.forEach((element) => {
-      element.wireframe = !element.wireframe;
-    });
-  }
+      // This is not the code you’re looking for.
+      renderingContext.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+      renderingContext.fillText(`timestamp: ${timestamp}`, 10, 20)
 
-  const lightUp = () => {
-    scene.setLightPosition(0.0, 2.0, 0.0)
-  }
-  const lightDown = () => {
-    scene.setLightPosition(0.0, -2.0, 0.0)
-  }
-  const lightLeft = () => {
-    scene.setLightPosition(-2.0, 0.0, 0.0)
-  }
-  const lightRight = () => {
-    scene.setLightPosition(2.0, 0.0, 0.0)
-  }
+      // Request the next frame.
+      previousTimestamp = timestamp
+      window.requestAnimationFrame(nextFrame)
+    }
+
+    window.requestAnimationFrame(nextFrame)
+  }, [canvasRef])
 
   return (
     <article>
-      <p>
-        Use this component to implement your pitched scene—the one with an
-        intended purpose, use cases, etc.
-      </p>
+      <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
 
-      <section
-        width={CANVAS_WIDTH}
-        height={CANVAS_HEIGHT}
-        ref={canvasContainerRef}
-      >
+      <canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasRef}>
         Your favorite update-your-browser message here.
-      </section>
-      <div>
-        <button onClick={handleToggle}>Show shape</button>
-        <button onClick={handleWireframe}>Wireframe</button>
-        <button onClick={handleBirdsEyeView}>Birds Eye View</button> 
-        <button onClick={handleBehindView}>Behind View</button>
-        <button onClick={lightUp}>Light Up</button>
-        <button onClick={lightDown}>Light Down</button>
-        <button onClick={lightRight}>Light Left</button>
-        <button onClick={lightLeft}>Light Right</button>
-      </div>
+      </canvas>
     </article>
-  );
-};
+  )
+}
 
-export default PitchedScene;
+export default PitchedScene
