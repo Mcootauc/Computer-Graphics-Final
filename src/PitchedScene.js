@@ -29,12 +29,14 @@ const CANVAS_HEIGHT = 512
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
 
+  // the planet doesn't rotate
   const bluePlanet = new Mesh(sphere(0.3, 4.0), true)
   bluePlanet.setColor({ r: 0.0, g: 0.5, b: 1.0 })
   bluePlanet.setTranslation({ x: 0, y: 0, z: 0 })
   bluePlanet.setRotationXYZ({ x: 0.0, y: 0.0, z: 0.0 })
 
-  const bluePlanetGrayMoon = new Mesh(sphere(0.2, 1.0))
+  // the moon rotates around the planet
+  const bluePlanetGrayMoon = new Mesh(sphere(0.2, 1.0), false)
   bluePlanetGrayMoon.setColor({ r: 0.72, g: 0.68, b: 0.64 })
   bluePlanetGrayMoon.setTranslation({ x: 1.5, y: 0.0, z: 0.0 })
   bluePlanetGrayMoon.setRotationXYZ({ x: 0.0, y: 0.0, z: 1.0 })
@@ -42,7 +44,6 @@ const PitchedScene = props => {
   const planetAndMoon = new Group()
   planetAndMoon.add(bluePlanet)
   planetAndMoon.add(bluePlanetGrayMoon)
-
 
   const topSpaceship = new Mesh(cone(), false)
   topSpaceship.setColor({ r: 0.0, g: 1.0, b: 1.0 })
