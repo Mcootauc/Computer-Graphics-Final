@@ -30,9 +30,7 @@ class Mesh {
   setRotationXYZ(rotationXYZ) {
     this.rotationXYZ = rotationXYZ
   }
-  setRotationSpeed(rotationSpeed) {
-    this.rotationSpeed = rotationSpeed
-  }
+  
   setWireFrame(wireframe) {
     this.wireframe = wireframe
   }

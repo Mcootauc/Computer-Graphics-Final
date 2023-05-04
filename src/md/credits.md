@@ -5,13 +5,15 @@ Mitchell:
 - Implemented lighting to the scene
 - Created createMesh.js completely
 - Created Smooth and Faceted Shapes
+- created planetAndMoon Group
 - Fixed Up, Down, Left, Right Views 
 - Created Up, Down, Left, Right Lighting 
 - Fixed the Camera to work properly
 - Fixed group.js and implemented functions
 - Added Rotation to the Scene
 - Worked on the toggle between wireframe and solid rendering
-- Updated rotationMatrix to accept non rotating shapes
+- Worked on Scale Matrix
+- Updated rotationMatrix to accept non rotating shape
 
 Kevin:
 - Began implementation of scene
