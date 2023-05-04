@@ -82,7 +82,7 @@ const PitchedScene = props => {
     scene.setObjectsToDraw(objectsToDraw)
     scene.setLightPosition(-2.0, 0.0, 0.0)
     scene.drawScene()
-  }, [])
+  }, [objectsToDraw, scene])
 
   const handleToggle = () => {
     objectsToDraw.forEach(element => {

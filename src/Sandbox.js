@@ -75,7 +75,7 @@ const Sandbox = props => {
     scene.setObjectsToDraw(objectsToDraw)
     scene.setLightPosition(1.5, 0.0, 1.0)
     scene.drawScene()
-  }, [])
+  }, [objectsToDraw, scene])
 
   const handleToggle = () => {
     objectsToDraw.forEach(element => {
