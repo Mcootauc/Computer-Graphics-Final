@@ -15,8 +15,11 @@ Mitchell:
 
 Kevin:
 - Began implementation of scene
-- Attempted to make WebGL conversion for matrix
-- Attempted matrix multiplication
+- Attempted to make WebGL conversion for matrix and unit test
+- Attempted matrix multiplication and unit test
+- Attempted perspective matrix and unit test
+- Attempted to implement lighting
+- Started group class and add/remove
 
 Gage:
 - Worked on wireframe
