@@ -19,7 +19,8 @@ Kevin:
 
 Gage:
 - Worked on wireframe
-- Worked on lookAt(not used)/setCameraPositionAndOrientation function
+- Worked on lookAt(not used) function, turned into setCameraPositionAndOrientation function
 - Canvas shape
 - Attempted matrix multiplication
+- Attempted translation matrix
 - Made and cleaned up unit tests
