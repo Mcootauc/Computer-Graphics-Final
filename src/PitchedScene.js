@@ -36,6 +36,7 @@ const PitchedScene = props => {
   planetAndMoon.add(bluePlanet)
   planetAndMoon.add(bluePlanetGrayMoon)
 
+  // Kevin Perez:
   const topSpaceship = new Mesh(cone(), false)
   topSpaceship.setColor({ r: 1.0, g: 0.1, b: 1.0 })
   topSpaceship.setTranslation({ x: 0.5, y: 1.2, z: 0.0 })

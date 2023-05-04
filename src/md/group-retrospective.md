@@ -1,6 +1,6 @@
 **_Our Own 3D Library_**
 
-Mitchell Cootauco: Overall, I think we all should have put more time and effort because we could have done much better.
+Mitchell Cootauco: Overall, I think we all should have put more time and effort because we could have done much better.\
 Kevin Perez: As said by Mitchell, as well as making scene more interactive.
 
 **Credits**
@@ -30,11 +30,11 @@ Kevin:
 
 - Began implementation of scene
 - Attempted to make WebGL conversion for matrix and unit test
-- Attempted matrix multiplication and unit test
-- Attempted perspective matrix and unit test
+- Implemented matrix multiplication and unit test
+- Implemented perspective matrix and unit test
 - Attempted lighting
 - Implemented shaders
-- Rotaation around X&Y + speed for mesh
+- Rotation around X&Y + speed for mesh
 - Started group class and implemented add/remove
 - Attempted scene add/remove(not implemented)
 
