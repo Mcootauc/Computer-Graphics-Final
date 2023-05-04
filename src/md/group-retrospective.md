@@ -2,6 +2,7 @@
 
 Mitchell Cootauco: Overall, I think we all should have put more time and effort because we could have done much better.\
 Kevin Perez: As said by Mitchell, as well as making scene more interactive.
+Gage Messner: I think we had the necessary parts but could have added more to make our scene more interactive.
 
 **Credits**
 Mitchell:
