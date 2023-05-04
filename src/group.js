@@ -5,7 +5,6 @@ class Group {
   }
 
   add(object) {
-    object.parent = this
     this.children.push(object)
   }
 
