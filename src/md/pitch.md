@@ -14,6 +14,10 @@ When set to true, custom shapes appear on the screen.
 _Wireframe:_
 When set to true, only the lines connecting the vertices appear for all of our shapes.
 
+WireFrame doesn't work on mac for these reasons:
+https://discourse.threejs.org/t/vertex-buffer-is-not-big-enough-for-the-draw-call-only-on-mac-computers/43628
+https://stackoverflow.com/questions/71846106/webgl-cannot-draw-more-than-44-points-even-if-enough-buffer-space
+
 **Camera**
 
 _Top View:_
