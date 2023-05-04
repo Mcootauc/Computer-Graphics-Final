@@ -32,6 +32,8 @@ When toggled, it lets us view our scene straight on. The camera matrix is set to
 _Behind View:_
 When toggled, it lets us view our scene from the back. The camera matrix is set to #((0, 0, 1), (0, 0, 0), (0, 1, 0)).
 
+_Orthographic or Perspective Projection:_ When toggled, it lets us view our scene from either an orthographic or perspective projection.
+
 **Lighting**
 
 _Light Up:_
