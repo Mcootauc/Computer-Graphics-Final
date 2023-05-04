@@ -89,7 +89,6 @@ const PitchedScene = props => {
       element.visible = !element.visible
     })
     scene.drawScene()
-    console.log('objectsToDraw', objectsToDraw)
   }
   const handleWireframe = () => {
     objectsToDraw.forEach(element => {
