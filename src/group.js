@@ -8,14 +8,6 @@ class Group {
     this.children.push(object);
   }
 
-  add(object) {
-    // if (object.parent !== null) {
-    //   object.parent.remove(object)
-    // }
-    object.parent = this
-    this.children.push(object)
-  }
-
   remove(object) {
     const index = this.children.indexOf(object)
     if (index !== -1) {
