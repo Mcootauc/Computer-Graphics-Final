@@ -8,42 +8,42 @@ When you load into our scene, it has a singular spaceship that rotates around Pl
 
 **General**
 
-*Show Shape*
-When set to true, shapes appear on the screen. 
+*Show Shape:*
+When set to true, custom shapes appear on the screen. 
 
-*Wireframe*
+*Wireframe:*
 When set to true, only the lines connecting the vertices appear for all of our shapes.
 
 **Camera**
 
-*Top View*
+*Top View:*
 When toggled, it lets us view our scene from the top looking down. The camera matrix is set to #((0, 1, 0), (0, 0, 0), (0, 0, -1)).
 
-*Bottom View*
+*Bottom View:*
 When toggled, it lets us view our scene from the bottom looking up. The camera matrix is set to #((0, -1, 0), (0, 0, 0), (0, 0, -1)).
 
-*Front View*
+*Front View:*
 When toggled, it lets us view our scene straight on. The camera matrix is set to #((0, 0, 0), (0, 0, 1), (0, 1, 0)).
 
-*Behind View*
+*Behind View:*
 When toggled, it lets us view our scene from the back. The camera matrix is set to #((0, 0, 1), (0, 0, 0), (0, 1, 0)).
 
 **Lighting**
 
-*Light Up*
+*Light Up:*
 When toggled, it lights our scene from the top. The light matrix is set to #(0.0, 2.0, 0.0)
 
-*Light Down*
+*Light Down:*
 When toggled, it lights our scene from the bottom. The light matrix is set to #(0.0, -2.0, 0.0)
 
-*Light Left*
+*Light Left:*
 When toggled, it lights our scene from the left. The light matrix is set to #(-2.0, 0.0, 0.0)
 
-*Light Right*
+*Light Right:*
 When toggled, it lights our scene from the right. The light matrix is set to #(2.0, 0.0, 0.0)
 
-*Light Forward*
+*Light Forward:*
 When toggled, it lights our scene from the front. The light matrix is set to #(0.0, 0.0, -2.0)
 
-*Light Backward*
+*Light Backward:*
 When toggled, it lights our scene from the back. The light matrix is set to #(0.0, 0.0, 2.0)
