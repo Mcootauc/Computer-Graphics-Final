@@ -29,18 +29,20 @@ const CANVAS_HEIGHT = 512
 const PitchedScene = props => {
   const canvasContainerRef = useRef()
 
-  const sunMesh = new Mesh(sphere(0.3, 2.0), true)
-  sunMesh.setColor({ r: 1.0, g: 0.72, b: 0.0 })
-  sunMesh.setTranslation({ x: 0, y: 0, z: 0 })
-  sunMesh.setRotation({ x: 0.0, y: 0.0, z: 0.0 })
+  const bluePlanet = new Mesh(sphere(0.3, 3.0), true)
+  bluePlanet.setColor({ r: 0.0, g: 0.5, b: 1.0 })
+  bluePlanet.setTranslation({ x: 0, y: 0, z: 0 })
+  bluePlanet.setRotationXYZ({ x: 0.0, y: 0.0, z: 0.0 })
 
-  const cylinderPlanet = new Mesh(cylinder(0.3, 0.3, 8), true)
-  cylinderPlanet.setColor({ r: 0.0, g: 0.5, b: 1.0 })
-  cylinderPlanet.setTranslation({ x: 1.5, y: 0.0, z: 0.0 })
-  cylinderPlanet.setRotation({ x: 0.0, y: 0.0, z: 1.0 })
+  const bluePlanetGrayMoon = new Mesh(sphere(0.2, 3.0))
+  bluePlanetGrayMoon.setColor({ r: 0.72, g: 0.68, b: 0.64 })
+  bluePlanetGrayMoon.setTranslation({ x: 1.5, y: 0.0, z: 0.0 })
+  bluePlanetGrayMoon.setRotationXYZ({ x: 0.0, y: 0.0, z: 1.0 })
 
-  const planets = new Group()
-  planets.add(cylinderPlanet)
+  const planetAndMoon = new Group()
+  planetAndMoon.add(bluePlanet)
+  planetAndMoon.add(bluePlanetGrayMoon)
+
 
   const topSpaceship = new Mesh(cone(), false)
   topSpaceship.setColor({ r: 0.0, g: 1.0, b: 1.0 })
@@ -56,7 +58,7 @@ const PitchedScene = props => {
 
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
-  const [objectsToDraw] = useState(planets.children, spaceship)
+  const [objectsToDraw] = useState(planetAndMoon.children, spaceship)
 
   const [scene] = useState(new Scene())
 

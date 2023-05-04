@@ -179,10 +179,10 @@ class Scene {
       this.gl.uniformMatrix4fv(
         theRotationMatrix,
         this.gl.FALSE,
-        new Float32Array(rotationMatrix(currentRotation, object.rotation.x, object.rotation.y, object.rotation.z))
+        new Float32Array(rotationMatrix(currentRotation * object.rotationSpeed, object.rotationXYZ.x, object.rotationXYZ.y, object.rotationXYZ.z))
       )
-      console.log("roration 1:", new Float32Array(rotationMatrix(0, object.rotation.x, object.rotation.y, object.rotation.z)))
-      console.log("roration 2:", new Float32Array(rotationMatrix(currentRotation, object.rotation.x, object.rotation.y, object.rotation.z)))
+      console.log("roration 1:", new Float32Array(rotationMatrix(currentRotation, 0, 0, 0)))
+      console.log("roration 2:", new Float32Array(rotationMatrix(100, object.rotationXYZ.x, object.rotationXYZ.y, object.rotationXYZ.z)))
 
       this.gl.uniform3f(
         this.gl.getUniformLocation(this.shaderProgram, 'vertexColor'),
