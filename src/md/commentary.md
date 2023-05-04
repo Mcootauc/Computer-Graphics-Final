@@ -15,7 +15,7 @@
 - The grouping of shapes
 
 3. How much code for using your library is the same at the application level, regardless of the specific scene?
-
+- most of the code is handled repeatedly in each scene
 
 4. What aspects of your design would you keep, if you got a chance to do this library over?
 We would keep:
