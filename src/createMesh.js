@@ -1,15 +1,13 @@
-import {
-  computeFacetedNormals,
-  computeSmoothNormals
-} from './shapes'
+import { computeFacetedNormals, computeSmoothNormals } from './shapes'
 
 class Mesh {
-  constructor(shape, smooth, rotation) {
+  constructor(shape, smooth) {
     this.vertices = shape
     this.color = { r: 0, g: 0, b: 0 }
     this.translation = { x: 0, y: 0, z: 0 }
     this.rotationXYZ = { x: 0, y: 0, z: 0 }
     this.rotationSpeed = 1.0
+    this.rotationXY = { x: 0, y: 0 }
     this.wireframe = false
     if (smooth) {
       this.normals = computeSmoothNormals(shape)
@@ -30,7 +28,11 @@ class Mesh {
   setRotationXYZ(rotationXYZ) {
     this.rotationXYZ = rotationXYZ
   }
-  
+  setRotationXY(rotationXY, rotationSpeed) {
+    this.rotationXY = rotationXY
+    this.rotationSpeed = rotationSpeed
+  }
+
   setWireFrame(wireframe) {
     this.wireframe = wireframe
   }

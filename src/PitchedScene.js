@@ -41,15 +41,16 @@ const PitchedScene = props => {
   bluePlanetGrayMoon.setTranslation({ x: 1.5, y: 0.0, z: 0.0 })
   bluePlanetGrayMoon.setRotationXYZ({ x: 0.0, y: 0.0, z: 1.0 })
 
-  const topSpaceship = new Mesh(cone(), false)
-  topSpaceship.setColor({ r: 1.0, g: 0.1, b: 1.0 })
-  topSpaceship.setTranslation({ x: 0.5, y: 1.2, z: 0.0 })
-  topSpaceship.setRotationXYZ({ x: 1.5, y: 0.5, z: -1.5 })
+  const sideUFO = new Mesh(cone(), false)
+  sideUFO.setColor({ r: 1.0, g: 0.1, b: 1.0 })
+  sideUFO.setTranslation({ x: 0.5, y: 1.2, z: 0.0 })
+  sideUFO.setRotationXYZ({ x: 1.5, y: 0.5, z: -1.5 })
+  sideUFO.setRotationXY({ x: 1.0, y: 0.5 }, 0.5)
 
-  const bottomSpaceship = new Mesh(hexagonalPrism(), false)
-  bottomSpaceship.setColor({ r: 0.0, g: 1.0, b: 1.0 })
-  bottomSpaceship.setTranslation({ x: 0.5, y: 1.0, z: 0.0 })
-  bottomSpaceship.setRotationXYZ({ x: 1.5, y: 0.5, z: -1.5 })
+  const upperSpaceship = new Mesh(hexagonalPrism(), false)
+  upperSpaceship.setColor({ r: 0.0, g: 1.0, b: 1.0 })
+  upperSpaceship.setTranslation({ x: 0.5, y: 1.0, z: 0.0 })
+  upperSpaceship.setRotationXYZ({ x: 1.5, y: 0.5, z: -1.5 })
 
   const lowerSpaceship = new Mesh(cylinder(0.3, 0.3, 8), false)
   lowerSpaceship.setColor({ r: 1.0, g: 1.0, b: 1.0 })
@@ -60,9 +61,9 @@ const PitchedScene = props => {
   universe.add(bluePlanet)
   universe.add(bluePlanetGrayMoon)
 
-  universe.add(topSpaceship)
-  universe.add(bottomSpaceship)
+  universe.add(sideUFO)
 
+  universe.add(upperSpaceship)
   universe.add(lowerSpaceship)
 
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
