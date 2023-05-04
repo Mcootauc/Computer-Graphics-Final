@@ -5,7 +5,8 @@ class Group {
   }
 
   add(object) {
-    this.children.push(object);
+    object.parent = this
+    this.children.push(object)
   }
 
   remove(object) {
@@ -14,20 +15,28 @@ class Group {
       this.children.splice(index, 1)
     }
   }
-  
+
   move(translation) {
     if (!this.children.length !== 0) {
       for (let i = 0; i < this.children.length; i++) {
-        console.log("before move", this.children[i].translation.x, this.children[i].translation.y, this.children[i].translation.z)
+        console.log(
+          'before move',
+          this.children[i].translation.x,
+          this.children[i].translation.y,
+          this.children[i].translation.z
+        )
         this.children[i].translation.x += translation.x
         this.children[i].translation.y += translation.y
         this.children[i].translation.z += translation.z
-        console.log("after move", this.children[i].translation.x, this.children[i].translation.y, this.children[i].translation.z)
+        console.log(
+          'after move',
+          this.children[i].translation.x,
+          this.children[i].translation.y,
+          this.children[i].translation.z
+        )
       }
     }
   }
-
-  
 }
 
 export default Group
