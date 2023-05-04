@@ -46,7 +46,7 @@ class Scene {
     this.cameraMatrix = null;
 
     this.cameraPosition = new Vector(0, 0, 0);
-    this.targetPosition = new Vector(0, 0, -1);
+    this.targetPosition = new Vector(0, 0, 1);
     this.upVector = new Vector(0, 1, 0);
 
     const ze = this.cameraPosition.subtract(this.targetPosition).unit
@@ -262,6 +262,7 @@ class Scene {
       }
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
+      //this.lightPosition
       drawScene()
       if (currentRotation >= FULL_CIRCLE) {
         currentRotation -= FULL_CIRCLE
