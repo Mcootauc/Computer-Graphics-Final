@@ -30,7 +30,7 @@ const PitchedScene = props => {
   const canvasContainerRef = useRef()
 
   const sunMesh = new Mesh(sphere(0.3, 2.0), true)
-  sunMesh.setColor({ r: 1.0, g: 0.72, b: 0.0})
+  sunMesh.setColor({ r: 1.0, g: 0.72, b: 0.0 })
   sunMesh.setTranslation({ x: 0, y: 0, z: 0 })
 
   const cylinderPlanet = new Mesh(cylinder(0.3, 0.3, 8), true)
@@ -41,9 +41,21 @@ const PitchedScene = props => {
   planets.add(sunMesh)
   planets.add(cylinderPlanet)
 
+  const topSpaceship = new Mesh(cone(), false)
+  topSpaceship.setColor({ r: 0.0, g: 1.0, b: 1.0 })
+  topSpaceship.setTranslation({ x: 1.5, y: 1.0, z: 0.0 })
+
+  const bottomSpaceship = new Mesh(hexagonalPrism(), false)
+  bottomSpaceship.setColor({ r: 1.0, g: 0.0, b: 1.0 })
+  bottomSpaceship.setTranslation({ x: 0.7, y: -1.5, z: 0 })
+
+  const spaceship = new Group()
+  spaceship.add(topSpaceship)
+  spaceship.add(bottomSpaceship)
+
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
-  const [objectsToDraw] = useState(planets.children)
+  const [objectsToDraw] = useState(planets.children, spaceship)
 
   const [scene] = useState(new Scene())
 
@@ -129,9 +141,9 @@ const PitchedScene = props => {
           <button onClick={lightForward}>Light Forward</button>
           <button onClick={lightBackward}>Light Backward</button>
         </div>
-    </div>
+      </div>
     </article>
   )
-};
+}
 
-export default PitchedScene;
+export default PitchedScene

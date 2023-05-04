@@ -52,8 +52,8 @@ const Sandbox = props => {
   lavenderConeMesh.setColor({ r: 1, g: 1, b: 2 })
   lavenderConeMesh.setTranslation({ x: 0.8, y: 1.5, z: 0 })
 
-  const limeHexagonalPrismMesh = new Mesh(hexagonalPrism(), true)
-  limeHexagonalPrismMesh.setColor({ r: 1, g: 1.5, b: 1 })
+  const limeHexagonalPrismMesh = new Mesh(hexagonalPrism(), false)
+  limeHexagonalPrismMesh.setColor({ r: 1, g: 1.0, b: 0 })
   limeHexagonalPrismMesh.setTranslation({ x: -0.4, y: -1.5, z: 0 })
 
   const orangeHexagonalPrismMesh = new Mesh(hexagonalPrism(), false)
@@ -158,7 +158,7 @@ const Sandbox = props => {
           <button onClick={lightForward}>Light Forward</button>
           <button onClick={lightBackward}>Light Backward</button>
         </div>
-    </div>
+      </div>
     </article>
   )
 }
