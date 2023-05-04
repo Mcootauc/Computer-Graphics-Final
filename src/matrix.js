@@ -48,7 +48,6 @@ function matrixMultiplier(matrix1, matrix2) {
   result[15] =
     matrix1[3] * matrix2[12] + matrix1[7] * matrix2[13] + matrix1[11] * matrix2[14] + matrix1[15] * matrix2[15]
 
-  console.log('your result is: ', result)
   return result
 }
 
@@ -159,7 +158,6 @@ function orthoProjection(left, right, bottom, top, near, far) {
 }
 
 const perspectiveProjection = (left, right, bottom, top, near, far) => {
-  console.log((2 * near), (right - left))
   return [
     (2 * near) / (right - left),
     0,

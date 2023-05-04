@@ -128,8 +128,6 @@ class Scene {
     ]
 
     this.cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix')
-
-    console.log('New Matrix for Camera', this.cameraMatrixArray)
   }
 
   setLightPosition(x, y, z) {
@@ -252,14 +250,13 @@ class Scene {
 
       // Set up the projection matrix.
       if (this.orthoProjectionBool === true) {
-        console.log('ortho')
+
         this.gl.uniformMatrix4fv(
           theProjection,
           this.gl.FALSE,
           new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
         )
       } else {
-        console.log('perspective')
         this.gl.uniformMatrix4fv(
           theProjection,
           this.gl.FALSE,
@@ -268,7 +265,6 @@ class Scene {
       }
 
       this.gl.uniformMatrix4fv(cameraMatrix, this.gl.FALSE, new Float32Array(this.cameraMatrixArray))
-      //console.log("Camera Matrix: ", cameraMatrixArray)
 
       // Display the objects.
       for (const element of this.objectsToDraw) {
