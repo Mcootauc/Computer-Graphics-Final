@@ -159,14 +159,15 @@ function orthoProjection(left, right, bottom, top, near, far) {
 }
 
 const perspectiveProjection = (left, right, bottom, top, near, far) => {
+  console.log((2 * near), (right - left))
   return [
-    (2 * near) / right - left,
+    (2 * near) / (right - left),
     0,
     0,
     0,
 
     0,
-    (2 * near) / top - bottom,
+    (2 * near) / (top - bottom),
     0,
     0,
 
