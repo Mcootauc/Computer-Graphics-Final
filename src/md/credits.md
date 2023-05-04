@@ -6,15 +6,18 @@ Mitchell:
 - Created createMesh.js completely
 - Created Smooth and Faceted Shapes
 - created planetAndMoon Group
-- Fixed Up, Down, Left, Right Views 
 - Created Up, Down, Left, Right Lighting 
 - Created the Autonomous Animation (rotation around planet)
+- Fixed Up, Down, Left, Right Views 
 - Fixed the Camera to work properly
 - Fixed group.js and implemented functions
 - Added Rotation to the Scene
 - Worked on the toggle between wireframe and solid rendering
+- Worked on Matrix Generator
 - Worked on Scale Matrix
+- Worked on Scale Matrix Tests
 - Updated rotationMatrix to accept non rotating shape
+- Attempted perspective and orthographic toggle
 
 Kevin:
 - Began implementation of scene
