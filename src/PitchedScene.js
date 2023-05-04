@@ -7,7 +7,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import { sphere, cone, cylinder, hexagonalPrism } from './shapes'
+import { sphere, cone, cylinder, hexagonalPrism, ring } from './shapes'
 import Scene from './scene/scene'
 import Vector from './vector'
 import Mesh from './createMesh'
@@ -35,6 +35,21 @@ const PitchedScene = props => {
   const planetAndMoon = new Group()
   planetAndMoon.add(bluePlanet)
   planetAndMoon.add(bluePlanetGrayMoon)
+
+  //David Huang: attempted but some error
+  // const satelliteBody = new Mesh(cylinder(0.3, 0.3, 8), false)
+  // satelliteBody.setColor({ r: 1.0, g: 1.0, b: 1.0 })
+  // satelliteBody.setTranslation({ x: 1.5, y: 0, z: 1.0 })
+  // satelliteBody.setRotationXYZ({ x: 1.5, y: 0.5, z: -1.5 })
+
+  // const satelliteCircle = new Mesh(sphere(0.2, 1.0), false)
+  // satelliteCircle.setColor({ r: 0.72, g: 0.68, b: 0.64 })
+  // satelliteCircle.setTranslation({ x: 1.5, y: 1.0, z: 0.3 })
+  // satelliteCircle.setRotationXYZ({ x: 1.5, y: 1.0, z: 1.0 })
+
+  // const test = new Group();
+  // test.add(satelliteBody);
+  // test.add(satelliteCircle);
 
   // Kevin Perez:
   const topSpaceship = new Mesh(cone(), false)
@@ -66,6 +81,9 @@ const PitchedScene = props => {
 
   universe.add(upperSpaceship)
   universe.add(lowerSpaceship)
+
+  // universe.add(satellite)
+
 
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.

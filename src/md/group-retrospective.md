@@ -47,3 +47,12 @@ Gage:
 - Attempted matrix multiplication
 - Attempted translation matrix
 - Made and cleaned up unit tests
+
+David:
+
+ - Began work on the camera
+ - Created the cone
+ - Made Orthographic Projection
+ - Made unit tests
+ - Worked some on Lighting
+ - 

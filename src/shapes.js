@@ -110,6 +110,41 @@ const sphere = (scaleFactor, subDivCount) => {
   return { vertices, facesByIndex }
 }
 
+const ring = (innerRadius, outerRadius, radialSegments) => {
+  const vertices = []
+  const facesByIndex = []
+
+  for (let i = 0; i <= radialSegments; i++) {
+    const theta = (i / radialSegments) * Math.PI * 2
+    const sinTheta = Math.sin(theta)
+    const cosTheta = Math.cos(theta)
+
+    const xInner = innerRadius * cosTheta
+    const yInner = 0
+    const zInner = innerRadius * sinTheta
+
+    const xOuter = outerRadius * cosTheta
+    const yOuter = 0
+    const zOuter = outerRadius * sinTheta
+
+    vertices.push([xInner, yInner, zInner], [xOuter, yOuter, zOuter])
+
+    const startIndex = 2 * i
+    if (i < radialSegments) {
+      const a = startIndex
+      const b = startIndex + 1
+      const c = startIndex + 3
+      const d = startIndex + 2
+      facesByIndex.push([a, b, d])
+      facesByIndex.push([b, c, d])
+    }
+  }
+
+  return { vertices, facesByIndex }
+}
+
+
+
 const cylinder = (radius, height, radialSegments) => {
   const vertices = [
     [0, height, 0] // top vertex
@@ -402,6 +437,7 @@ export {
   toRawLineArray,
   hexagonalPrism,
   box,
+  ring,
   computeFacetedNormals,
   computeSmoothNormals
 }
