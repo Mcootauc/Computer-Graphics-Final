@@ -16,3 +16,10 @@ Kevin:
 - Began implementation of scene
 - Attempted to make WebGL conversion for matrix
 - Attempted matrix multiplication
+
+Gage:
+- Worked on wireframe
+- Worked on lookAt(not used)/setCameraPositionAndOrientation function
+- Canvas shape
+- Attempted matrix multiplication
+- Made and cleaned up unit tests
