@@ -250,7 +250,6 @@ class Scene {
 
       // Set up the projection matrix.
       if (this.orthoProjectionBool === true) {
-
         this.gl.uniformMatrix4fv(
           theProjection,
           this.gl.FALSE,
