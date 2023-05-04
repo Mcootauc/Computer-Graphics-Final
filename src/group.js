@@ -1,4 +1,3 @@
-
 class Group {
   constructor() {
     this.children = []
@@ -6,16 +5,7 @@ class Group {
   }
 
   add(object) {
-    if (object instanceof Group) {
-      while (object instanceof Group) {
-        object = object.children
-      }
-      for (const element of object) {
-        this.children.push(element)
-      }
-    } else {
-      this.children.push(object)
-    }
+    this.children.push(object)
   }
 
   remove(object) {
