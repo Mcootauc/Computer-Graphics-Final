@@ -138,7 +138,6 @@ class Scene {
     this.objectsToDraw.forEach(objectToDraw => {
       if (objectToDraw.wireframe === true) {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawLineArray(objectToDraw.vertices))
-        //console.log("Wireframe buffer length: ", toRawLineArray(objectToDraw.vertices).length)
       } else {
         objectToDraw.verticesBuffer = initVertexBuffer(this.gl, toRawTriangleArray(objectToDraw.vertices))
       }
@@ -175,6 +174,16 @@ class Scene {
         this.gl.FALSE,
         new Float32Array(translateMatrix(object.translation.x, object.translation.y, object.translation.z))
       )
+
+      // Set up the rotation matrix.
+      this.gl.uniformMatrix4fv(
+        theRotationMatrix,
+        this.gl.FALSE,
+        new Float32Array(rotationMatrix(currentRotation, object.rotation.x, object.rotation.y, object.rotation.z))
+      )
+      console.log("roration 1:", new Float32Array(rotationMatrix(0, object.rotation.x, object.rotation.y, object.rotation.z)))
+      console.log("roration 2:", new Float32Array(rotationMatrix(currentRotation, object.rotation.x, object.rotation.y, object.rotation.z)))
+
       this.gl.uniform3f(
         this.gl.getUniformLocation(this.shaderProgram, 'vertexColor'),
         object.color.r,
@@ -209,12 +218,7 @@ class Scene {
     const drawScene = () => {
       // Clear the display.
       this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
-      // Set up the rotation matrix.
-      this.gl.uniformMatrix4fv(
-        theRotationMatrix,
-        this.gl.FALSE,
-        new Float32Array(rotationMatrix(currentRotation, 0, 0, 1))
-      )
+
       // Set up the orthographic matrix.
       this.gl.uniformMatrix4fv(
         orthographicProjection,

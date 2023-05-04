@@ -81,6 +81,30 @@ const rotationMatrix = (angle, x, y, z) => {
   const oneMinusC = 1.0 - c
 
   // Normalize the axis vector of rotation.
+  if (x === 0 && y === 0 && z === 0 && axisLength === 0) {
+    return [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+  
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+  
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+  
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  }
+
   x /= axisLength
   y /= axisLength
   z /= axisLength
@@ -96,7 +120,6 @@ const rotationMatrix = (angle, x, y, z) => {
   const xs = x * s
   const ys = y * s
   const zs = z * s
-
   // GL expects its matrices in column major order.
   return [
     x2 * oneMinusC + c,

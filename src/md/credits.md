@@ -11,6 +11,7 @@ Mitchell:
 - Fixed group.js and implemented functions
 - Added Rotation to the Scene
 - Worked on the toggle between wireframe and solid rendering
+- Updated rotationMatrix to accept non rotating shapes
 
 Kevin:
 - Began implementation of scene

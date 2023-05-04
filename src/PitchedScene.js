@@ -32,13 +32,14 @@ const PitchedScene = props => {
   const sunMesh = new Mesh(sphere(0.3, 2.0), true)
   sunMesh.setColor({ r: 1.0, g: 0.72, b: 0.0 })
   sunMesh.setTranslation({ x: 0, y: 0, z: 0 })
+  sunMesh.setRotation({ x: 0.0, y: 0.0, z: 0.0 })
 
   const cylinderPlanet = new Mesh(cylinder(0.3, 0.3, 8), true)
   cylinderPlanet.setColor({ r: 0.0, g: 0.5, b: 1.0 })
   cylinderPlanet.setTranslation({ x: 1.5, y: 0.0, z: 0.0 })
+  cylinderPlanet.setRotation({ x: 0.0, y: 0.0, z: 1.0 })
 
   const planets = new Group()
-  planets.add(sunMesh)
   planets.add(cylinderPlanet)
 
   const topSpaceship = new Mesh(cone(), false)
@@ -76,6 +77,7 @@ const PitchedScene = props => {
       element.visible = !element.visible
     })
     scene.drawScene()
+    console.log('objectsToDraw', objectsToDraw)
   }
   const handleWireframe = () => {
     objectsToDraw.forEach(element => {
@@ -120,7 +122,6 @@ const PitchedScene = props => {
       <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
 
       <section width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasContainerRef}>
-        Your favorite update-your-browser message here.
       </section>
       <div>
         <div>
