@@ -39,26 +39,26 @@ const PitchedScene = props => {
   bluePlanetGrayMoon.setTranslation({ x: 1.5, y: 0.0, z: 0.0 })
   bluePlanetGrayMoon.setRotationXYZ({ x: 0.0, y: 0.0, z: 1.0 })
 
+  const topSpaceship = new Mesh(cone(), false)
+  topSpaceship.setColor({ r: 0.0, g: 1.0, b: 1.0 })
+  topSpaceship.setTranslation({ x: 1.0, y: 1.2, z: 0.0 })
+  topSpaceship.setRotationXYZ({ x: 1.5, y: 0.0, z: 1.0 })
+
+  const bottomSpaceship = new Mesh(hexagonalPrism(), false)
+  bottomSpaceship.setColor({ r: 1.0, g: 0.0, b: 1.0 })
+  bottomSpaceship.setTranslation({ x: 1.0, y: 1.0, z: 0.0 })
+  bottomSpaceship.setRotationXYZ({ x: 1.5, y: 0.0, z: 1.0 })
+
   const planetAndMoon = new Group()
   planetAndMoon.add(bluePlanet)
   planetAndMoon.add(bluePlanetGrayMoon)
 
-
-  const topSpaceship = new Mesh(cone(), false)
-  topSpaceship.setColor({ r: 0.0, g: 1.0, b: 1.0 })
-  topSpaceship.setTranslation({ x: 1.5, y: 1.0, z: 0.0 })
-
-  const bottomSpaceship = new Mesh(hexagonalPrism(), false)
-  bottomSpaceship.setColor({ r: 1.0, g: 0.0, b: 1.0 })
-  bottomSpaceship.setTranslation({ x: 0.7, y: -1.5, z: 0 })
-
-  const spaceship = new Group()
-  spaceship.add(topSpaceship)
-  spaceship.add(bottomSpaceship)
+  planetAndMoon.add(topSpaceship)
+  planetAndMoon.add(bottomSpaceship)
 
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
-  const [objectsToDraw] = useState(planetAndMoon.children, spaceship)
+  const [objectsToDraw] = useState(planetAndMoon.children)
 
   const [scene] = useState(new Scene())
 
@@ -123,8 +123,7 @@ const PitchedScene = props => {
     <article>
       <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
 
-      <section width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasContainerRef}>
-      </section>
+      <section width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasContainerRef}></section>
       <div>
         <div>
           <button onClick={handleToggle}>Show shape</button>
