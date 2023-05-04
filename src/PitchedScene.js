@@ -35,11 +35,21 @@ const PitchedScene = props => {
   bluePlanet.setTranslation({ x: 0, y: 0, z: 0 })
   bluePlanet.setRotationXYZ({ x: 0.0, y: 0.0, z: 0.0 })
 
-  // the moon rotates around the planet
+  // the moon rotates around the planet (internal moving part)
   const bluePlanetGrayMoon = new Mesh(sphere(0.2, 1.0), false)
   bluePlanetGrayMoon.setColor({ r: 0.72, g: 0.68, b: 0.64 })
   bluePlanetGrayMoon.setTranslation({ x: 1.5, y: 0.0, z: 0.0 })
   bluePlanetGrayMoon.setRotationXYZ({ x: 0.0, y: 0.0, z: 1.0 })
+
+  //Mitchell Cootauco:
+  const planetAndMoon = new Group()
+  planetAndMoon.add(bluePlanet)
+  planetAndMoon.add(bluePlanetGrayMoon)
+
+  const topSpaceship = new Mesh(cone(), false)
+  topSpaceship.setColor({ r: 1.0, g: 0.1, b: 1.0 })
+  topSpaceship.setTranslation({ x: 0.5, y: 1.2, z: 0.0 })
+  topSpaceship.setRotationXYZ({ x: 1.5, y: 0.5, z: -1.5 })
 
   const sideUFO = new Mesh(cone(), false)
   sideUFO.setColor({ r: 1.0, g: 0.1, b: 1.0 })
@@ -129,6 +139,9 @@ const PitchedScene = props => {
     scene.setLightPosition(0.0, 0.0, 2.0)
   }
 
+  const orthoOrPerspective = () => {
+    scene.setOrthoOrPerspective()
+  }
   return (
     <article>
       <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
@@ -152,6 +165,9 @@ const PitchedScene = props => {
           <button onClick={lightLeft}>Light Right</button>
           <button onClick={lightForward}>Light Forward</button>
           <button onClick={lightBackward}>Light Backward</button>
+        </div>
+        <div>
+          <button onClick={orthoOrPerspective}>Orthographic Or Perspective Projection</button>
         </div>
       </div>
     </article>
