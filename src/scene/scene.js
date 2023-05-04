@@ -17,7 +17,7 @@ uniform mat4 cameraMatrix;
 
 void main(void) {
   vec4 worldPosition = theTranslationMatrix * vec4(vertexPosition, 1.0);
-  gl_Position = theOrthoProjection * theTranslationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
+  gl_Position = theOrthoProjection * theRotationMatrix * theTranslationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
   
   vec3 normalLightVector = normalize(lightPosition);
   float lightContribution = dot(normalize(normalVector), normalLightVector);
@@ -47,7 +47,7 @@ class Scene {
 
     this.cameraPosition = new Vector(0, 0, 0);
     this.targetPosition = new Vector(0, 0, -1);
-    this.upVector = new Vector(1, 1, 0);
+    this.upVector = new Vector(0, 1, 0);
 
     const ze = this.cameraPosition.subtract(this.targetPosition).unit
     const ye = this.upVector.subtract(this.upVector.projection(ze)).unit
@@ -114,7 +114,7 @@ class Scene {
     this.lightPosition.y = y
     this.lightPosition.z = z
   }
-
+  
   toggleView() {
     // Set bird's eye view as default
     if (!this.currentView) {
@@ -245,7 +245,7 @@ class Scene {
       this.gl.uniformMatrix4fv(
         theRotationMatrix,
         this.gl.FALSE,
-        new Float32Array(rotationMatrix(currentRotation, 1, 1, 1))
+        new Float32Array(rotationMatrix(currentRotation, 0, 0, 1))
       )
       // Set up the orthographic matrix.
       this.gl.uniformMatrix4fv(

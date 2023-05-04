@@ -43,10 +43,7 @@ const PitchedScene = props => {
 
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
-  const [objectsToDraw] = useState([
-    sunMesh,
-    cylinderPlanet,
-  ])
+  const [objectsToDraw] = useState(planets.children)
 
   const [scene] = useState(new Scene())
 
