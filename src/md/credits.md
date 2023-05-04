@@ -8,6 +8,7 @@ Mitchell:
 - created planetAndMoon Group
 - Fixed Up, Down, Left, Right Views 
 - Created Up, Down, Left, Right Lighting 
+- Created the Autonomous Animation (rotation around planet)
 - Fixed the Camera to work properly
 - Fixed group.js and implemented functions
 - Added Rotation to the Scene

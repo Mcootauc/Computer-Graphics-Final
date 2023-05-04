@@ -1,5 +1,5 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
-import { translateMatrix, rotationMatrix, orthoProjection } from '../matrix'
+import { translateMatrix, rotationMatrix, orthoProjection, perspectiveProjection } from '../matrix'
 import { toRawLineArray, toRawTriangleArray } from '../shapes'
 import Vector from '../vector'
 const VERTEX_SHADER = `
@@ -12,12 +12,12 @@ varying vec4 finalVertexColor;
 
 uniform mat4 theTranslationMatrix;
 uniform mat4 theRotationMatrix;
-uniform mat4 theOrthoProjection;
+uniform mat4 theProjection;
 uniform mat4 cameraMatrix;
 
 void main(void) {
   vec4 worldPosition = theTranslationMatrix * vec4(vertexPosition, 1.0);
-  gl_Position = theOrthoProjection * theRotationMatrix * theTranslationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
+  gl_Position = theProjection * theRotationMatrix * theTranslationMatrix * cameraMatrix * vec4(vertexPosition, 1.0);
   
   vec3 normalLightVector = normalize(lightPosition);
   float lightContribution = dot(normalize(normalVector), normalLightVector);
@@ -44,7 +44,7 @@ class Scene {
     this.objectsToDraw = []
     this.gl = getGL(this.canvas)
     this.cameraMatrix = null;
-
+    this.orthoProjectionBool = true;
     this.cameraPosition = new Vector(0, 0, 0);
     this.targetPosition = new Vector(0, 0, 1);
     this.upVector = new Vector(0, 1, 0);
@@ -114,6 +114,10 @@ class Scene {
     this.lightPosition.y = y
     this.lightPosition.z = z
   }
+
+  setOrthoOrPerspective() {
+    this.orthoProjectionBool = !this.orthoProjectionBool;
+  }
   
   setCanvas(canvasContainer) {
     canvasContainer.appendChild(this.canvas)
@@ -164,7 +168,7 @@ class Scene {
     this.gl.enableVertexAttribArray(normalVector)
     const theRotationMatrix = this.gl.getUniformLocation(this.shaderProgram, 'theRotationMatrix')
     const translationMatrix = this.gl.getUniformLocation(this.shaderProgram, 'theTranslationMatrix')
-    const orthographicProjection = this.gl.getUniformLocation(this.shaderProgram, 'theOrthoProjection')
+    const theProjection = this.gl.getUniformLocation(this.shaderProgram, 'theProjection')
     const cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix')
 
     const drawObject = object => {
@@ -181,8 +185,6 @@ class Scene {
         this.gl.FALSE,
         new Float32Array(rotationMatrix(currentRotation * object.rotationSpeed, object.rotationXYZ.x, object.rotationXYZ.y, object.rotationXYZ.z))
       )
-      console.log("roration 1:", new Float32Array(rotationMatrix(currentRotation, 0, 0, 0)))
-      console.log("roration 2:", new Float32Array(rotationMatrix(100, object.rotationXYZ.x, object.rotationXYZ.y, object.rotationXYZ.z)))
 
       this.gl.uniform3f(
         this.gl.getUniformLocation(this.shaderProgram, 'vertexColor'),
@@ -219,12 +221,23 @@ class Scene {
       // Clear the display.
       this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
 
-      // Set up the orthographic matrix.
-      this.gl.uniformMatrix4fv(
-        orthographicProjection,
-        this.gl.FALSE,
-        new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
-      )
+      // Set up the projection matrix.
+      if (this.orthoProjectionBool === true) {
+        console.log("ortho")
+        this.gl.uniformMatrix4fv(
+          theProjection,
+          this.gl.FALSE,
+          new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
+        )
+      } else {
+        console.log("perspective")
+        this.gl.uniformMatrix4fv(
+          theProjection,
+          this.gl.FALSE,
+          new Float32Array(perspectiveProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
+        )
+      }
+
       this.gl.uniformMatrix4fv(cameraMatrix, this.gl.FALSE, new Float32Array(this.cameraMatrixArray))
       //console.log("Camera Matrix: ", cameraMatrixArray)
 
@@ -262,7 +275,6 @@ class Scene {
       }
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
-      //this.lightPosition
       drawScene()
       if (currentRotation >= FULL_CIRCLE) {
         currentRotation -= FULL_CIRCLE
