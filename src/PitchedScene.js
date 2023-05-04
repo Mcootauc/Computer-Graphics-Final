@@ -42,25 +42,32 @@ const PitchedScene = props => {
   bluePlanetGrayMoon.setRotationXYZ({ x: 0.0, y: 0.0, z: 1.0 })
 
   const topSpaceship = new Mesh(cone(), false)
-  topSpaceship.setColor({ r: 0.0, g: 1.0, b: 1.0 })
-  topSpaceship.setTranslation({ x: 1.0, y: 1.2, z: 0.0 })
-  topSpaceship.setRotationXYZ({ x: 1.5, y: 0.0, z: 1.0 })
+  topSpaceship.setColor({ r: 1.0, g: 0.1, b: 1.0 })
+  topSpaceship.setTranslation({ x: 0.5, y: 1.2, z: 0.0 })
+  topSpaceship.setRotationXYZ({ x: 1.5, y: 0.5, z: -1.5 })
 
   const bottomSpaceship = new Mesh(hexagonalPrism(), false)
-  bottomSpaceship.setColor({ r: 1.0, g: 0.0, b: 1.0 })
-  bottomSpaceship.setTranslation({ x: 1.0, y: 1.0, z: 0.0 })
-  bottomSpaceship.setRotationXYZ({ x: 1.5, y: 0.0, z: 1.0 })
+  bottomSpaceship.setColor({ r: 0.0, g: 1.0, b: 1.0 })
+  bottomSpaceship.setTranslation({ x: 0.5, y: 1.0, z: 0.0 })
+  bottomSpaceship.setRotationXYZ({ x: 1.5, y: 0.5, z: -1.5 })
 
-  const planetAndMoon = new Group()
-  planetAndMoon.add(bluePlanet)
-  planetAndMoon.add(bluePlanetGrayMoon)
+  const lowerSpaceship = new Mesh(cylinder(0.3, 0.3, 8), false)
+  lowerSpaceship.setColor({ r: 1.0, g: 1.0, b: 1.0 })
+  lowerSpaceship.setTranslation({ x: 0.5, y: 0.5, z: 0.0 })
+  lowerSpaceship.setRotationXYZ({ x: 1.5, y: 0.5, z: -1.5 })
 
-  planetAndMoon.add(topSpaceship)
-  planetAndMoon.add(bottomSpaceship)
+  const universe = new Group()
+  universe.add(bluePlanet)
+  universe.add(bluePlanetGrayMoon)
+
+  universe.add(topSpaceship)
+  universe.add(bottomSpaceship)
+
+  universe.add(lowerSpaceship)
 
   // This variable stores 3D model information. We inline it for now but will want to separate it later.
   // Think of these as proto-meshes, with no distinct geometry nor material.
-  const [objectsToDraw] = useState(planetAndMoon.children)
+  const [objectsToDraw] = useState(universe.children)
 
   const [scene] = useState(new Scene())
 
