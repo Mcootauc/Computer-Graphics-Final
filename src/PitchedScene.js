@@ -77,6 +77,11 @@ const PitchedScene = props => {
     })
     scene.drawScene()
   }
+  const handleWireframe = () => {
+    objectsToDraw.forEach(element => {
+      element.wireframe = !element.wireframe
+    })
+  }
 
   const handleTopView = () => {
     scene.setCameraPositionAndOrientation(new Vector(0, 1, 0), new Vector(0, 0, 0), new Vector(0, 0, -1))
@@ -91,11 +96,6 @@ const PitchedScene = props => {
     scene.setCameraPositionAndOrientation(new Vector(0, 0, 1), new Vector(0, 0, 0), new Vector(0, 1, 0))
   }
 
-  const handleWireframe = () => {
-    objectsToDraw.forEach(element => {
-      element.wireframe = !element.wireframe
-    })
-  }
   const lightUp = () => {
     scene.setLightPosition(0.0, 2.0, 0.0)
   }

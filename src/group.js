@@ -17,22 +17,10 @@ class Group {
 
   move(translation) {
     if (!this.children.length !== 0) {
-      for (let i = 0; i < this.children.length; i++) {
-        console.log(
-          'before move',
-          this.children[i].translation.x,
-          this.children[i].translation.y,
-          this.children[i].translation.z
-        )
-        this.children[i].translation.x += translation.x
-        this.children[i].translation.y += translation.y
-        this.children[i].translation.z += translation.z
-        console.log(
-          'after move',
-          this.children[i].translation.x,
-          this.children[i].translation.y,
-          this.children[i].translation.z
-        )
+      for (const element of this.children) {
+        element.translation.x += translation.x
+        element.translation.y += translation.y
+        element.translation.z += translation.z
       }
     }
   }

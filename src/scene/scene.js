@@ -115,38 +115,6 @@ class Scene {
     this.lightPosition.z = z
   }
   
-  toggleView() {
-    // Set bird's eye view as default
-    if (!this.currentView) {
-      this.currentView = "bird";
-    }
-
-    // Remove the existing shape
-    this.objectsToDraw.pop();
-
-    let newShape;
-    if (this.currentView === "bird") {
-      // Switch to behind view
-      this.currentView = "behind";
-      // Create a new shape for the behind view
-      newShape = this.createShapeFromBehindView();
-      // Update the camera for behind view
-      this.setCameraPositionAndOrientation(this.cameraPosition, this.targetPosition, this.upVector);
-    } else {
-      // Switch to bird's eye view
-      this.currentView = "bird";
-      // Create a new shape for the bird's eye view
-      newShape = this.createShapeFromBirdsEyeView();
-      // Update the camera for bird's eye view
-      this.setCameraPositionAndOrientation(this.cameraPosition, this.targetPosition, this.upVector);
-    }
-
-    // Add the new shape to the list of objects to draw
-    this.objectsToDraw.push(newShape);
-  }
-
- 
-
   setCanvas(canvasContainer) {
     canvasContainer.appendChild(this.canvas)
   }
