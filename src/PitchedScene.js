@@ -7,17 +7,7 @@
  * a different group, many many weeks ago!
  */
 import { useEffect, useRef, useState } from 'react'
-import {
-  sphere,
-  cone,
-  cylinder,
-  toRawLineArray,
-  hexagonalPrism,
-  box,
-  computeFacetedNormals,
-  computeSmoothNormals,
-  toRawTriangleArray
-} from './shapes'
+import { sphere, cone, cylinder, hexagonalPrism } from './shapes'
 import Scene from './scene/scene'
 import Vector from './vector'
 import Mesh from './createMesh'
