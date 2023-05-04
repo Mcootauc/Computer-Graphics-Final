@@ -43,23 +43,35 @@ class Scene {
     this.canvas.height = 500
     this.objectsToDraw = []
     this.gl = getGL(this.canvas)
-    this.cameraMatrix = null;
-    this.orthoProjectionBool = true;
-    this.cameraPosition = new Vector(0, 0, 0);
-    this.targetPosition = new Vector(0, 0, 1);
-    this.upVector = new Vector(0, 1, 0);
+    this.cameraMatrix = null
+    this.orthoProjectionBool = true
+    this.cameraPosition = new Vector(0, 0, 0)
+    this.targetPosition = new Vector(0, 0, 1)
+    this.upVector = new Vector(0, 1, 0)
 
     const ze = this.cameraPosition.subtract(this.targetPosition).unit
     const ye = this.upVector.subtract(this.upVector.projection(ze)).unit
     const xe = ye.cross(ze)
 
     this.cameraMatrixArray = [
-      xe.x, ye.x, ze.x, 0,
-      xe.y, ye.y, ze.y, 0,
-      xe.z, ye.z, ze.z, 0,
-      -this.cameraPosition.dot(xe), -this.cameraPosition.dot(ye), -this.cameraPosition.dot(ze), 1
+      xe.x,
+      ye.x,
+      ze.x,
+      0,
+      xe.y,
+      ye.y,
+      ze.y,
+      0,
+      xe.z,
+      ye.z,
+      ze.z,
+      0,
+      -this.cameraPosition.dot(xe),
+      -this.cameraPosition.dot(ye),
+      -this.cameraPosition.dot(ze),
+      1
     ]
-    this.lightPosition = {x: 0.0, y: 0.0, z: 0.0};
+    this.lightPosition = { x: 0.0, y: 0.0, z: 0.0 }
     // Initialize the shaders.
     let abort = false
     this.shaderProgram = initSimpleShaderProgram(
@@ -88,26 +100,37 @@ class Scene {
   }
 
   setCameraPositionAndOrientation(position, target, up) {
-    this.cameraPosition = position;
-    this.targetPosition = target;
-    this.upVector = up;
-  
+    this.cameraPosition = position
+    this.targetPosition = target
+    this.upVector = up
+
     const ze = position.subtract(target).unit
     const ye = up.subtract(up.projection(ze)).unit
     const xe = ye.cross(ze)
-  
+
     this.cameraMatrixArray = [
-      xe.x, ye.x, ze.x, 0,
-      xe.y, ye.y, ze.y, 0,
-      xe.z, ye.z, ze.z, 0,
-      -position.dot(xe), -position.dot(ye), -position.dot(ze), 1
+      xe.x,
+      ye.x,
+      ze.x,
+      0,
+      xe.y,
+      ye.y,
+      ze.y,
+      0,
+      xe.z,
+      ye.z,
+      ze.z,
+      0,
+      -position.dot(xe),
+      -position.dot(ye),
+      -position.dot(ze),
+      1
     ]
-  
+
     this.cameraMatrix = this.gl.getUniformLocation(this.shaderProgram, 'cameraMatrix')
 
-    console.log("New Matrix for Camera", this.cameraMatrixArray)
+    console.log('New Matrix for Camera', this.cameraMatrixArray)
   }
-  
 
   setLightPosition(x, y, z) {
     this.lightPosition.x = x
@@ -116,9 +139,9 @@ class Scene {
   }
 
   setOrthoOrPerspective() {
-    this.orthoProjectionBool = !this.orthoProjectionBool;
+    this.orthoProjectionBool = !this.orthoProjectionBool
   }
-  
+
   setCanvas(canvasContainer) {
     canvasContainer.appendChild(this.canvas)
   }
@@ -133,10 +156,10 @@ class Scene {
       // No WebGL, no use going on...
       return
     }
-    
+
     this.gl.enable(this.gl.DEPTH_TEST)
     this.gl.enable(this.gl.CULL_FACE)
-    this.gl.clearColor(0.0, 0.0, 0.0, 0.0)
+    this.gl.clearColor(0.0, 0.0, 0.0, 0.92)
     this.gl.viewport(0, 0, this.canvas.width - 500, this.canvas.height)
     // Pass the vertices to WebGL.
     this.objectsToDraw.forEach(objectToDraw => {
@@ -183,7 +206,14 @@ class Scene {
       this.gl.uniformMatrix4fv(
         theRotationMatrix,
         this.gl.FALSE,
-        new Float32Array(rotationMatrix(currentRotation * object.rotationSpeed, object.rotationXYZ.x, object.rotationXYZ.y, object.rotationXYZ.z))
+        new Float32Array(
+          rotationMatrix(
+            currentRotation * object.rotationSpeed,
+            object.rotationXYZ.x,
+            object.rotationXYZ.y,
+            object.rotationXYZ.z
+          )
+        )
       )
 
       this.gl.uniform3f(
@@ -213,7 +243,6 @@ class Scene {
       }
     }
 
-    
     /*
      * Displays the scene.
      */
@@ -223,14 +252,14 @@ class Scene {
 
       // Set up the projection matrix.
       if (this.orthoProjectionBool === true) {
-        console.log("ortho")
+        console.log('ortho')
         this.gl.uniformMatrix4fv(
           theProjection,
           this.gl.FALSE,
           new Float32Array(orthoProjection(-5 / 2, 5 / 2, -5 / 2, 5 / 2, -1, 1))
         )
       } else {
-        console.log("perspective")
+        console.log('perspective')
         this.gl.uniformMatrix4fv(
           theProjection,
           this.gl.FALSE,
